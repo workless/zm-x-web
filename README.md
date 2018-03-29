@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/Zimbra/zm-x-web.svg?style=shield&circle-token=75201964c368d39693f2a82da744402fd7e90c35)](https://circleci.com/gh/Zimbra/zm-x-web)
+[![CircleCI](https://circleci.com/gh/Zimbra/zm-x-web.svg?style=shield)](https://circleci.com/gh/Zimbra/zm-x-web)
 
 # zm-x-web
 Zimbra X Web Client - A responsive webapp front-end for Zimbra.
