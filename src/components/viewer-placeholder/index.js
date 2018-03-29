@@ -1,0 +1,25 @@
+import { h } from 'preact';
+import PropTypes from 'prop-types';
+
+import s from './style.less';
+
+const ViewerPlaceholder = ({ numSelected }) => (
+	<div class={s.placeholder}>
+		{numSelected > 0 &&
+			<div class={s.numOverlay}>
+				{numSelected}
+			</div>
+		}
+	</div>
+);
+
+ViewerPlaceholder.defaultProps = {
+	numSelected: 0
+};
+
+
+ViewerPlaceholder.propTypes = {
+	numSelected: PropTypes.number
+};
+
+export default ViewerPlaceholder;

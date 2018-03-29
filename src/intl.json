@@ -1,0 +1,982 @@
+{
+	"app": {
+		"loading": "Loading…"
+	},
+	"buttons": {
+		"add": "Add",
+		"cancel": "Cancel",
+		"change": "Change",
+		"clear": "Clear",
+		"close": "Close",
+		"continue": "Continue",
+		"delete": "Delete",
+		"edit": "Edit",
+		"done": "Done",
+		"download": "Download",
+		"edit": "Edit",
+		"export": "Export Now",
+		"forward": "Forward",
+		"fullScreen": "Full Screen",
+		"import": "Import",
+		"more": "More",
+		"next": "Next",
+		"no": "No",
+		"ok": "OK",
+		"previous": "Previous",
+		"removeMailbox": "Remove mailbox",
+		"reply": "Reply",
+		"replyToAll": "Reply to All",
+		"restore": "Restore",
+		"save": "Save",
+		"send": "Send",
+		"show": "Show",
+		"hide": "Hide",
+		"verify": "Verify",
+		"yes": "Yes",
+		"zoomIn": "Zoom In",
+		"zoomOut": "Zoom Out",
+		"undo": "Undo"
+	},
+	"dates": {
+		"yesterday": "Yesterday"
+	},
+	"toasts": {
+		"sorry": "We are sorry! Something went wrong...",
+		"folderExists": {
+			"message":
+				"A folder named <b>{{name}}</b> already exists! Please enter a different name for your folder.",
+			"conversation":
+				"A folder named <b>{{name}}</b> already exists! Please enter a different name for your folder.",
+			"note":
+				"A notebook named <b>{{name}}</b> already exists! Please enter a different name for your notebook."
+		},
+		"restoreContacts": {
+			"failure": "Contacts failed to restore. Try again.",
+			"success": "Contacts have been reset to {{name}}"
+		}
+	},
+	"loginScreen": {
+		"header": {
+			"title": "Sign in",
+			"tagline": "To access your {{name}} email"
+		},
+		"labels": {
+			"email": "Email",
+			"pass": "Password",
+			"newPass": "New Password",
+			"confirmPass": "Confirm Password"
+		},
+		"forgotPass": {
+			"button": "Forgot Password?",
+			"header": "Password Assistance",
+			"paragraph": "To initiate a password reset, please contact Jennifer Goodwin at"
+		},
+		"resetPass": {
+			"header": "Reset Your Password"
+		},
+		"errors": {
+			"invalidCredentials": "Invalid username or password",
+			"chooseNewPass": "Your password is no longer valid. Please choose a new password.",
+			"inMaintainance": "This account is currently in maintenance mode."
+		},
+		"switchToBasic": "Switch to Basic Version",
+		"privacyPolicy": "Privacy Policy",
+		"acceptableUsePolicy": "Acceptable Use Policy",
+		"contact": "Contact",
+		"copyright": "© 2018 Synacor, Inc. All rights reserved. \"Zimbra\" is a registered trademark of Synacor, Inc."
+	},
+	"header": {
+		"DEFAULT_ACCOUNT": "Account",
+		"SETTINGS": "Settings",
+		"EMAIL_SUPPORT": "Email Support",
+		"KEYBOARD_SHORTCUTS": "Keyboard Shortcuts",
+		"PRIVACY": "Privacy",
+		"LEGAL": "Legal",
+		"ABOUT_THE_ADS": "About the Ads",
+		"LOGOUT": "Logout"
+	},
+	"navigation": {
+		"closeAllTabs": "Close All Messages"
+	},
+	"composer": {
+		"SHOW_CC": "CC/BCC",
+		"HIDE_CC": "Hide CC/BCC",
+		"SUBJECT": "Subject",
+		"SAVED": "Saved {{time}}"
+	},
+	"mail": {
+		"folders": {
+			"ADD_NEW_PLACEHOLDER": "Create a folder",
+			"FIND_PLACEHOLDER": "Find a folder"
+		},
+		"contextMenu": {
+			"MARK_READ": "Mark emails as read",
+			"EMPTY_JUNK": "Empty junk",
+			"EMPTY_TRASH": "Empty trash",
+			"ARCHIVE_ALL": "Archive all emails",
+			"TRASH_ALL": "Delete all emails",
+			"RENAME_FOLDER": "Rename folder",
+			"MOVE_FOLDER": "Move folder",
+			"DELETE_FOLDER": "Delete folder",
+			"CREATE_SUBFOLDER": "Create subfolder",
+			"CREATE_FOLDER": "Create folder",
+			"FIND_FOLDER": "Find folder",
+			"PLACE_TOP_LEVEL": "Place at top level",
+			"MARK_AS_READ": "Mark as Read",
+			"MARK_AS_UNREAD": "Mark as Unread",
+			"STAR": "Star",
+			"CLEAR_STAR": "Clear Star",
+			"BLOCK": "Block",
+			"MARK_AS_SPAM": "Mark as Spam",
+			"ARCHIVE": "Archive",
+			"DELETE_MESSAGE": "Delete",
+			"PRINT": "Print",
+			"CREATE_EVENT": "Create Event",
+			"CREATE_FILTER": "Create Filter",
+			"ADD_SENDER_CONTACTS": "Add Sender to Contacts",
+			"VIEW_RAW_MESSAGE": "View Raw Message"
+		},
+		"sortMenu": {
+			"dateDesc": "Date: Newest on top",
+			"dateAsc": "Date: Oldest on top",
+			"attachDesc": "Attachments",
+			"flagDesc": "Starred",
+			"nameAsc": "Sender",
+			"subjAsc": "Subject",
+			"groupByConversations": "Group by Conversations",
+			"settings": "More Settings…",
+			"unread": "Unread"
+		},
+		"sortLabels": {
+			"dateDesc": "Sort by date",
+			"dateAsc": "Sort by date",
+			"attachDesc": "Sort by attachment",
+			"flagDesc": "Sort by starred",
+			"nameAsc": "Sort by sender",
+			"subjAsc": "Sort by subject",
+			"unread": "Sort by unread"
+		},
+		"viewer": {
+			"messageContainsExternalImages": "This message contains external images",
+			"clickToLoad": "Click to load",
+			"alwaysDisplayImagesFrom": "Always display images from",
+			"or": "or"
+		},
+		"title": "Mail",
+		"DRAFT": "Draft",
+		"noSubject": "[No subject]"
+	},
+	"dialogs": {
+		"blockEmails": {
+			"DIALOG_TITLE": "Block",
+			"DESCRIPTION":
+				"Verify that you want to block messages from the following email addresses:",
+			"BLOCK_EMAILS_LABEL": "Block all future emails",
+			"DELETE_EMAILS_LABEL": "Delete all existing emails"
+		},
+		"emptyFolder": {
+			"DIALOG_TITLE": "Empty the {{name}} folder",
+			"DESCRIPTION":
+				"Are you sure you want to permanently delete all items in {{name}}?"
+		},
+		"deleteFolder": {
+			"DIALOG_TITLE": "Delete the {{name}} folder",
+			"DESCRIPTION":
+				"Are you sure you want to delete the \"{{name}}\" folder?",
+			"DESCRIPTION_PERMANENT":
+				"Are you sure you want to permanently delete the \"{{name}}\" folder?"
+		},
+		"timeError": {
+			"WORKING_HOURS_ERROR": "{{message}}"
+		}
+	},
+	"calendar": {
+		"title": "Calendar",
+		"today": "Today",
+		"search": {
+			"refineHeader": "Refine by",
+			"results": "{{count}} {{types}} were found matching your search",
+			"filters": {
+				"type": "Events/Tasks",
+				"date": "Date"
+			},
+			"popover": {
+				"repeat": "Repeats {{frequency}}",
+				"frequencies": {
+					"SEC": "Every Second",
+					"MIN": "Every Minute",
+					"HOU": "Hourly",
+					"DAI": "Daily",
+					"WEE": "Weekly",
+					"MON": "Monthly",
+					"YEA": "Yearly"
+				}
+			},
+			"eventType": {
+				"tasks": "Tasks",
+				"events": "Events"
+			},
+			"datePlaceholder": "--/--/--"
+		},
+		"actions": {
+			"BUTTON": "Actions",
+			"PRINT": "Print",
+			"NEW_CALENDAR": "Create New Calendar",
+			"NEW_TASK_LIST": "Create New Task List",
+			"SHARE": "Share",
+			"SHOW_TASKS": "Show Tasks",
+			"ADD_HOLIDAYS": "Add Holidays",
+			"ADD_SHARED_CALENDAR": "Add a Friend's Calendar",
+			"SYNC_HELP": "Sync Help"
+		},
+		"views": {
+			"year": "Year",
+			"month": "Month",
+			"week": "Week",
+			"day": "Day",
+			"agenda": "List"
+		},
+		"editModal": {
+			"title": "Add Event",
+			"FILE_SIZE_EXCEEDED":
+				"Unable to upload your attachment. Please try again. Note: the maximum attachment size is 10MB.",
+			"fields": {
+				"remind": {
+					"label": "Remind",
+					"options": {
+						"never": "Never",
+						"0m": "At time of event",
+						"1m": "1 minute before",
+						"5m": "5 minutes before",
+						"10m": "10 minutes before",
+						"15m": "15 minutes before",
+						"30m": "30 minutes before",
+						"45m": "45 minutes before",
+						"60m": "60 minutes before",
+						"2h": "2 hours before",
+						"3h": "3 hours before",
+						"4h": "4 hours before",
+						"5h": "5 hours before",
+						"18h": "18 hours before",
+						"1d": "1 day before",
+						"2d": "2 days before",
+						"3d": "3 days before",
+						"4d": "4 days before",
+						"1w": "1 week before",
+						"2w": "2 weeks before"
+					}
+				},
+				"showAs": {
+					"label": "Show as",
+					"options": {
+						"F": "Free",
+						"T": "Tentative",
+						"B": "Busy",
+						"O": "Out of Office"
+					}
+				},
+				"repeat": {
+					"label": "Repeat",
+					"options": {
+						"NONE": "None",
+						"DAI": "Every day",
+						"WEE": "Every week",
+						"MON": "Every month",
+						"YEA": "Every year"
+					}
+				}
+			},
+			"availability": {
+				"title": "Availability for {{date}}",
+				"subtitle":
+					"Only calendars that are shared with you or that are public will be visible."
+			}
+		},
+		"sidebar": {
+			"actions": {
+				"IMPORT_CALENDAR": "Import",
+				"EXPORT_CALENDAR": "Export"
+			},
+			"holidayCalendars": {
+				"Australian": "Australian Holidays",
+				"Chinese": "Chinese Lunar Simplified Holidays",
+				"Brazilian": "Brazilian Holidays",
+				"Danish": "Danish Holidays",
+				"Dutch": "Dutch Holidays",
+				"Irish": "Irish Holidays",
+				"Finnish": "Finnish Holidays",
+				"French": "French Holidays",
+				"German": "German Holidays",
+				"HongKong": "Hong Kong Holidays",
+				"Indian": "Indian Holidays",
+				"Italian": "Italian Holidays",
+				"Japanese": "Japanese Holidays",
+				"Mexican": "Mexican Holidays",
+				"Norwegian": "Norwegian Holidays",
+				"NewZealand": "New Zealand Holidays",
+				"Portuguese": "Portuguese Holidays",
+				"SouthAfrican": "South African Holidays",
+				"SouthKorean": "South Korean Holidays",
+				"Swedish": "Swedish Holidays",
+				"Spanish": "Spanish Holidays",
+				"Taiwanese": "Taiwanese Holidays",
+				"UK": "UK Holidays",
+				"US": "US Holidays"
+			},
+			"myCalendars": "My Calendars",
+			"holidays": "Holidays",
+			"sports": "Sports",
+			"others": "Others"
+		},
+		"dialogs": {
+			"calendarMenu": {
+				"COLOR_LABEL": "Color"
+			},
+			"holidayCalendar": {
+				"DIALOG_TITLE": "Holiday Calendars",
+				"HOLIDAY_CALENDAR_LABEL": "Pick a Calendar"
+			},
+			"newCalendar": {
+				"DIALOG_TITLE": "Add Calendar",
+				"COLOR_LABEL": "Color",
+				"INPUT_PLACEHOLDER": "New Calendar",
+				"ERROR_DUPLICATE_CALENDAR": "A calendar with this name already exists."
+			},
+			"share": {
+				"title": "Share Calendar: {{name}}",
+				"settingsTitle": "Sharing settings",
+				"enablePublicLabel":
+					"Enable my public calendar (easiest, least private)",
+				"generateLinksLabel": "Generate Links (most secure)",
+				"inviteEmailsLabel": "Invite people by email (most flexible)",
+				"publicSelectLabel": "Anyone with the link can view events",
+				"emailSelectLabel": "Anyone with the link can",
+				"linksBrowserLabel": "To view in browser — View only",
+				"linksICSLabel": "To import into a Calendar app (.ics) — View only",
+				"addressFieldPreviouslySelected": "Shared",
+				"noAccess": "No one has access.",
+				"notifyCopy": "Copied link to clipboard.",
+				"inviteEmailsSection": "Invite people by email",
+				"accessSection": "Who has access:",
+				"emailAddressesPlaceholder": "Enter names or email addresses…",
+				"fields": {
+					"permissions": {
+						"options": {
+							"r": "Can view",
+							"rf": "Can view free/busy times only",
+							"rp": "Can view (including private events)",
+							"rw": "Can view and edit",
+							"rwidx": "Can view, edit, add, and remove",
+							"rwidxa": "Can administer",
+							"rwidxap": "Can administer (including private events)",
+							"rwidxp":
+								"Can view, edit, add, and remove (including private events)"
+						}
+					},
+					"permissionsInline": {
+						"options": {
+							"r": "view",
+							"rf": "view free/busy times only",
+							"rp": "view (including private events)",
+							"rw": "view and edit",
+							"rwidx": "view, edit, add, and remove",
+							"rwidxa": "administer",
+							"rwidxap": "administer (including private events)",
+							"rwidxp": "view, edit, add, and remove (including private events)"
+						}
+					}
+				}
+			},
+			"importCalendar": {
+				"DIALOG_TITLE": "Import from file",
+				"ERROR_IMPORT_FORMAT": "The chosen file format is not valid.",
+				"PROMPT_TEXT":
+					"The file should be in iCalendar ics format only. The maximum size of the file that can be uploaded is 5MB."
+			},
+			"exportCalendar": {
+				"DIALOG_TITLE": "Export calendar",
+				"PROMPT_TEXT": "Export this calendar in ICS format.",
+				"ERROR_EXPORT": "An error occured while downloading your calendar",
+				"FORMATS": {
+					"ics": "iCalendar ICS",
+					"json": "JavaScript Object Notation JSON",
+					"rss": "Rich Site Summary RSS",
+					"xml": "Extensible Markup Language XML",
+					"atom": "Atom syndication format ATOM",
+					"html": "HyperText Markup Language HTML"
+				}
+			},
+			"newSharedCalendar": {
+				"DIALOG_TITLE": "Add Calendar",
+				"ERROR_DUPLICATE_CALENDAR": "A calendar with this name already exists.",
+				"EMAIL_INPUT_LABEL":
+					"Please enter your friend's {{providerName}} email address:",
+				"NO_SHARES_FOR_EMAIL_ERROR":
+					"{{email}} is not sharing any calendars. Make sure that your friend is using {{providerName}} Calendar and has shared a calendar (or set one up to be public)",
+				"CALENDAR_TITLE_PLACEHOLDER": "New Shared Calendar",
+				"CALENDAR_OWNER_LABEL": "Owner",
+				"CALENDAR_NAME_LABEL": "Calendar",
+				"CALENDAR_COLOR_LABEL": "Color",
+				"CALENDAR_REMIND_LABEL": "Remind",
+				"CALENDAR_REMIND_MAIL_LABEL": "Mail",
+				"CALENDAR_REMIND_MOBILE_DESKTOP_LABEL": "Mobile/Desktop",
+				"CALENDAR_REMIND_DISCLAIMER":
+					"Note: Reminders are sent subject to the owner's reminder setting for an event.",
+				"CALENDAR_LINKED_TOAST":
+					"The calendar \"{{calendarName}}\" has been added."
+			}
+		},
+		"contextMenu": {
+			"editCalendar": "Edit Calendar",
+			"share": "Share...",
+			"unlink": "Unfollow",
+			"linkShared": "Add a Friend's Calendar",
+			"unlinkShared": "The calendar \"{{calendarName}}\" has been removed."
+		}
+	},
+	"tasks": {
+		"TITLE_LIST": "Tasks - List",
+		"TITLE_PRIORITY": "Tasks - Priority",
+		"TITLE_DUE_DATE": "Tasks - Due Date",
+		"TITLE_DONE": "Tasks - Done",
+		"SETTINGS": "Task Settings",
+		"NEW_TASK": "New Task",
+		"PRIORITY_VIEW": "Priority View",
+		"LIST_VIEW": "List View",
+		"DUE_DATE_VIEW": "Due Date View",
+		"DONE_VIEW": "Done View",
+		"CREATE_LIST": "Create List...",
+		"SHARE": "Share...",
+		"PLACEHOLDER": "Add Task",
+		"NO_TASKS": "0 Tasks.",
+		"normal": "Normal",
+		"important": "Important !",
+		"urgent": "Urgent !!",
+		"pastDue": "Past Due",
+		"dueToday": "Due Today",
+		"upcoming": "Upcoming",
+		"duplicateListError":
+			"A task list with this name already exists. Please enter a different name for your task list.",
+		"contextMenu": {
+			"deleteTaskList": "Delete Task List",
+			"editTask": "Edit Task",
+			"postponeOneDay": "Postpone by a Day",
+			"postponeUntilTomorrow": "Postpone until Tomorrow",
+			"markDone": "Mark as Done",
+			"markNotDone": "Mark as Undone",
+			"renameTaskList": "Rename Task List",
+			"deleteTask": "Delete Task"
+		},
+		"groups": {
+			"ALL": "All",
+			"DOING": "In Progress",
+			"DONE": "Completed"
+		},
+		"createList": {
+			"title": "Create Task List",
+			"description": "Enter a name for the new list",
+			"placeholder": "New List",
+			"create": "Create List",
+			"cancel": "Cancel"
+		},
+		"loading": "Loading Tasks",
+		"addTask": {
+			"editTitle": "Edit Task",
+			"placeholder": "Add Task",
+			"dueDate": "Due Date",
+			"priority": {
+				"label": "Priority"
+			},
+			"lists": {
+				"label": "List"
+			},
+			"notes": "Notes",
+			"error": {
+				"taskErrorKey": "Entering a name is required"
+			}
+		},
+		"notifications": {
+			"addTask": "Task Added.",
+			"createList": "Task List Created.",
+			"delete": "Task Deleted.",
+			"deleteUndone": "Task Restored.",
+			"completed": "Task Completed.",
+			"listDeleted": "Task List Deleted.",
+			"listRestored": "Task List Restored."
+		}
+	},
+	"contacts": {
+		"title": "Contacts",
+		"picker": {
+			"DIALOG_TITLE": "Choose contacts",
+			"DESCRIPTION": "Select addresses to add to the {{field}} field",
+			"SEARCH_PLACEHOLDER": "Search for a contact",
+			"ALL_CONTACTS": "All Contacts",
+			"DONE_BUTTON": "Done",
+			"NUM_SELECTED": {
+				"none": "None selected",
+				"other": "{{count}} selected"
+			},
+			"ADDITIONAL_SELECTED_ITEMS": {
+				"singular": "+ {{count}} selected contact:",
+				"plural": "+ {{count}} selected contacts:"
+			}
+		},
+		"restore": {
+			"DIALOG_TITLE": "Restore Address Book",
+			"RESTORE_TO_TIME": "Restore address book to how it was at this time:",
+			"LOAD_FAILED": "Loading failed.",
+			"TRY_AGAIN": "Try again.",
+			"NO_BACKUPS": "You currently have no backups."
+		},
+		"importFromFile": {
+			"DIALOG_TITLE": "Import from file",
+			"IMPORT_BUTTON": "Import",
+			"FILE_SIZE_EXCEEDED":
+				"File size is bigger than 5MB. Try again with a file of smaller size.",
+			"DESCRIPTION":
+				"To transfer contacts from another email program you'll need to export all your contacts into a list first. They can be exported as a .csv or .vcf formats. The maximum size of the file that can be uploaded is 5MB.",
+			"UPLOAD_INVALID":
+				"The file you're trying to upload is invalid. Try another file.",
+			"NO_FILE": "Please select a file to import contacts."
+		},
+		"export": {
+			"DIALOG_TITLE": "Export Contacts",
+			"DESCRIPTION":
+				"Choose the format you would like to export your contacts in.",
+			"EXPORT_BUTTON": "Export Now"
+		},
+		"actions": {
+			"heading": "{{selectedCount}} of {{total}} contacts selected",
+			"email": {
+				"title": "Email",
+				"description": "Send an email or your selected contacts.",
+				"buttonText": "Email Contacts"
+			},
+			"assign": {
+				"title": "Assign",
+				"description": "Assign your contacts to a list you have created.",
+				"buttonText": "Assign Contacts"
+			},
+			"delete": {
+				"title": "Delete",
+				"description":
+					"Keep your contacts up-to-date! Delete old or unused contacts.",
+				"buttonText": "Delete Contacts"
+			}
+		},
+		"editLists": {
+			"DIALOG_TITLE": "Assign to Lists",
+			"NEW_LIST": "New List"
+		},
+		"edit": {
+			"errors": {
+				"invalidEmail":
+					"Please enter a valid email address format (e.g. name@domain.com).",
+				"minimumFieldsRequired":
+					"Please enter some information for this contact."
+			},
+			"fields": {
+				"firstName": "First name",
+				"lastName": "Last name",
+				"middleName": "Middle name",
+				"nickname": "Nickname",
+				"jobTitle": "Job Title",
+				"company": "Company",
+				"birthday": "Birthday",
+				"anniversary": "Anniversary",
+				"website": "Website",
+				"notes": "Notes",
+				"im": "Instant Messenger",
+				"Street": "Street",
+				"City": "City",
+				"Postal": "Postal Code",
+				"State": "State or Province",
+				"Country": "Country"
+			},
+			"dropdown": {
+				"email": {
+					"email": "email",
+					"workEmail": "work email",
+					"homeEmail": "home email"
+				},
+				"phone": {
+					"mobile": "mobile",
+					"phone": "phone",
+					"homePhone": "home phone",
+					"workPhone": "work phone",
+					"pager": "pager",
+					"fax": "fax"
+				},
+				"im": {
+					"yahoo": "yahoo",
+					"xmpp": "xmpp",
+					"aol": "aol",
+					"msn": "Windows Live Messenger"
+				},
+				"chat": "chat",
+				"birthday": "birthday",
+				"anniversary": "anniversary",
+				"website": "website",
+				"home": "home",
+				"work": "work"
+			}
+		},
+		"modalEdit": {
+			"TITLE": "Edit Details",
+			"DESCRIPTION": "for {{address}}"
+		},
+		"hoverCard": {
+			"MENU": "Contact Actions",
+			"EDIT": "Edit contact",
+			"COPY_ADDRESS": "Copy email address",
+			"COPY_DETAILS": "Copy all details",
+			"COPIED_TOAST": "Copied"
+		}
+	},
+	"error": {
+		"any": "Error: {{e}}",
+		"invalidEmail":
+			"Please enter a valid email address format (e.g. name@domain.com).",
+		"genericInvalidRequest": "An unknown error has occurred.",
+		"upload": "chosen files are too large"
+	},
+	"plusSignMenu": {
+		"toggleButton": {
+			"open": "Open Plus Sign Menu",
+			"close": "Close Plus Sign Menu"
+		},
+		"gifs": {
+			"heading": {
+				"empty": "Popular GIFs",
+				"notempty": "GIFs"
+			},
+			"subheading": "Suggested Searches",
+			"poweredBy": "Powered by Giphy.com",
+			"fromGiphy": "Gif from Giphy.com",
+			"empty": "No Results"
+		},
+		"webSearches": {
+			"heading": {
+				"suggested": "Suggested Searches",
+				"searches": "Searches"
+			},
+			"empty":
+				"No results found for {{tags}}. Try searching some other keywords."
+		}
+	},
+	"compose": {
+		"toolbar": {
+			"attachmentsTitle": "Attachments",
+			"collapsedTitle": "Formatting Options",
+			"fontsTitle": "Font",
+			"colorTitle": "Text Color",
+			"listsTitle": "Lists",
+			"indentationTitle": "Indentation",
+			"alignmentTitle": "Text Alignment",
+			"titleBold": "Bold",
+			"titleItalic": "Italic",
+			"titleUnderline": "Underline",
+			"titleLink": "Link",
+			"headingText": "Text",
+			"headingHighlight": "Highlight",
+			"attachments": {
+				"my_device": "Attach from my device",
+				"my_computer": "Attach from my computer",
+				"photos": "Attach photo from email",
+				"files": "Attach file from email",
+				"gifs": "Attach GIF",
+				"web_links": "Attach web link"
+			},
+			"fonts": {
+				"modern": "Modern",
+				"modernWide": "Modern wide",
+				"classic": "Classic",
+				"classicWide": "Classic wide",
+				"courierNew": "Courier New",
+				"garamond": "Garamond",
+				"lucidaConsole": "Lucida Console"
+			},
+			"fontSize": {
+				"tiny": "Tiny",
+				"small": "Small",
+				"medium": "Medium",
+				"large": "Large",
+				"xLarge": "X-Large",
+				"huge": "Huge"
+			},
+			"emojiMenu": "Insert Emoji",
+			"togglePlaintext": {
+				"false": "Switch to Plain Text",
+				"true": "Switch to Rich Text"
+			},
+			"deleteDraft": "Delete Draft",
+			"links": {
+				"insertLink": "Insert link",
+				"searchWebLinks": "Search for web link"
+			}
+		},
+		"linkEditorDialog": {
+			"title": "Link Options",
+			"displayText": "Display text",
+			"editLink": "Edit link",
+			"followLink": "Follow link",
+			"placeholderText": "http://www.provider.net"
+		},
+		"textarea": {
+			"placeholder": "Enter your message..."
+		},
+		"confirmAttachmentForward": {
+			"TITLE": "Include original attachments?",
+			"DESCRIPTION":
+				"You added new recipients to your reply. Do you want to include attachments from the original message?",
+			"CONFIRM": "Yes",
+			"CANCEL": "No"
+		}
+	},
+	"settings": {
+		"modal": {
+			"title": "Settings",
+			"saveLabel": "Save",
+			"cancelLabel": "Cancel"
+		},
+		"blockedAddresses": {
+			"title": "Blocked Addresses"
+		},
+		"securityAndActivity": {
+			"title": "Security and activity"
+		},
+		"filterRuleModal": {
+			"title": "Edit Filter",
+			"saveLabel": "Save",
+			"cancelLabel": "Cancel",
+			"rulePrompt": "If an incoming message meets all of these conditions",
+			"filterNameLabel": "Filter Name",
+			"moveIntoFolderLabel": "Then move the messages to this folder",
+			"sortIntoFoldersLabel":
+				"Sort incoming messages into folders ({{currentlyUsed}} of 1000 used)",
+			"caseSensitive": "Match case"
+		},
+		"filterRuleRemoveModal": {
+			"title": "Delete filter",
+			"description":
+				"Are you sure you want to permanently delete the \"{{name}}\" filter?"
+		},
+		"viewingEmail": {
+			"title": "Viewing Email",
+			"messageListsSubsection": "When viewing message lists",
+			"enableConversationsLabel": "Enable conversations",
+			"showSnippetsLabel": "Show snippets",
+			"groupByListLabel": "Group by date",
+			"multitaskingSubsection": "Multitasking",
+			"tabsLabel": "Tabs",
+			"recentLabel": "Recent",
+			"previewPaneSubsection": "Preview Pane",
+			"previewPaneOption": {
+				"right": "Preview pane on the right",
+				"bottom": "Preview pane on the bottom",
+				"none": "None"
+			},
+			"messageListDensitySubsection": "Message list density",
+			"messageListDensityOption": {
+				"regular": "Regular",
+				"slim": "Slim",
+				"relaxed": "Relaxed"
+			},
+			"markAsReadSubsection": "Mark as read",
+			"markAsReadOption": {
+				"immediately": "Immediately",
+				"2seconds": "After 2 seconds",
+				"5seconds": "After 5 seconds",
+				"never": "Never"
+			},
+			"afterMovingMessageSubsection": "After moving message",
+			"afterMovingMessageOption": {
+				"back": "Go back to the original folder",
+				"previous": "Show previous email message",
+				"next": "Show next email message"
+			},
+			"desktopNotificationSubsection": "Desktop notifications",
+			"desktopNotificationsLabel": "Enable desktop notifications",
+			"mobileNotificationsSubsection": "Notifications",
+			"mobileNotificationsLabel": "Enable notifications",
+			"mailVersionSubsection": "Mail version",
+			"fullFeatured": "Full featured",
+			"mailVersionAdvancedLabel":
+				"(recommended) - View photo slideshows, drag and drop attachments, personalize your theme, and more.",
+			"mailVersionBasicLabel": "Basic"
+		},
+		"writingEmail": {
+			"title": "Writing Email",
+			"whenSendingMessageSubsection": "When sending messages",
+			"addToContactsLabel": "Automatically add new recipients to Contacts",
+			"generateLinkPreview": "Automatically generate a preview of links",
+			"undoSendSubsection": "Undo send",
+			"enableUndoSend": "Enable undo send",
+			"richTextFontSubsection": "Default rich text font",
+			"defaultSendingAccountSubsection": "Default sending account",
+			"sendOnlyAddressSubsection": "Add send only address",
+			"editSignature": "Note: To edit your signature, go to Accounts."
+		},
+		"accounts": {
+			"mailForwardingLabel":
+				"Forward: Your mail is forwarded to the specified address, so you can check it there.",
+			"mailForwardingTitle": "Access your mail elsewhere",
+			"mailForwardingExampleAddress": "example@example.com",
+			"mailAddressesTitle": "Accounts",
+			"addAccount": {
+				"email": "Email Address",
+				"emailPlaceholder": "name@example.com",
+				"wrongEmail": "The email address provided is invalid.",
+				"invalidPort":
+					"The port provided must be a positive integer between 1 and 65535",
+				"password": "Password",
+				"passwordPlaceholder": "Required",
+				"additionalInformationTitle": "Additional information needed",
+				"typeSubsection": "Account Type",
+				"imap": "IMAP",
+				"pop": "POP",
+				"host": "Mail Server",
+				"username": "Username",
+				"advancedSettings": "Advanced Settings",
+				"changePort": "Change port",
+				"useSSL":
+					"Use an encrypted connection (SSL) when accessing this server",
+				"portHint": "({{portNum}} is the default)",
+				"downloadDestination": "Download Messages to:",
+				"inbox": "Inbox",
+				"popDeleteFromServer":
+					"Delete messages on the server after downloading",
+				"addAnotherAccountLabel": "Add another account",
+				"successfulConnection": "Connection successful.",
+				"connectingMessage": "Connecting to {{email}}…",
+				"fixErrorsLabel": "Fix Errors"
+			},
+			"types": {
+				"primary": "primary"
+			},
+			"editAccount": {
+				"fromDisplay": "Your name",
+				"fromDisplayHelper": "The name shown in the emails you send.",
+				"description": "Description",
+				"descriptionHelper": "Name this mailbox.",
+				"replyToAddressSection": "Reply-to-address",
+				"replyToAddressEnabled":
+					"Receive replies to your sent emails at a different address.",
+				"replyToAddress": "Email address",
+				"replyToDisplay": "Name",
+				"accessYourMail": "Access your mail elsewhere",
+				"editSignatures": "Edit Signatures",
+				"forward":
+					"Forward: Your mail is forwarded to the specified address, so you can check it there. ",
+				"append": "Append a signature to the emails you send",
+				"confirmation": "Are you sure you want to remove \"{{accountName}}\"?",
+				"removeMailboxFolderOnDelete": "Delete the folder \"{{name}}\"?",
+				"additionalConfirmationInfo":
+					"You won’t be able to send messages from this mailbox.",
+				"storeAndForward": "Store and Forward",
+				"deleteAndForward": "Delete and Forward",
+				"removeMailboxHelper":
+					"Disconnecting a mailbox will permanently remove all messages and data from provider.net mail and cannot be undone."
+			},
+			"errors": {
+				"loginFailed": "Login failed. Please try again.",
+				"invalidCredentials": "Invalid credentials. Please try again.",
+				"generic": "Failed to connect. Please try again.",
+				"existingIsFailing": "There is a problem connecting to your account."
+			}
+		},
+		"calendarAndReminders": {
+			"generalSettingsTitle": "General Calendar Settings",
+			"startOfWeekSubsection": "Start of Week",
+			"startOfDaySubsection": "Start of Day",
+			"endOfDaySubsection": "End of Day",
+			"timeZoneSubsection": "Time Zone",
+			"autoAddAppointmentsToCalendar": "Automatically add to my calendar"
+		},
+		"vacationResponse": {
+			"title": "Vaction Response",
+			"enableOutOfOfficeReply":
+				"Enable automatic response during these dates (inclusive)",
+			"fromDate": "From",
+			"untilDate": "Until",
+			"sendMeCopy": "Send sample copy to me",
+			"sampleSent": "Sample email sent.",
+			"vacationResponseSample": "Vacation Response Sample"
+		}
+	},
+	"search": {
+		"results": {
+			"none": "No results",
+			"one": "One result",
+			"many": "{{count}} results"
+		},
+		"primaryButtonLabel": "Search {{type}}",
+		"placeholder": "{{name}}, search your {{type}}",
+		"buttonTypes": {
+			"mail": "Mail",
+			"calendar": "Calendar",
+			"contacts": "Contacts"
+		},
+		"placeholderTypes": {
+			"mail": "mailbox",
+			"calendar": "calendar",
+			"contacts": "contacts"
+		},
+		"categories": {
+			"photos": "Search photos",
+			"files": "Search files",
+			"gifs": "Search GIFs",
+			"web": "Search the web"
+		},
+		"placeholderWithContact": "Add Keywords",
+		"notes": {
+			"noResults": "We couldn't find a note with the keyword {{searchTerm}}",
+			"results": {
+				"singular": "There is {{length}} note which matches your search.",
+				"plural": "There are {{length}} notes which match your search."
+			}
+		},
+		"save_search": {
+			"success": "Your search has been saved in the Smart Folders list.",
+			"delete": "Your saved search has been deleted."
+		},
+		"cards": {
+			"relatedContacts": {
+				"title": "Related Contacts",
+				"showAll": "See more",
+				"hideAll": "See less"
+			},
+			"contactFrequency": {
+				"frequencyDescription":
+					"You and {{name}} have traded {{numMessages}} messages in the past {{dateRangeText}}. They first sent you a message regarding ‘{{firstMessageSubject}}’.",
+				"dateRangeLabel": {
+					"1m": "month",
+					"6m": "six months",
+					"1y": "year"
+				}
+			}
+		},
+		"scope": {
+			"search_in": "Search In:",
+			"all_mail": "All mail",
+			"advanced_search":"Advanced search"
+		}
+	},
+	"notifications": {
+		"smartFolderMoved": "<b>{{name}}</b> restored to Smart Folders."
+	},
+	"lists": {
+		"empty": "Nothing to show."
+	},
+	"folderlist": {
+		"smart_folders": "Smart Folders",
+		"folders": "Folders",
+		"deleted_contacts": "Deleted Contacts"
+	},
+	"faults": {
+		"AUTH_REQUIRED": "Please login to continue",
+		"AUTH_EXPIRED": "Please login to continue",
+		"AUTH_FAILED": "Your username/email or password was incorrect. Please try again"
+	}
+}

@@ -1,0 +1,13 @@
+mutation createSearchFolder(
+	$name: String!,
+	$parentFolderId: String,
+	$view: FolderView,
+	$query: String!
+) {
+	createSearchFolder(
+		name: $name
+		parentFolderId: $parentFolderId
+		view: $view,
+		query: $query
+	)
+}

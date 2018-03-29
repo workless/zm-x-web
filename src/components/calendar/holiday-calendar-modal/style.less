@@ -1,0 +1,54 @@
+@import '~@zimbra/x-ui/helpers.less';
+
+.holidayCalendarModalContent {
+	margin-top: 14px;
+}
+
+.holidayCalendarModal {
+	width: 630px;
+
+	.error {
+		margin: 12px 0px;
+		padding: 12px 20px;
+		color: @brand-danger;
+		background-color: fadeout(@brand-danger, 90%);
+	}
+}
+
+.list {
+	margin: 20px 0;
+	padding: 0;
+	list-style: none;
+	li {
+		margin-bottom: 6px;
+
+		&:last-child {
+			margin-bottom: 0;
+		}
+	}
+}
+
+.subsectionTitle {
+	min-width: 220px;
+	width: 220px;
+
+	&.forSelect {
+		line-height: 33px;
+	}
+}
+
+.subsection {
+	margin-bottom: 16px;
+	display: flex;
+	font-size: 13px;
+	color: @text-color;
+
+	&:last-child {
+		margin-bottom: 0;
+	}
+}
+
+.subsectionBody {
+	flex-grow: 1;
+	max-width: 375px;
+}

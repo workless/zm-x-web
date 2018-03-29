@@ -1,0 +1,38 @@
+@import '~@zimbra/x-ui/refs.less';
+
+.tokenInput {
+	display: flex;
+	flex-wrap: wrap;
+	position: relative;
+	width: 100%;
+	border: 1px solid @gray-darkest;
+	cursor: text;
+
+	.tokens {
+		margin: 0;
+		vertical-align: middle;
+
+		> * {
+			float: left;
+			cursor: pointer;
+			vertical-align: middle;
+		}
+	}
+
+	.inputWrap {
+		display: flex;
+		flex: 1;
+		min-width: 150px;
+		overflow: visible;
+	}
+
+	.input {
+		width: 100%;
+		padding: 2px;
+		margin: 0;
+		border: none;
+		background: none;
+		outline: none;
+		vertical-align: middle;
+	}
+}

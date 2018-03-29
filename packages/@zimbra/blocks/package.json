@@ -1,0 +1,25 @@
+{
+  "name": "@zimbra/blocks",
+  "version": "1.0.0",
+  "description": "Reusable components to be used throughout Zimbra Apps",
+  "main": "src/index.js",
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dom-helpers": "^3.2.1",
+    "focusable": "^2.0.0",
+    "linkref": "^1.0.1",
+    "lodash-es": "^4.17.4",
+    "preact": "^8.1.0",
+    "preact-i18n": "^1.0.0",
+    "preact-portal": "^1.1.2",
+    "react-popper": "^0.7.5"
+  }
+}

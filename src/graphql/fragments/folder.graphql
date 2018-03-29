@@ -1,0 +1,16 @@
+fragment folderFields on Folder {
+	absFolderPath
+	color
+	flags
+	id
+	name
+	nonFolderItemCount
+	nonFolderItemCountTotal
+	owner
+	parentFolderId
+	revision
+	unread
+	uuid
+	view
+	query
+}

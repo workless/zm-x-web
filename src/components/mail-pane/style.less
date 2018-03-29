@@ -1,0 +1,151 @@
+@import '~@zimbra/x-ui/helpers.less';
+
+.mailPane {
+	transition: opacity 150ms ease 50ms, width 450ms ease 20ms;
+	position: relative;
+	height: 100%;
+	overflow: hidden;
+}
+
+@media (min-width: @screen-md) {
+	.mailPane {
+		width: ~'calc(100vw - ' (@sidebar-width) ~')';
+		min-width: 66.67%;
+
+		&.attachmentViewerOpen {
+			width: ~'calc(50% - ' (@sidebar-width/2) ~')';
+			min-width: 0;
+		}
+		&.mediaMenuOpen {
+			width: ~'calc(66.67% - ' @sidebar-width/2 ~')';
+			min-width: ~'calc(100% - ' @sidebar-width ~' - 400px)';
+		}
+	}
+
+	.mailListPane {
+		&.withBottomPreview {
+			transition: none;
+		}
+		transition: max-width 450ms ease 20ms;
+		max-width: 100%;
+		/*TODO: Explore other alternatives as this will be a costly animation*/
+		&.collapse {
+			max-width: 0;
+		}
+	}
+}
+
+.mailListPane {
+	display: flex;
+	flex-direction: column;
+	float: left;
+	height: 100%;
+	width: 100%;
+	overflow: hidden;
+
+	&.narrow {
+		width: 330px;
+	}
+}
+
+.readPane {
+	position: relative;
+	height: 100%;
+	box-shadow: -1px 0 0 #ccc;
+	overflow-y: scroll;
+	-webkit-overflow-scrolling: touch;
+	background-color: @read-pane-bg-color;
+
+	&.rightPaneOpen {
+		margin-left: 1px;
+	}
+}
+
+.readPaneWide {
+	position: static;
+	width: 100%;
+}
+
+.horizontalResizeControl {
+	float: left;
+}
+
+.wideMailListHeader {
+	background: @gray-lighter;
+	border-bottom: 0;
+}
+
+.scrollParent {
+	position: relative;
+	top: 105%;
+	left: 40px;
+
+	&.buttonsAlign {
+		top: ~'calc(100% + 45px)';
+	}
+}
+
+.scrollToTop {
+	background-color: fade(@brand-tertiary, 90%);
+	width: 32px;
+	height: 32px;
+	position: absolute;
+	z-index: 1000;
+	right: 65px;
+	bottom: 5vh;
+	visibility: visible;
+	border-radius: 3px;
+	border: none;
+	color: #fff;
+	padding: 0px;
+}
+
+.input {
+	width: 0px;
+	height: 32px;
+	visibility: visible;
+	transition: all 150ms ease-in-out;
+	border-top-right-radius: 3px;
+	border-bottom-right-radius: 3px;
+	background-color: #fff;
+}
+
+.searchButton {
+	width: 32px;
+	height: 32px;
+	top: 0px;
+	position: absolute;
+	left: -30px;
+	border-radius: 3px;
+	background-color: fade(@brand-tertiary, 90%);
+	color: #fff;
+	padding: 0px;
+}
+
+.searchContainer {
+	position: absolute;
+	border-top-right-radius: 3px;
+	border-bottom-right-radius: 3px;
+	z-index: 1000;
+	right: 100px;
+	bottom: 5vh;
+	background-color: fade(@brand-tertiary, 90%);
+	.input {
+		padding: 0px;
+	}
+	&.inlineSearchIsVisible {
+		.input {
+			height: 24px;
+			width: 90px;
+			margin: 4px;
+			padding-left: 4px;
+		}
+		.searchButton {
+			border-bottom-right-radius: 0;
+			border-top-right-radius: 0;
+		}
+	}
+	> * {
+		border: none;
+	}
+}

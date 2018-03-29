@@ -1,0 +1,152 @@
+@import '../../../style/helpers.less';
+@import '../style.less';
+
+.viewerContent {
+	// padding: 14px 22px 0 16px;
+}
+
+.headers {
+	padding: 16px 12px 0 40px;
+	margin-bottom: 14px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: flex-start;
+}
+
+.replyActionButton {
+	width: 36px;
+	height: 36px;
+	padding: 0;
+	margin-right: 8px;
+}
+
+.replyPopover {
+	right: 0;
+	left: initial !important;
+	width: 188px;
+	min-width: 188px;
+}
+
+.replyActionButtonIconClass {
+	@media (max-width: @screen-xs-max) {
+		color: black !important;
+	}
+}
+
+.controls {
+	margin-top: -8px;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+}
+
+.readStatus {
+	position: absolute;
+	top: 22px;
+	left: 18px;
+}
+
+.header {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: flex-start;
+	flex: 1;
+}
+
+.addressColumn {
+	flex: 1;
+}
+
+.toAddressList,
+.attachmentLabel {
+	font-size: 11px;
+}
+
+.attachmentLabel {
+	margin-right: 3px;
+}
+
+.date {
+	color: @placeholder-color;
+	font-size: 11px;
+}
+
+.body {
+	padding: 0 42px 24px 40px;
+}
+
+.attachments {
+	padding: 0 42px 40px 40px;
+}
+
+.footer {
+	width: 100%;
+	border-top: solid 1px @gray-lightest;
+
+	.actions {
+		display: flex;
+		flex-direction: row;
+		> .button {
+			flex: 1;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			padding: 0 14px;
+			height: 44px;
+			background: #fff;
+			border: 0;
+			color: @text-color;
+			white-space: nowrap;
+			transition: all 200ms ease;
+
+			&:first-child {
+				padding-left: 0;
+			}
+
+			> .icon {
+				color: black;
+				font-size: 18px;
+				vertical-align: middle;
+			}
+
+			> .text {
+				margin-left: 5px;
+				vertical-align: middle;
+				font-size: 14px;
+			}
+		}
+	}
+}
+
+@media (max-width: @screen-xs-max) {
+	.headers {
+		padding: 16px 12px 0 16px;
+	}
+
+	.body {
+		padding: 0 22px 28px 16px;
+	}
+
+	.attachments {
+		padding: 0 22px 24px 16px;
+	}
+
+	.footer {
+		border-top: solid 2px @gray-lightest;
+	}
+}
+
+@media (max-width: @screen-xs) {
+	.headers {
+		padding-right: 12px;
+	}
+	.replyActionButton {
+		margin-right: 0px;
+	}
+
+	.footer .button .icon {
+		margin-left: 24px;
+	}
+}

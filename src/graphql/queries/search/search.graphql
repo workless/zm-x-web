@@ -1,0 +1,116 @@
+#import "../../fragments/contact.graphql"
+#import "../../fragments/mime-part.graphql"
+
+# Specify the fields that we want for search with a search-specific
+# fragments for two reasons:
+#
+# (a) we need less data to render list items than we do full items
+# (b) this caches a search results and full items seperately.  If an item is added here that is not in search results
+#		it will get set to null and the more detailed response will not overwrite it with the real value
+#		tl;dr; DO NOT add fields here unless they are actually returned by the search result
+fragment searchConversationFields on Conversation {
+	id
+	size
+	date
+	folderId
+	subject
+	excerpt
+	conversationId
+	flags
+	tags
+	tagNames
+	revision
+	changeDate
+	modifiedSequence
+	sortField
+	emailAddresses {
+		address
+		name
+		type
+		displayName
+	}
+	numMessages
+	messages {
+		id
+		date
+		folderId
+		size
+	}
+}
+
+fragment searchMessageFields on MessageInfo {
+	id
+	size
+	date
+	folderId
+	subject
+	excerpt
+	conversationId
+	flags
+	tags
+	tagNames
+	revision
+	changeDate
+	modifiedSequence
+	sortField
+	emailAddresses {
+		address
+		name
+		type
+		displayName
+	}
+	attachments {
+		...mimePartFields
+	}
+	inlineAttachments {
+		...mimePartFields
+	}
+	mimeParts {
+		...mimePartFields
+		mimeParts {
+			...mimePartFields
+			mimeParts {
+				...mimePartFields
+			}
+		}
+	}
+}
+
+query search(
+	$cursor: Cursor,
+	$fetch: String,
+	$fullConversation: Boolean,
+	$limit: Int,
+	$needExp: Boolean,
+	$offset: Int,
+	$query: String,
+	$recip: Int,
+	$sortBy: SortBy,
+	$types: SearchType
+) {
+	search(
+		cursor: $cursor,
+		fetch: $fetch,
+		fullConversation: $fullConversation,
+		limit: $limit,
+		needExp: $needExp,
+		offset: $offset,
+		query: $query,
+		recip: $recip,
+		sortBy: $sortBy,
+		types: $types
+	) {
+		more
+		offset
+		sortBy
+		contacts {
+			...contactFields
+		}
+		messages {
+			...searchMessageFields
+		}
+		conversations {
+			...searchConversationFields
+		}
+	}
+}

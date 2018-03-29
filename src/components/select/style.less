@@ -1,0 +1,74 @@
+@import '~@zimbra/x-ui/helpers.less';
+
+.container {
+	display: inline-block;
+	position: relative;
+	line-height: normal;
+
+	&.fullWidth {
+		width: 100%;
+
+		.select {
+			width: 100%;
+		}
+	}
+}
+
+.select,
+.collapseLabel {
+	white-space: nowrap;
+	background-color: transparent;
+	background-image: url('../../assets/down-arrow.svg');
+	background-repeat: no-repeat;
+	background-position: center right 7px;
+	padding: 9px 34px 9px 12px;
+	border-radius: 3px;
+	border: solid 1px @gray-lighter;
+	color: @gray-darkest;
+
+	&.collapsable {
+		outline: none;
+		padding: 0 25px 0 2px;
+	}
+
+	&.noArrow {
+		background-image: none;
+	}
+
+	&.bold {
+		font-weight: bold;
+	}
+
+	&.noBorder {
+		border: 0;
+
+		&:hover,
+		&:active,
+		&:focus {
+			background-color: @gray-lightest;
+		}
+	}
+}
+
+.select {
+	appearance: none;
+
+	&::-ms-expand {
+		display: none;
+	}
+
+	&.hidden {
+		opacity: 0;
+	}
+}
+
+.collapseLabel {
+	line-height: 14px;
+	position: absolute;
+	display: inline-block;
+	padding-right: 25px;
+
+	&.hidden {
+		display: none;
+	}
+}

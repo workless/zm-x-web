@@ -1,0 +1,93 @@
+{
+  "name": "@zimbra/webpack-config",
+  "version": "1.0.0",
+  "description": "Wraps up the webpack configuration, plugins and loaders for Zimbra.",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "babel src -d dist -s --copy-files",
+    "prebuild": "mkdirp dist",
+    "test": "eslint src",
+    "prepublish": "npm run build"
+  },
+  "babel": {
+    "presets": [
+      "es2015",
+      "stage-0"
+    ],
+    "plugins": [
+      "add-module-exports"
+    ]
+  },
+  "eslintConfig": {
+    "extends": "eslint-config-synacor",
+    "rules": {
+      "no-console": 0
+    }
+  },
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-eslint": "^7.2.2",
+    "chalk": "^2.3.0",
+    "eslint": "^4.13.1",
+    "eslint-config-synacor": "^2.0.2",
+    "mkdirp": "^0.5.1"
+  },
+  "license": "UNLICENSED",
+  "dependencies": {
+    "babel-core": "^6.24.1",
+    "babel-loader": "^7.1.0",
+    "babel-plugin-__coverage__": "^11.0.0",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-plugin-lodash": "^3.2.11",
+    "babel-plugin-recharts": "^1.1.1",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-plugin-transform-object-assign": "^6.22.0",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "babel-runtime": "^6.23.0",
+    "bundle-loader": "^0.5.5",
+    "clean-css": "^4.0.12",
+    "copy-webpack-plugin": "^4.3.1",
+    "cors": "^2.8.3",
+    "cq-prolyfill": "^0.3.3",
+    "css-loader": "^0.28.0",
+    "css-object-loader": "0.0.7",
+    "deepmerge": "^1.3.2",
+    "ejs-loader": "^0.3.0",
+    "extract-text-webpack-plugin": "^2.1.0",
+    "file-loader": "^0.11.1",
+    "filesize": "^3.5.6",
+    "gzip-size": "^3.0.0",
+    "happypack": "^4.0.0-beta.1",
+    "html-webpack-plugin": "^2.30.1",
+    "ignore-loader": "^0.1.2",
+    "less": "^2.7.2",
+    "less-loader": "^4.0.3",
+    "loader-utils": "^1.1.0",
+    "lodash-webpack-plugin": "^0.11.4",
+    "postcss-cssnext": "2.9.0",
+    "postcss-discard-comments": "^2.0.4",
+    "postcss-filter-gradient": "^0.2.6",
+    "postcss-loader": "^1.3.3",
+    "praline": "^0.3.1",
+    "pretty-bytes": "^4.0.2",
+    "progress-bar-webpack-plugin": "^1.9.3",
+    "promise-loader": "^1.0.0",
+    "raw-loader": "^0.5.1",
+    "recursive-readdir": "^2.1.1",
+    "resolve-url-loader": "^2.0.2",
+    "source-map-loader": "^0.2.1",
+    "strip-ansi": "^3.0.1",
+    "style-loader": "^0.16.1",
+    "ts-loader": "^3.4.0",
+    "typescript": "^2.7.1",
+    "url-loader": "^0.5.8",
+    "webpack-bundle-analyzer": "^2.9.0"
+  },
+  "peerDependencies": {
+    "graphql": "*",
+    "graphql-tag": "*",
+    "webpack": ">=2"
+  }
+}

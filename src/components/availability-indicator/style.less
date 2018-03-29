@@ -1,0 +1,158 @@
+@import '~@zimbra/x-ui/helpers.less';
+
+@border-primary: #b5b5b5;
+
+
+.availabilityIndicator {
+	background-color: @gray-lightest;
+	padding: 19px 21px 25px;
+	width: 100%;
+}
+
+.angleIcon {
+	margin-right: 18px;
+}
+
+.refreshIcon {
+	margin-right: 13px;
+	font-size: 16px;
+}
+
+.icon {
+	cursor: pointer;
+}
+
+.header {
+	margin-bottom: 8px;
+}
+
+.headerControls {
+	display: flex;
+	align-items: center;
+	margin-bottom: 9px;
+}
+
+.title {
+	flex: 1;
+	font-size: 18px;
+}
+
+.tableBody {
+	overflow-x: scroll;
+	position: relative;
+}
+
+.tableGridlineLabelSpacer {
+	border-bottom: solid 1px @border-primary;
+}
+
+.tableGridlines {
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	top: 0;
+}
+
+.tableGridline {
+	position: absolute;
+	width: 1px;
+	bottom: 0;
+	background-color: @gray-lighter;
+}
+
+.tableGridlineLabels {
+	position: relative;
+	border-bottom: solid 1px @border-primary;
+	div {
+		display: inline-block;
+		text-align: center;
+		font-size: 10px;
+		color: @gray;
+	}
+}
+
+.tableRowBody {
+	border-bottom: solid 1px @gray-lighter;
+	height: 31px;
+	position: relative;
+	div {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+	}
+}
+
+.freeIndicator {
+	background-color: transparent
+}
+
+.busyIndicator,
+.tentativeIndicator,
+.unavailableIndicator {
+	background-color: fade(@brand-primary, 30%);
+}
+
+.nodataIndicator {
+	background: repeating-linear-gradient(
+		-45deg,
+		@gray-lighter,
+		@gray-lighter 4px,
+		white 4px,
+		white 8px
+	);
+}
+
+.tableRowHeader {
+	width: 162px;
+	height: 31px;
+	border-right: solid 1px @border-primary;
+	border-bottom: solid 1px @gray-lighter;
+	display: flex;
+	align-items: center;
+	flex-shrink: 0;
+}
+
+.contextMenu {
+	width: 100%;
+	display: flex;
+	align-items: center;
+}
+.contextMenuContainer {
+	z-index: 1001;
+}
+
+.requiredToggle {
+	position: relative;
+}
+
+.selectContainer {
+	opacity: 0;
+}
+
+.downAngleIcon {
+	margin-left: 4px;
+	margin-right: 8px;
+}
+
+.selectLabel {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	display: flex;
+	align-items: center;
+}
+
+.availabilityTable {
+	display: flex;
+	flex-direction: row;
+}
+
+.eventOutline {
+	position: absolute;
+	border: solid 2px #a4a4a4;
+	border-radius: 2px;
+	bottom: 0;
+}

@@ -1,0 +1,17 @@
+@import '~@zimbra/x-ui/refs.less';
+
+button.icon {
+	background: transparent;
+	color: @gray;
+	border: none;
+	cursor: pointer;
+	padding: 0;
+
+	// TODO: Differentiate these three
+	&.active,
+	&:focus,
+	&:hover {
+		background-color: transparent;
+		color: @brand-primary;
+	}
+}

@@ -1,0 +1,36 @@
+@import '~@zimbra/x-ui/refs.less';
+
+.spinner {
+	display: inline-block;
+	width: 1em;
+	height: 1em;
+	border: 1px solid transparent;
+	border-top-color: rgba(0,0,0,0.6);
+	border-radius: 50%;
+	animation: rotate 800ms linear infinite;
+
+	&[dark] {
+		border-top-color: rgba(255,255,255,0.6);
+	}
+
+	@keyframes rotate {
+		0% { transform: rotate(0deg); }
+		100% { transform: rotate(360deg); }
+	}
+}
+
+.blockSpinner {
+	display: table !important;
+	height: 100%;
+	width: 100%;
+
+	> div {
+		display: table-cell;
+		text-align: center;
+		vertical-align: middle;
+
+		.innerSpinner {
+			font-size: 3em;
+		}
+	}
+}

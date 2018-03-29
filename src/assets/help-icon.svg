@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="12px" height="12px" viewBox="0 0 12 12" version="1.1" 
+  xmlns="http://www.w3.org/2000/svg" 
+  xmlns:xlink="http://www.w3.org/1999/xlink">
+  <g id="Settings" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+    <g id="MAIL---Inbox-w-Settings-Modal---Calendar-and-Reminders" transform="translate(-1110.000000, -408.000000)">
+      <g id="Edit-Details-modal">
+        <g id="dialog" transform="translate(299.000000, 138.000000)">
+          <g id="Group-3" transform="translate(233.000000, 261.000000)">
+            <g id="ic_help_black_24px-(3)" transform="translate(576.000000, 7.000000)">
+              <polygon id="Shape" points="0 0 16 0 16 16 0 16"></polygon>
+              <path d="M8,2 C4.688,2 2,4.688 2,8 C2,11.312 4.688,14 8,14 C11.312,14 14,11.312 14,8 C14,4.688 11.312,2 8,2 Z M8.6,12.2 L7.4,12.2 L7.4,11 L8.6,11 L8.6,12.2 Z M9.842,7.55 L9.302,8.102 C8.87,8.54 8.6,8.9 8.6,9.8 L7.4,9.8 L7.4,9.5 C7.4,8.84 7.67,8.24 8.102,7.802 L8.846,7.046 C9.068,6.83 9.2,6.53 9.2,6.2 C9.2,5.54 8.66,5 8,5 C7.34,5 6.8,5.54 6.8,6.2 L5.6,6.2 C5.6,4.874 6.674,3.8 8,3.8 C9.326,3.8 10.4,4.874 10.4,6.2 C10.4,6.728 10.184,7.208 9.842,7.55 Z" id="Shape" fill="#000000" fill-rule="nonzero"></path>
+            </g>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

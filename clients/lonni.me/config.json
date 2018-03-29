@@ -1,0 +1,11 @@
+{
+	"title": "Lonni",
+	"clientName": "Lonni",
+	"zimbraOrigin": "/@zimbra",
+	"zimbraProxyURL": "https://zimbra-api-proxy-aws.herokuapp.com",
+	"devServer": {
+		"zimbraOrigin": "https://zimbra-api-proxy-aws.herokuapp.com"
+	},
+
+	"nav": false
+}

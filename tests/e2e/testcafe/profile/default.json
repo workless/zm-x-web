@@ -1,0 +1,25 @@
+{
+    "clientName": ".zimbra-client",
+    "notepadName": ".zimlets-notepad",
+    "serverName": "ec2-13-58-225-137.us-east-2.compute.amazonaws.com",
+    "hostURL": "https://localhost:8080/",
+    "pageElements": {
+        "id": {
+            "contacts": {
+                "detailField": {
+                    "firstName": "firstName",
+                    "middleName": "middleName",
+                    "lastName": "lastName",
+                    "email": "email@zimbra.com",
+                    "phone": "phone",
+                    "jobTitle": "jobTitle",
+                    "company": "company",
+                    "birthday": "1999-04-01",
+                    "anniversary": "1999-04-02",
+                    "website": "www.website.com",
+                    "notes": "notes here"
+                }
+            }
+        }
+    }
+}

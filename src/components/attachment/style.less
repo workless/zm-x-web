@@ -1,0 +1,48 @@
+@import '~@zimbra/x-ui/helpers.less';
+
+.attachment {
+	position: relative;
+	padding: 5px;
+	border-top: 1px solid @gray-lighter;
+	background: #fff;
+	overflow: hidden;
+	cursor: pointer;
+
+	> * {
+		vertical-align: middle;
+	}
+
+	.name {
+		display: block;
+		margin: 0;
+		padding: 10px;
+		color: @text-color;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+	.size {
+		display: inline-block;
+		margin: 0;
+		padding: 10px 5px;
+		line-height: calc(1.21 * @font-size-base);
+		font-size: @font-size-small;
+		color: lighten(@gray-light, 30%);
+	}
+
+	.icon {
+		float: left;
+		padding: 11px 5px 9px;
+		color: @gray-light;
+	}
+	.size {
+		float: right;
+	}
+	.button {
+		position: relative;
+		top: 1px;
+		float: right;
+		margin: 0;
+	}
+}
+

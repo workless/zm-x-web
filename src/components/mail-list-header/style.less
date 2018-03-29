@@ -1,0 +1,43 @@
+@import '~@zimbra/x-ui/helpers.less';
+
+.mailListHeader {
+	.toolbarHeight();
+	min-height: @toolbar-height;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding-left: 12px;
+	border-bottom: 1px solid #E6E6E6;
+
+	@media (max-width: @screen-sm-max) {
+		padding-left: 16px;
+	}
+
+	&.wide {
+		background: @read-pane-toolbar-color;
+		border-bottom: 0;
+	}
+}
+
+.title {
+	line-height: 1.23;
+	margin-left: 6px;
+	@media (max-width: @screen-sm-max) {
+		margin-left: 14px;
+	}
+}
+
+.leftContainer {
+	display: flex;
+	align-items: center;
+}
+
+.checkbox {
+	margin-right: 14px;
+}
+
+.count {
+	font-weight: bold;
+	color: @brand-secondary;
+	margin-left: 4px;
+}

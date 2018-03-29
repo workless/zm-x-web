@@ -1,0 +1,18 @@
+{
+  "name": "@zimbra/a11y",
+  "version": "1.0.0",
+  "description": "A collection of Preact components for helping with accesibility",
+  "main": "src/index.js",
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "preact": "^8.1.0"
+  }
+}

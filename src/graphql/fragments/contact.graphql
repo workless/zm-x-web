@@ -1,0 +1,41 @@
+fragment contactFields on Contact {
+	id
+	date
+	folderId
+	revision
+	sortField
+	attributes {
+		anniversary
+		birthday
+		company
+		email
+		email2
+		fax
+		firstName
+		fullName
+		homeCity
+		homeEmail
+		homePhone
+		homePostal
+		homeState
+		homeStreet
+		im
+		im2
+		im3
+		im4
+		jobTitle
+		lastName
+		middleName
+		mobile
+		nickname
+		pager
+		phone
+		website
+		workCity
+		workEmail
+		workPhone
+		workPostal
+		workState
+		workStreet
+	}
+}

@@ -1,0 +1,36 @@
+@import '~@zimbra/x-ui/refs.less';
+
+.notifications {
+	position: fixed;
+	top: 75px;
+	left: 50%;
+	transform: translateX(-50%);
+	background-color: white;
+	padding: 4px 8px;
+	box-shadow: 0 4px 6px rgba(0,0,0,.36);
+	text-align: center;
+	border-radius: 1px;
+	border-width: 1px;
+	border-style: solid;
+
+	&.success {
+		border-color: @toast-success-color;
+	}
+
+	&.failure {
+		border-color: @toast-failure-color;
+	}
+}
+
+
+.undoButton {
+	color: @brand-primary;
+	background-color: transparent;
+	border: none;
+	padding: 0;
+	text-decoration: none;
+	&:hover, &:focus {
+		background-color: transparent !important;
+		text-decoration: underline;
+	}
+}

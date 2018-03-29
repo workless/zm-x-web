@@ -1,0 +1,36 @@
+@import '~@zimbra/x-ui/refs.less';
+
+.tab {
+	width: 100%;
+	display: none;
+
+	&.active {
+		// Only display the active tab
+		display: block;
+	}
+}
+
+.nav {
+	width: 100%;
+}
+
+.nav-item {
+	color: initial;
+	cursor: pointer;
+	display: inline-block;
+
+	// Psuedo-element for vertical centering: https://css-tricks.com/centering-in-the-unknown/
+	&:before {
+		content: '';
+		display: inline-block;
+		height: 100%;
+		vertical-align: middle;
+	}
+
+	> a {
+		color: #000;
+		display: inline-block;
+		vertical-align: middle;
+		text-decoration: none;
+	}
+}

@@ -1,0 +1,3 @@
+mutation prefCalendarInitialView($value: PrefCalendarInitialView!) {
+	prefCalendarInitialView(value: $value)
+}

@@ -1,0 +1,20 @@
+@import '~@zimbra/x-ui/helpers.less';
+
+.button {
+	outline: none;
+	background: none;
+	border: 0;
+	padding: 0;
+	line-height: 1;
+
+	&.linkColor {
+		color: @link-color;
+	}
+
+	&:not(:disabled) {
+		&:focus,
+		&:hover {
+			background: none;
+		}
+	}
+}

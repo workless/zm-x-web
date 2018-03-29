@@ -1,0 +1,34 @@
+@import '~@zimbra/x-ui/helpers.less';
+
+.toolbar {
+	flex: 0 0 auto;
+
+	.toolbarTop {
+		height: 46px;
+		// @TODO this value is #ccc in the mocks, which is not @gray-lighter
+		border-bottom: 1px solid @gray-lighter;
+	}
+
+	h3 {
+		display: inline-block;
+		margin: 0;
+		padding: 0 8px;
+		line-height: 48px;
+		vertical-align: middle;
+		font-size: @font-size-h3;
+		font-family: @headings-font-family;
+		font-weight: @headings-font-weight;
+		color: @text-color;
+	}
+
+	.viewButton, .actionsMenuButton {
+		vertical-align: middle;
+		height: 46px;
+		line-height: 46px;
+	}
+
+	.viewButton.current {
+		color: @brand-primary;
+		opacity: 1;
+	}
+}

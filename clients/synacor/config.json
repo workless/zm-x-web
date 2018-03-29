@@ -1,0 +1,51 @@
+{
+	"title": "SynaMail",
+	"clientName": "Synacor",
+	"zimbraOrigin": "/@zimbra",
+	"zimbraProxyURL": "https://email.corp.synacor.com",
+	"devServer": {
+		"zimbraOrigin": "https://email.corp.synacor.com"
+	},
+
+	"nav": {
+		"home": {
+			"name": "Synacor",
+			"alt": "Synacor",
+			"href": "https://synacor.com"
+		},
+
+		"left": [
+			{
+				"name":"Wiki",
+				"href": "https://wiki.corp.synacor.com/"
+			},
+			{
+				"name":"Projects",
+				"href": "https://stash.corp.synacor.com/"
+			},
+			{
+				"name":"Dashboards",
+				"href": "https://bamboo.corp.synacor.com/"
+			}
+		],
+
+		"right": [
+			{
+				"name": "Products",
+				"href": "https://synacor.com/products/"
+			},
+			{
+				"name": "Customers",
+				"href": "https://synacor.com/customers/"
+			},
+			{
+				"name": "Media",
+				"href": "https://synacor.com/media/"
+			},
+			{
+				"name": "Careers",
+				"href": "https://synacor.com/careers/"
+			}
+		]
+	}
+}

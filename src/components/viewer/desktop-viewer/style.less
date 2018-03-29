@@ -1,0 +1,60 @@
+@import '../../../style/helpers.less';
+@import '../style.less';
+
+.viewerContent {
+	padding: 12px 36px 0 40px;
+}
+
+.headers {
+	margin-bottom: 18px;
+}
+
+.star {
+	position: absolute;
+	top: 12px;
+	right: 11px;
+}
+
+.readStatus {
+	position: absolute;
+	top: 17px;
+	left: 17px;
+}
+
+.date {
+	display: inline-block;
+	float: right;
+	color: @placeholder-color;
+}
+
+.footer {
+	width: 100%;
+	padding: 10px 0;
+
+	.actions {
+		> .button {
+			padding: 0 14px;
+			.toolbarHeight();
+			background: #fff;
+			border: 0;
+			color: @text-color;
+			white-space: nowrap;
+			transition: all 200ms ease;
+
+			&:first-child {
+				padding-left: 0;
+			}
+
+			> .icon {
+				color: @brand-primary;
+				font-size: 18px;
+				vertical-align: middle;
+			}
+
+			> .text {
+				margin-left: 5px;
+				vertical-align: middle;
+			}
+		}
+	}
+}

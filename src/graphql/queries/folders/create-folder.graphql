@@ -1,0 +1,19 @@
+mutation createFolder(
+	$color: Int,
+	$fetchIfExists: Boolean,
+	$flags: String,
+	$name: String!,
+	$parentFolderId: String,
+	$url: String,
+	$view: FolderView
+) {
+	createFolder(
+		color: $color
+		fetchIfExists: $fetchIfExists
+		flags: $flags
+		name: $name
+		parentFolderId: $parentFolderId
+		url: $url
+		view: $view
+	)
+}

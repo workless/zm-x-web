@@ -1,0 +1,7 @@
+#import "../fragments/message.graphql"
+
+query getMessage($id: ID!) {
+	message: getMessage(id: $id) {
+		...messageFields
+	}
+}

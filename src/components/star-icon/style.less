@@ -1,0 +1,24 @@
+@import '~@zimbra/x-ui/helpers.less';
+
+.star {
+	color: @gray-darkest;
+	opacity: 0.5;
+	transition: color 150ms ease, opacity 150ms ease;
+	outline: 0;
+	cursor: pointer;
+
+	&:hover {
+		opacity: 1;
+	}
+
+	&.starred {
+		opacity: 1;
+		&:hover {
+			opacity: 0.5;
+		}
+	}
+}
+
+.starred {
+	color: @favorite-indicator-active;
+}

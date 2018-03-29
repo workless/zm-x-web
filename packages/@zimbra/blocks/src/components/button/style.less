@@ -1,0 +1,246 @@
+@import '~@zimbra/x-ui/refs.less';
+
+@disabled-color: 5%;
+
+button {
+	cursor: pointer;
+	&:hover,
+	&:focus {
+		outline: none;
+	}
+}
+
+a[role='button'] {
+	display: inline-block;
+
+	&:hover,
+	&:focus {
+		text-decoration: none;
+	}
+}
+
+.button {
+	border: solid 1px transparent;
+	border-radius: 3px;
+	font-size: 100%;
+	line-height: 1;
+	margin: 5px;
+	background-color: @gray-lightest;
+	color: @text-color;
+
+	&:disabled {
+		opacity: 0.4;
+	}
+
+	.icon {
+		display: inline-block;
+		vertical-align: top;
+
+		&.left {
+			margin-right: 5px;
+		}
+
+		&.right {
+			margin-left: 5px;
+		}
+	}
+
+	&:not(:disabled):hover,
+	&:not(:disabled):focus {
+		background-color: darken(@gray-lightest, 5%);
+		cursor: pointer;
+	}
+
+	//--------------
+	// Button Types
+	//--------------
+	&.primary {
+		background-color: @link-color;
+		color: @body-bg;
+
+		&.brand-primary {
+			background-color: @brand-primary;
+		}
+		&.brand-success {
+			background-color: @brand-success;
+		}
+		&.brand-info {
+			background-color: @brand-info;
+		}
+		&.brand-warning {
+			background-color: @brand-warning;
+		}
+		&.brand-danger {
+			background-color: @brand-danger;
+			color: #fff;
+		}
+
+		&:not(:disabled) {
+			&:hover,
+			&:focus {
+				background-color: lighten(@link-color, @disabled-color);
+
+				&.brand-primary {
+					background-color: lighten(@brand-primary, @disabled-color);
+				}
+				&.brand-success {
+					background-color: lighten(@brand-success, @disabled-color);
+				}
+				&.brand-info {
+					background-color: lighten(@brand-info, @disabled-color);
+				}
+				&.brand-warning {
+					background-color: lighten(@brand-warning, @disabled-color);
+				}
+				&.brand-danger {
+					background-color: lighten(@brand-danger, @disabled-color);
+				}
+			}
+		}
+	}
+
+	&.secondary {
+		background-color: transparent;
+		border-color: @link-color;
+		color: @link-color;
+
+		&.brand-primary {
+			color: @brand-primary;
+			border-color: @brand-primary;
+		}
+		&.brand-success {
+			color: @brand-success;
+			border-color: @brand-success;
+		}
+		&.brand-info {
+			color: @brand-info;
+			border-color: @brand-info;
+		}
+		&.brand-warning {
+			color: @brand-warning;
+			border-color: @brand-warning;
+		}
+		&.brand-danger {
+			color: @brand-danger;
+			border-color: @brand-danger;
+		}
+
+		&:not(:disabled) {
+			&:hover,
+			&:focus {
+				background-color: @link-color;
+
+				&.brand-primary {
+					background-color: @brand-primary;
+				}
+				&.brand-success {
+					background-color: @brand-success;
+				}
+				&.brand-info {
+					background-color: @brand-info;
+				}
+				&.brand-warning {
+					background-color: @brand-warning;
+				}
+				&.brand-danger {
+					background-color: @brand-danger;
+				}
+
+				color: @body-bg;
+			}
+		}
+	}
+
+	&.floating {
+		background-color: transparent;
+		border-color: transparent;
+		color: @link-color;
+
+		&.brand-primary {
+			color: @brand-primary;
+		}
+		&.brand-success {
+			color: @brand-success;
+		}
+		&.brand-info {
+			color: @brand-info;
+		}
+		&.brand-warning {
+			color: @brand-warning;
+		}
+		&.brand-danger {
+			color: @brand-danger;
+		}
+
+		&:not(:disabled) {
+			&:hover,
+			&:focus {
+				text-decoration: underline;
+
+				.icon {
+					text-decoration: none;
+				}
+			}
+		}
+	}
+
+	&.tertiary {
+		background-color: @body-bg;
+		color: lighten(@gray-base, 20%); // #333
+		border-color: darken(@body-bg, 20%); // @gray-darkest;
+		&:not(:disabled) {
+			&:hover,
+			&:focus {
+				background-color: @body-bg;
+				color: lighten(@gray-base, 20%);
+				border-color: darken(@body-bg, 20%);
+				opacity: 0.7;
+			}
+		}
+	}
+
+	&.text {
+		border: 0;
+		background-color: inherit;
+		color: @link-color;
+
+		&:hover,
+		&:focus {
+			background-color: inherit;
+			color: inherit;
+			border: 0;
+		}
+	}
+
+	&.alignLeft {
+		margin-left: 0;
+	}
+
+	//--------------
+	// Button Sizes
+	//--------------
+	&.regular {
+		padding: 8px 23px;
+
+		&.floating {
+			padding: 8px;
+		}
+
+		&.text {
+			padding: 0;
+		}
+	}
+
+	&.large {
+		font-size: 115%;
+		padding: 12px 44px;
+
+		&.floating {
+			padding: 14px;
+		}
+
+		&.text {
+			padding: 0;
+		}
+	}
+}

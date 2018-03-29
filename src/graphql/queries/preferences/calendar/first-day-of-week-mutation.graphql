@@ -1,0 +1,3 @@
+mutation prefCalendarFirstDayOfWeek($value: String!) {
+	prefCalendarFirstDayOfWeek(value: $value)
+}

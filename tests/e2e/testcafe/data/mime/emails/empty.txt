@@ -1,0 +1,57 @@
+Return-Path: john.doe@ec2-13-59-112-76.us-east-2.compute.amazonaws.com
+Received: from ip-172-31-31-184.us-east-2.compute.internal (LHLO
+ ip-172-31-31-184.us-east-2.compute.internal) (172.31.31.184) by
+ ip-172-31-31-184.us-east-2.compute.internal with LMTP; Sun, 11 Feb 2018
+ 01:41:26 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+	by ip-172-31-31-184.us-east-2.compute.internal (Postfix) with ESMTP id 182621001E0
+	for <john.doe@ec2-13-59-112-76.us-east-2.compute.amazonaws.com>; Sun, 11 Feb 2018 01:41:26 +0000 (UTC)
+X-Spam-Flag: NO
+X-Spam-Score: -2.47
+X-Spam-Level:
+X-Spam-Status: No, score=-2.47 required=6.6 tests=[ALL_TRUSTED=-1,
+	BAYES_00=-1.9, HTML_MESSAGE=0.001, MIME_HTML_MOSTLY=0.428,
+	TVD_SPACE_RATIO=0.001] autolearn=ham autolearn_force=no
+Received: from ip-172-31-31-184.us-east-2.compute.internal ([127.0.0.1])
+	by localhost (ip-172-31-31-184.us-east-2.compute.internal [127.0.0.1]) (amavisd-new, port 10032)
+	with ESMTP id utHgtbnFz59Q
+	for <john.doe@ec2-13-59-112-76.us-east-2.compute.amazonaws.com>;
+	Sun, 11 Feb 2018 01:41:25 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+	by ip-172-31-31-184.us-east-2.compute.internal (Postfix) with ESMTP id E49CA1001E4
+	for <john.doe@ec2-13-59-112-76.us-east-2.compute.amazonaws.com>; Sun, 11 Feb 2018 01:41:25 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at
+	ec2-13-59-112-76.us-east-2.compute.amazonaws.com
+Received: from ip-172-31-31-184.us-east-2.compute.internal ([127.0.0.1])
+	by localhost (ip-172-31-31-184.us-east-2.compute.internal [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id EIFLY6u6IJKF
+	for <john.doe@ec2-13-59-112-76.us-east-2.compute.amazonaws.com>;
+	Sun, 11 Feb 2018 01:41:25 +0000 (UTC)
+Received: from ip-172-31-31-184.us-east-2.compute.internal (ip-172-31-31-184.us-east-2.compute.internal [172.31.31.184])
+	by ip-172-31-31-184.us-east-2.compute.internal (Postfix) with ESMTP id D2C7D1001E0
+	for <john.doe@ec2-13-59-112-76.us-east-2.compute.amazonaws.com>; Sun, 11 Feb 2018 01:41:25 +0000 (UTC)
+Date: Sun, 11 Feb 2018 01:41:25 +0000 (UTC)
+From: John Doe <john.doe@ec2-13-59-112-76.us-east-2.compute.amazonaws.com>
+Reply-To: Test Doe <test.doe.zimbra@imap.gmail.com>
+To: John Doe <john.doe@ec2-13-59-112-76.us-east-2.compute.amazonaws.com>
+Message-ID: <1155710090.654925.1518313285807.JavaMail.zimbra@ec2-13-59-112-76.us-east-2.compute.amazonaws.com>
+Subject: empty
+MIME-Version: 1.0
+Content-Type: multipart/alternative; 
+	boundary="=_379e0df0-237e-42ea-9bec-6a9a22201b7b"
+X-Originating-IP: [172.31.31.184]
+X-Mailer: Zimbra 8.8.7_GA_1907 (ZimbraWebClient - SAF11 (Mac)/8.8.7_GA_1907)
+Thread-Index: 6ePD+ufTLxVdYlkXESotXZYCf2hnYg==
+Thread-Topic: empty
+
+--=_379e0df0-237e-42ea-9bec-6a9a22201b7b
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+
+
+--=_379e0df0-237e-42ea-9bec-6a9a22201b7b
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: 7bit
+
+<html><body></body></html>
+--=_379e0df0-237e-42ea-9bec-6a9a22201b7b--

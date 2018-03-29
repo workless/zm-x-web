@@ -1,0 +1,35 @@
+@import '~@zimbra/x-ui/helpers.less';
+
+.sidebarHeader {
+	display: block;
+
+	.createNew {
+		display: block;
+		height: 46px;
+		background: @sidebar-primary-button-color;
+		box-shadow: none;
+		font-weight: bold;
+	}
+}
+
+.sidebarSectionHeaderIcon {
+	background-image: url('../../../assets/calendar.svg');
+	background-repeat: no-repeat;
+	display: block;
+	width: 20px;
+	height: 20px;
+	position: absolute;
+	left: 14px;
+	top: 12px;
+}
+
+.sidebarSectionHeader {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	height: 44px;
+	padding: 0 10px 0 50px;
+	font-family: @branding-font-family-bold;
+	font-size: 13px;
+}

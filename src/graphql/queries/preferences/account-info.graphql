@@ -1,0 +1,77 @@
+#import "../../fragments/data-source.graphql"
+
+query AccountInfo {
+	accountInfo {
+		id
+		name
+		publicURL
+		rest
+		name
+		attrs {
+			displayName
+			zimbraFeatureCalendarEnabled
+			zimbraFeatureRelatedContactsEnabled
+		}
+		identities {
+			identity {
+				id
+				name
+				_attrs {
+					zimbraPrefIdentityId
+					zimbraPrefDefaultSignatureId
+					zimbraPrefForwardReplyFormat
+					zimbraPrefFromAddress
+					zimbraPrefFromAddressType
+					zimbraPrefFromDisplay
+					zimbraPrefIdentityName
+					zimbraPrefMailSignatureStyle
+					zimbraPrefReplyToAddress
+					zimbraPrefReplyToDisplay
+					zimbraPrefReplyToEnabled
+					zimbraPrefSaveToSent
+					zimbraPrefSentMailFolder
+				}
+			}
+		}
+		dataSources {
+			imap {
+				...dataSourceFields
+			}
+			pop3 {
+				...dataSourceFields
+			}
+			cal {
+				...dataSourceFields
+			}
+		}
+		signatures {
+			signature {
+				id
+				name
+				content {
+					_content
+					type
+				}
+			}
+		}
+		prefs {
+			zimbraPrefAutoAddAppointmentsToCalendar
+			zimbraPrefCalendarFirstDayOfWeek
+			zimbraPrefCalendarInitialView
+			zimbraPrefCalendarReminderEmail
+			zimbraPrefCalendarWorkingHours
+			zimbraPrefGroupMailBy
+			zimbraPrefMailSelectAfterDelete
+			zimbraPrefMarkMsgRead
+			zimbraPrefOutOfOfficeFromDate
+			zimbraPrefOutOfOfficeReply
+			zimbraPrefOutOfOfficeReplyEnabled
+			zimbraPrefOutOfOfficeStatusAlertOnLogin
+			zimbraPrefOutOfOfficeUntilDate
+			zimbraPrefReadingPaneEnabled
+			zimbraPrefReadingPaneLocation
+			zimbraPrefReadingPaneSashHorizontal
+			zimbraPrefShowFragments
+		}
+	}
+}

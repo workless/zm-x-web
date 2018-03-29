@@ -1,0 +1,31 @@
+@import '~@zimbra/x-ui/helpers.less';
+
+.avatar {
+	position: relative;
+	background: @gray-lightest;
+	font-size: 16px;
+
+	.initials, .default {
+		position: absolute;
+		display: inline-block;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%);
+		color: @gray-placeholder;
+	}
+
+	.default {
+		font-size: 125%;
+	}
+
+	.inner {
+		.fit();
+		background-size: cover;
+		background-position: top center;
+		background-repeat: no-repeat;
+	}
+
+	&.contain .inner {
+		background-size: contain;
+	}
+}

@@ -1,0 +1,3 @@
+mutation modifySignature($id: ID!, $contentType: String, $value: String!) {
+	modifySignature(id: $id, contentType: $contentType, value: $value)
+}

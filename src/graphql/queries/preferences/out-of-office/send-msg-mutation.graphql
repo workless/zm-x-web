@@ -1,0 +1,7 @@
+mutation sendMsg(
+	$subject: String!
+	$text: String!
+	$to: [EmailAddressInput]!
+) {
+	sendMsg(subject: $subject, text: $text, to: $to)
+}

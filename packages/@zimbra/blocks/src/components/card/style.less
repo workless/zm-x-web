@@ -1,0 +1,36 @@
+@import '~@zimbra/x-ui/refs.less';
+
+.card {
+	background: transparent;
+	border: none;
+	cursor: pointer;
+	padding: 0;
+	position: relative;
+	overflow: hidden;
+
+	button& {
+		text-align: left;
+		text-align: start;
+	}
+
+	> img {
+		border: solid 1px @gray-darkest;
+		max-width: 100%;
+	}
+
+	&.square {
+		&:before {
+			content: '';
+			float: left;
+			padding-top: 100%;
+		}
+
+		> img {
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			transform: translate(-50%, -50%);
+			min-height: 100%;
+		}
+	}
+}

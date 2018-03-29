@@ -1,0 +1,7 @@
+#import "../../fragments/contact.graphql"
+
+query getContact($id: ID!) {
+	getContact(id: $id) {
+		...contactFields
+	}
+}

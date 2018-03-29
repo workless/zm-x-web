@@ -1,0 +1,3 @@
+mutation changeCalendarColor($id: String!, $color: Int!) {
+	changeCalendarColor(id: $id, color: $color)
+}

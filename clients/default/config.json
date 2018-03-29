@@ -1,0 +1,19 @@
+{
+	"title": "Zimbra",
+	"clientName": "Zimbra",
+	"zimbraOrigin": "/@zimbra",
+	"zimbraProxyURL": "https://zimbra-api-proxy-aws.herokuapp.com",
+	"inboxInlineConversations": false,
+	"modalReply": false,
+	"modalReplyMobile": true,
+	"disableCompatZimlets": true,
+	"routes": {
+		"slugs": {
+			"email": "email",
+			"contacts": "contacts",
+			"calendar": "calendar",
+			"conversation": "conversation",
+			"message": "message"
+		}
+	}
+}

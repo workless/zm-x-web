@@ -1,0 +1,6 @@
+query ShareInfosQuery($addresses: [String!]) {
+	shareInfos(addresses: $addresses) {
+		folderUuid
+		view
+	}
+}

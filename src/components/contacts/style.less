@@ -1,0 +1,734 @@
+@import '~@zimbra/x-ui/refs.less';
+@import '~@zimbra/x-ui/helpers.less';
+
+.item {
+	border: none;
+
+	&:hover {
+		background: @gray-lightest;
+		border-bottom: none !important;
+	}
+}
+
+.contacts {
+	background: @read-pane-bg-color;
+	.fill();
+
+	.sidebarHeader {
+		display: block;
+
+		.createNew {
+			background-color: @sidebar-primary-button-color;
+			border: none;
+			border-radius: 2px;
+			box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.3);
+			color: white;
+			cursor: pointer;
+			display: block;
+			font-size: 12px;
+			font-weight: 600;
+			line-height: 1;
+			margin: @spacing-sm auto;
+			text-align: center;
+			padding: 10px 0;
+			text-transform: uppercase;
+			white-space: nowrap;
+			width: 100%;
+
+			&:hover {
+				text-decoration: none;
+			}
+		}
+	}
+
+	.sidebar {
+		background: @sidebar-bg-color;
+
+		.folders a,
+		.contactGroups a {
+		}
+
+		.contactGroups {
+			margin: 10px 0;
+		}
+
+		.createContactGroup {
+			display: block;
+			margin: @spacing-sm 0 @spacing-sm @spacing-md;
+		}
+	}
+
+	.toolbar {
+		display: flex;
+		height: 50px;
+		background: @read-pane-toolbar-color;
+		border-bottom: 1px solid @gray-lighter;
+		justify-content: space-between;
+
+		input[type="checkbox"] {
+			margin: 20px 15px;
+		}
+
+		.alignRight {
+			margin-left: auto;
+
+			> span {
+				color: @gray-darker;
+			}
+		}
+	}
+
+	.contactList {
+		float: left;
+		width: 328px;
+		height: 100%;
+		background: white;
+		border-right: 1px solid @gray-lighter;
+		transition: width 450ms ease 20ms;
+
+		&.attachmentViewerOpen {
+			width: 1px;
+		}
+	}
+
+	.contact {
+		position: relative;
+		display: block;
+		width: 100%;
+		height: 72px;
+		background: rgba(255,255,255,0.9);
+		border: none;
+		border-bottom: 1px solid @gray-lighter;
+		color: @text-color;
+		user-select: none;
+		cursor: pointer;
+		.strict();
+
+		&:hover,
+		&:focus {
+			background: @item-hover-bg;
+		}
+
+		&.selected {
+			background: @item-selected-bg;
+			box-shadow: 0 -1px 0 #7fcfed;
+			border-bottom-color: #7fcfed;
+			color: #000;
+			z-index: 2;
+
+			&:first-child {
+				box-shadow: inset 0 1px 0 #7fcfed;
+			}
+		}
+
+		> span {
+			display: inline-block;
+			height: 100%;
+			position: relative;
+			width: @checkbox-size;
+
+			label {
+				display: block;
+				height: 100%;
+				width: 100%;
+			}
+
+			input[type="checkbox"] {
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				margin: 0;
+			}
+		}
+
+		> div {
+			display: inline-block;
+			width: ~"calc(100% - @{checkbox-size})";
+			vertical-align: top;
+			padding: 7px 0;
+		}
+
+		h4, h5, h6 {
+			margin: 0;
+			padding: 0;
+			color: inherit;
+			font-weight: normal;
+			font-size: 100%;
+			min-height: 1.43em;
+		}
+
+		h4 {
+			font-weight: bold;
+			font-size: @font-size-h5;
+		}
+		h5 {
+			padding-bottom: 1px;
+		}
+	}
+
+	.readPane, .importContacts {
+		position: relative;
+		height: 100%;
+		background-color: @read-pane-bg-color;
+	}
+
+	.readPane {
+		overflow: hidden;
+		transition: width 450ms ease 20ms;
+		> .inner {
+			height: 100%;
+		}
+
+		&.attachmentViewerOpen {
+			width: ~"calc(50% - " (@sidebar-width/2) + 1 ~")";
+			min-width: 0;
+		}
+
+		.selectedContacts {
+			position: absolute;
+			left: 0;
+			top: 50%;
+			width: 100%;
+			padding: 0 30px;
+			margin: -1em 0 0;
+			text-align: center;
+			font-size: @font-size-h3;
+			font-weight: 300;
+			color: @text-color;
+		}
+	}
+}
+
+.actionButton {
+	margin: 10px 4px;
+	flex-shrink: 0;
+	width: 36px;
+	height: 36px;
+	padding: 0;
+}
+
+.actionButtons {
+	display: flex;
+	justify-content: flex-end;
+	flex: 1;
+	flex-shrink: 0;
+	margin-right: 4px;
+}
+
+.composeButton {
+	background-color: @brand-primary;
+	color: white;
+	border-radius: 2px;
+	&:hover {
+		color: white;
+	}
+}
+
+
+
+.menu {
+	.toggle {
+		line-height: 48px;
+		white-space: nowrap;
+
+		.inner {
+			font-weight: normal;
+			color: @text-color;
+
+			> span {
+				padding: 0 7px 0 4px;
+
+				&:first-child {
+					color: @brand-primary;
+				}
+			}
+		}
+	}
+}
+
+.dropdown {
+	margin-top: 0;
+	margin-right: 5px;
+
+	hr {
+		margin: 5px 0;
+		padding: 0;
+	}
+
+	.item {
+		position: relative;
+		display: block;
+		padding-left: 35px;
+		padding-right: 65px;
+		height: auto;
+		line-height: normal;
+		box-shadow: none;
+
+		.icon {
+			margin-left: -23px;
+		}
+
+		&:hover, &:focus {
+			background: fade(@brand-primary, 15%);
+		}
+
+	}
+
+}
+
+
+
+.contactEditor {
+	display: flex;
+	flex-direction: column;
+	position: relative;
+	height: 100%;
+	background: white;
+
+	> .inner {
+		flex: 1 1 100%;
+		padding: 0;
+		.scroll();
+	}
+
+	&.hasFooter > .inner {
+		bottom: 64px;
+	}
+
+	.header {
+		border-bottom: 1px solid @gray-darkest;
+		padding: 14px 24px;
+		margin: 0;
+
+		h2 {
+			margin: 0;
+			padding: 0;
+			font-size: @font-size-h4;
+			font-weight: 300;
+		}
+	}
+
+	&.hasHeader .contactEditFormWrapper {
+		top: 54px;
+	}
+
+	.error {
+		position: relative;
+		margin: 0;
+		padding: 12px 24px;
+		background: fade(@brand-danger, 10%);
+		color: darken(@brand-danger, 8.7%);
+		text-align: left;
+		animation: fadeIn 300ms ease forwards 1;
+		@keyframes fadeIn { 0% { opacity: 0; } }
+		~ form {
+			top: 104px;
+		}
+		span {
+			display: block
+		}
+	}
+
+
+	.footer {
+		position: relative;
+		bottom: 0;
+		flex: 0 0 0;
+		width: 100%;
+		height: 64px;
+		padding: 0 20px;
+		background: @off-white;
+		border-top: 1px solid @gray-lighter;
+		line-height: 64px;
+	}
+
+	.addRemoveButtons {
+		margin-left: 5px;
+		display: inline-block;
+		vertical-align: middle;
+
+		button {
+			background: none;
+			border: none;
+			color: #5a5a5a;
+			font-weight: 100;
+			padding: 1px 3px;
+		}
+	}
+
+	form {
+		padding: 20px 24px 0;
+		margin: 0;
+
+		legend {
+			color: @gray-light;
+			font-size: 16px;
+			margin-bottom: 15px;
+		}
+		fieldset {
+			padding: 4px 0;
+			margin: 0 0 40px;
+			border: none;
+
+			> div {
+				margin-bottom: 8px;
+			}
+		}
+
+		label {
+			display: block;
+			font-size: 13px;
+			float: left;
+			width: 179px;
+			clear: left;
+			margin: 0;
+			padding: 9px 16px 0;
+			color: @gray-darker;
+			text-align: left;
+			text-transform: capitalize;
+			overflow: hidden;
+		}
+		label, .inputDropdown {
+			:global(.blocks_select){
+				display: block;
+				:global(.blocks_select_button) {
+					display: block;
+					:global(.blocks_select_toggle) {
+						font-weight: normal;
+						padding-left: 0;
+					}
+				}
+			}
+		}
+		.dropdownLabel {
+			overflow: visible;
+		}
+		.addressGroup {
+			.inputWrap {
+				display: block;
+			}
+		}
+
+		.inputWrap {
+			display: inline-block;
+			vertical-align: middle;
+			position: relative;
+			/*overflow: hidden;*/
+			> *{
+				display: block;
+				width: 100%;
+				padding: 8px;
+			}
+			> .dateInput{
+				padding: 0;
+			}
+			.addressGroup {
+				padding: 0;
+			}
+
+			> select {
+				padding: 0;
+				margin: 6px 0;
+			}
+			.block
+			input, input, textarea, :global(.blocks_select) {
+				font-size: 13px;
+				padding: 9px 8px 8px;
+				width: 216px;
+				border: 1px solid @gray-darkest;
+				border-radius: 2px;
+				transition: box-shadow 300ms ease;
+				outline: none;
+				box-shadow: inset 0 -1px 0 -.5px @gray-lighter;
+				cursor: text;
+
+				&:focus {
+					box-shadow: inset 0 -2px 0 @brand-tertiary;
+				}
+			}
+			textarea {
+				height: 64px;
+				resize: none;
+			}
+			.errorField {
+				border: 1px solid #cf2a2a;
+				box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.3);
+			}
+
+		}
+		.inputDropdown {
+			overflow: visible;
+			:global(.blocks_select_toggle) {
+				width: 100%;
+			}
+		}
+	}
+	.scroll();
+}
+
+
+
+.contactDetails {
+	.fill();
+	top: 50px;
+	background: @read-pane-bg-color;
+	.alwaysScroll();
+
+
+	.contactMessages, .contactFiles, .contactPhotos {
+		position: relative;
+		margin: 0 24px;
+		padding: 0 0 24px;
+		animation: fadeIn 150ms ease forwards;
+		@keyframes fadeIn {
+			0% { opacity: 0; }
+			100% { opacity: 1; }
+		}
+
+		&.empty {
+			display: none;
+		}
+
+		h3 {
+			padding: 12px 0;
+			margin: 0;
+			font-size: 100%;
+			font-weight: normal;
+
+			strong {
+				font-weight: bold;
+			}
+		}
+	}
+
+	.contactMoreMessages {
+		padding: 10px;
+		border-top: 1px solid @gray-darkest;
+
+		a {
+			float: right;
+		}
+	}
+
+	.contactMessage, .contactFile {
+		display: block;
+		padding: 10px;
+		border-top: 1px solid @gray-darkest; // @TODO seriously we need a variable for this grey
+		color: #000;
+		text-decoration: none;
+		overflow: hidden;
+
+		&:hover, &:focus {
+			color: #000;
+			background-color: rgba(0,0,0,0.03);
+			text-decoration: none;
+			cursor: pointer;
+		}
+
+		.title {
+			display: block;
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+		}
+
+		.time {
+			float: right;
+			width: 6em;
+			text-align: right;
+		}
+
+		.folder {
+			float: right;
+			padding-left: 10px;
+			max-width: 12em;
+			text-align: right;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+			overflow: hidden;
+		}
+	}
+
+	.contactPhoto {
+		position: relative;
+		float: left;
+		margin: 0 8px 8px 0;
+		width: 100px;
+		height: 100px;
+		overflow: hidden;
+		background-color: @gray-lighter;
+		background-size: contain;
+		background-position: center;
+		background-repeat: no-repeat;
+		cursor: pointer;
+	}
+}
+
+
+.card {
+	margin: 24px;
+	padding: 24px;
+	background: white;
+	border: 1px solid #CCC;
+	overflow: hidden;
+
+	.name, h3 {
+		margin: 0;
+		padding: 0 0 16px;
+		font-size: @font-size-h4;
+		font-weight: 300;
+		color: black;
+	}
+
+	.byline {
+		margin: 0;
+		font-weight: @headings-font-weight;
+	}
+
+	h3 {
+		font-size: @font-size-h5;
+	}
+
+	.avatar {
+		float: right;
+		width: 150px;
+		height: 152px;
+		background: @gray-lighter;
+		text-align: center;
+		color: white;
+		font-size: 120px;
+	}
+
+	.type {
+		margin-left: 16px;
+		color: @gray-light;
+		font-weight: bold;
+	}
+
+	.primaryContactInfo,
+	.addressInfo,
+	.secondaryContactInfo {
+		padding: 10px 0;
+	}
+
+	.notes {
+		padding: 10px 0 0;
+	}
+}
+
+
+.importContacts {
+	padding: 48px 40px;
+	.scroll();
+
+	.providerContent h3,
+	h2 {
+		font-size: @font-size-h4;
+		font-weight: 300;
+	}
+
+	h2 {
+		padding-bottom: 16px;
+		border-bottom: 1px solid @gray-lighter;
+	}
+	.providerList {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		li {
+			padding: 20px 0;
+		}
+	}
+	.providerIcon {
+		color: rgb(62,92,151);
+		font-size: 3.7rem;
+	}
+
+	.providerContent {
+		h3 {
+			margin-top: 2px;
+			margin-bottom: 4px;
+		}
+		p {
+			margin-top: 0;
+			margin-bottom: 0;
+		}
+	}
+}
+
+
+.sidePane {
+	padding: 48px 40px;
+	height: 100%;
+	.scroll();
+
+	.itemContent h3,
+	h2 {
+		font-weight: 300;
+	}
+
+	h2 {
+		font-size: @font-size-h3;
+		padding-bottom: 16px;
+		border-bottom: 1px solid @gray-lighter;
+	}
+	.actionItemList {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		li {
+			padding: 20px 0;
+		}
+	}
+	.icon {
+		color: #959595;
+		font-size: 3.2rem;
+	}
+	.iconEmail {
+		font-size: 2.8rem;
+	}
+	.iconAssign {
+		font-size: 2.4rem;
+		line-height: 1.5;
+	}
+	.itemContent {
+		h3 {
+			font-size: @font-size-h4;
+			margin-top: 2px;
+			margin-bottom: 4px;
+		}
+		p {
+			margin-top: 0;
+			margin-bottom: 5px;
+		}
+	}
+}
+
+.sidebarSectionHeaderIcon {
+	background-image: url('../../../assets/contact-book.svg');
+	background-repeat: no-repeat;
+	display: block;
+	width: 20px;
+	height: 19px;
+	position: absolute;
+	left: 15px;
+	top: 14px;
+}
+
+.sidebarSectionHeader {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	height: 44px;
+	padding: 0 10px 0 50px;
+	font-family: @branding-font-family-bold;
+	font-size: 13px;
+}
+
+.sidebarSectionHeaderCompose {
+	display: block;
+	font-size: 20px;
+	color: @gray !important;
+}

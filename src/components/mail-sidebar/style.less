@@ -1,0 +1,99 @@
+@import '~@zimbra/x-ui/helpers.less';
+
+.accountList {
+	padding: 8px 0;
+
+	@media(max-width: @screen-sm-max) {
+		padding: 0;
+	}
+}
+
+.sidebarSectionHeaderIcon {
+	background-image: url('../../assets/mail.svg');
+	background-repeat: no-repeat;
+	display: block;
+	width: 20px;
+	height: 19px;
+	position: absolute;
+	left: 15px;
+	top: 14px;
+}
+
+.sidebarSectionHeader {
+	position: relative;
+	padding: 10px 0 0 50px;
+	font-family: @branding-font-family-bold;
+	font-size: 13px;
+}
+
+a.account {
+	position: relative;
+	padding-left: @spacing-md;
+	line-height: 32px;
+	cursor: pointer;
+	display: block;
+	color: @text-color;
+	display: flex;
+	align-items: center;
+
+	@media(max-width: @screen-sm-max) {
+		padding-left: 50px;
+		font-size: 11px;
+		line-height: 12px;
+	}
+
+	&:focus,
+	&:hover {
+		text-decoration: none;
+	}
+
+	&:hover {
+		color: inherit;
+	}
+
+	@media(min-width: @screen-md) {
+		&.active {
+			color: black;
+			font-weight: 500;
+
+			&::before {
+				content: '';
+				width: 0;
+				height: 0;
+				position: absolute;
+				left: 0;
+				top: 10px;
+				z-index: 1;
+				border-top: 6px solid transparent;
+				border-bottom: 6px solid transparent;
+				border-left: 6px solid @brand-primary;
+			}
+		}
+	}
+
+	&.failing {
+		cursor: not-allowed;
+	}
+}
+
+.accountSeparator {
+	height: 1px;
+	margin-bottom: @spacing-sm;
+	width: 100%;
+	background-color: @gray-lighter;
+}
+
+.warningIcon {
+	color: @brand-danger;
+	padding-left: 6px;
+}
+
+.otherAccountWrapper {
+	padding-left: 50px;
+
+	a.account {
+		padding-bottom: 13px;
+		padding-left: 0;
+		border-bottom: 1px solid @gray-lighter;
+	}
+}

@@ -1,0 +1,13 @@
+#import "../../fragments/calendar.graphql"
+
+query CalendarsQuery {
+	calendars {
+		...calendarFields
+		linkedFolders {
+			...calendarFields
+		}
+		folders {
+			...calendarFields
+		}
+	}
+}

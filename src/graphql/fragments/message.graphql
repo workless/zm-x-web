@@ -1,0 +1,112 @@
+#import "./mime-part.graphql"
+
+fragment emailAddressFields on EmailAddress {
+	address
+	name
+	type
+	displayName
+}
+
+fragment messageFields on MessageInfo {
+	id
+	size
+	date
+	folderId
+	subject
+	excerpt
+	conversationId
+	flags
+	tags
+	tagNames
+	revision
+	changeDate
+	modifiedSequence
+	sortField
+	emailAddresses {
+		...emailAddressFields
+	}
+	to {
+		...emailAddressFields
+	}
+	from {
+		...emailAddressFields
+	}
+	cc {
+		...emailAddressFields
+	}
+	bcc {
+		...emailAddressFields
+	}
+	sender {
+		...emailAddressFields
+	}
+	html
+	text
+	attachments {
+		...mimePartFields
+	}
+	inlineAttachments {
+		...mimePartFields
+	}
+	mimeParts {
+		...mimePartFields
+		mimeParts {
+			...mimePartFields
+			mimeParts {
+				...mimePartFields
+			}
+		}
+	}
+	invitations {
+		type
+		components {
+			allDay
+			calItemId
+			ciFolder
+			class
+			completedDateTime
+			componentNum
+			date
+			# description
+			draft
+			end {
+				date
+				timezone
+			}
+			excerpt
+			freeBusy
+			freeBusyActual
+			# htmlDescription
+			isException
+			isOrganizer
+			location
+			name
+			noBlob
+			organizer {
+				address
+				name
+				url
+			}
+			percentComplete
+			priority
+			recurrenceId
+			rsvp
+			sequence
+			start {
+				date
+				timezone
+			}
+			status
+			uid
+			x_uid
+			aid
+			attendees {
+				role
+				participationStatus
+				rsvp
+				address
+				name
+			}
+		}
+	}
+}

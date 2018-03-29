@@ -1,0 +1,96 @@
+@import '~@zimbra/x-ui/helpers.less';
+
+.header,
+.footer {
+	padding: 14px 24px;
+}
+.header {
+	font-size: 24px;
+	font-weight: 300;
+	color: @gray-darkest;
+}
+
+.close {
+	position: absolute;
+	font-size: 14px;
+	top: 18px;
+	right: 18px;
+
+	&:hover {
+		cursor: pointer;
+	}
+}
+.wrapper {
+	display: none;
+	position: fixed;
+	left: 0;
+	top: 0 !important;
+	width: 100%;
+	height: 100%;
+	background: rgba(238, 238, 238, 0.8);
+	z-index: 100;
+
+	@media (max-width: @screen-sm-max) {
+		right: 0;
+		bottom: 0;
+		top: @mobile-toolbar-height !important;
+		background: unset;
+	}
+
+	&.showing {
+		display: block;
+	}
+
+	.inner {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%);
+		height: 624px;
+		border-radius: 3px;
+		background-color: #ffffff;
+		box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.36);
+		cursor: default;
+		z-index: 1;
+		@media (max-width: @screen-sm-max) {
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			transform: unset;
+			box-shadow: unset;
+			height: auto;
+		}
+	}
+
+	.contentWrapper {
+		height: 491px;
+		overflow-y: auto;
+		border-top: 1px solid @gray-lighter;
+		border-bottom: 1px solid @gray-lighter;
+		background-color: #ffffff;
+		@media (max-width: @screen-sm-max) {
+			height: 100%;
+			border-bottom: unset;
+			border-top: unset;
+		}
+	}
+
+	@media (max-width: 480px) {
+		.scroll();
+
+		.inner {
+			position: relative;
+			left: 0;
+			right: 0;
+			top: 0;
+			bottom: 0;
+			margin: 0;
+			min-height: 100%;
+			border-radius: 0;
+			box-shadow: none;
+			overflow: auto;
+			-webkit-overflow-scrolling: none;
+		}
+	}
+}

@@ -1,0 +1,3 @@
+mutation prefMailForward($address: String, $deleteAndForward: Boolean!) {
+	prefMailForward(address: $address, deleteAndForward: $deleteAndForward)
+}

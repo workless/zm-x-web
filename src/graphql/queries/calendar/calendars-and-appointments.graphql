@@ -1,0 +1,35 @@
+#import "../../fragments/calendar.graphql"
+
+query CalendarsAndAppointmentsQuery($start: Float, $end: Float) {
+	calendars {
+		...calendarWithAppointmentFields
+		linkedFolders {
+			...calendarWithAppointmentFields
+		}
+		folders {
+			...calendarWithAppointmentFields
+		}
+	}
+}
+
+fragment calendarWithAppointmentFields on Folder {
+	...calendarFields
+	appointments(start: $start, end: $end) {
+		appointments {
+			inviteId
+			participationStatus
+			date
+			name
+			freeBusy
+			freeBusyActual
+			date
+			duration
+			alarm
+			allDay
+			class
+			instances {
+				start
+			}
+		}
+	}
+}

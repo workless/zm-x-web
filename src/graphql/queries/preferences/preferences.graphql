@@ -1,0 +1,17 @@
+query Preferences {
+	preferences {
+		zimbraPrefCalendarInitialView
+		zimbraPrefCalendarReminderEmail
+		zimbraPrefCalendarWorkingHours
+		zimbraPrefCalendarFirstDayOfWeek
+		zimbraPrefAutoAddAppointmentsToCalendar
+		zimbraPrefOutOfOfficeStatusAlertOnLogin
+		zimbraPrefOutOfOfficeReplyEnabled
+		zimbraPrefOutOfOfficeReply
+		zimbraPrefOutOfOfficeFromDate
+		zimbraPrefOutOfOfficeUntilDate
+		zimbraPrefReadingPaneEnabled
+		zimbraPrefReadingPaneLocation
+		zimbraPrefReadingPaneSashHorizontal
+	}
+}

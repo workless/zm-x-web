@@ -1,0 +1,16 @@
+{
+  "name": "@zimbra/polyfill",
+  "version": "1.0.0",
+  "description": "The polyfill to be used by Zimbra Apps",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "promise-polyfill": "^6.0.2",
+    "unfetch": "^2.1.2"
+  }
+}

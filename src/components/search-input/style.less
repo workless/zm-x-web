@@ -1,0 +1,94 @@
+@import '~@zimbra/x-ui/helpers.less';
+
+@input-height: 38px;
+
+.container {
+	flex: 1;
+	position: relative;
+}
+
+.form {
+	height: 100%;
+	display: flex;
+	align-items: center;
+}
+
+.input {
+	flex: 1;
+	height: @input-height;
+	border: 0;
+	border-radius: 2px;
+	padding: 0 @spacing-lg 0 @spacing-md;
+	outline: none;
+	&::placeholder {
+		color: @gray-light;
+	}
+}
+
+.clearBtn {
+	position: absolute;
+	right: 0;
+	top: 50%;
+	transform: translateY(-50%);
+	border: none;
+	background: transparent;
+}
+
+.suggestions {
+	position: absolute;
+	z-index: 11;
+	top: 100%;
+	width: 100%;
+	background-color: #fff;
+	color: @text-color;
+	border-top: 1px solid @brand-tertiary;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
+}
+
+.contactSuggestion {
+	&:hover {
+		background-color: @gray-lighter;
+	}
+
+	.contactSuggestionName {
+		font-weight: normal;
+	}
+
+	strong {
+		font-weight: bold;
+	}
+
+	&.contactSuggestionSelected {
+		background-color: @list-active-bg;
+	}
+}
+
+.contactTag {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	color: @brand-primary;
+	border: 1px solid @brand-primary;
+	border-radius: 2px;
+	height: 24px;
+	overflow: hidden;
+
+	&.focused {
+		background-color: @list-active-bg;
+	}
+}
+
+.contactTagName {
+	padding: 2px 8px;
+}
+
+.contactTagAvatar {
+	width: 24px;
+	height: 24px;
+}
+
+.close {
+	cursor: pointer;
+	padding-right: 7px;
+  font-size: inherit;
+}

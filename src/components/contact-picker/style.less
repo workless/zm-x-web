@@ -1,0 +1,163 @@
+@import '~@zimbra/x-ui/refs.less';
+@import '~@zimbra/x-ui/helpers.less';
+@import (reference) '../modal-dialog/style.less';
+
+.contact {
+	padding: 11px 16px;
+	cursor: pointer;
+	border-bottom: 1px solid #eee;
+	user-select: none;
+
+	> * {
+		vertical-align: baseline;
+	}
+
+	strong {
+		display: inline-block;
+		padding: 0 5px;
+		font-size: 16px;
+		font-weight: normal;
+		color: #000;
+	}
+
+	em {
+		display: inline-block;
+		padding: 0 5px;
+		font-size: 13px;
+		font-style: italic;
+		color: @placeholder-color;
+	}
+
+	input[type="checkbox"] {
+		float: right;
+		margin: 6px 0 0;
+	}
+
+	&.selected {
+		background-color: fade(@gray-lightest, 80%);
+	}
+
+	&.inoperable {
+		opacity: 0.5;
+	}
+}
+
+.divider {
+	padding: 10px;
+	box-shadow: 0 -1px 0 @gray-darkest;
+	color: @gray-placeholder;
+	text-align: center;
+	font-style: italic;
+	user-select: none;
+	z-index: 1;
+}
+
+.backdrop {
+	.backdrop();
+}
+
+.dialog {
+	.dialog();
+
+	.header {
+		height: 112px;
+		border-bottom: 1px solid @gray-darkest;
+
+		h2 {
+			margin: 0;
+			padding: 16px 16px 2px;
+			font-size: 20px;
+			font-weight: normal;
+		}
+	}
+
+	.description {
+		margin: 0;
+		padding: 0 16px;
+		text-align: left;
+		font-size: 13px;
+	}
+
+	.query,
+	.changeFolder {
+		display: inline-block;
+		width: 50%;
+		padding: 9px 16px 0;
+
+		input, .select {
+			display: block;
+			width: 100%;
+			max-width: 100%;
+			margin: 0;
+			padding: 6px;
+			background: #FFF;
+			border: 1px solid @gray-darkest;
+			font-size: 13px;
+			border-radius: 3px;
+			appearance: none;
+			outline: none;
+
+			&::placeholder {
+				color: @placeholder-color;
+			}
+
+			&:focus {
+				border-color: @brand-primary;
+			}
+		}
+	}
+
+	.changeFolder {
+		padding-left: 0;
+
+		.select {
+			vertical-align: middle;
+			padding: 4px 6px;
+			text-align: left;
+			p {
+				display: inline-block;
+				font-weight: normal;
+				padding: 0 2px;
+				text-overflow: clip;
+			}
+			ul {
+				width: 100%;
+			}
+			:global(.blocks_select_button) {
+				display: block;
+			}
+			:global(.blocks_select_buttonIcon) {
+				position: absolute;
+				right: 5px;
+				top: 7px;
+				font-size: 100%;
+			}
+		}
+	}
+
+	.footer {
+		.selectionState {
+			position: absolute;
+			right: 14px;
+			top: 30px;
+			font-size: 13px;
+		}
+	}
+
+	&.scrollable {
+		height: 446px;
+
+		@media (max-height: 446px) {
+			height: 100%;
+		}
+
+		.content {
+			top: 112px;
+			padding: 0;
+		}
+
+		.footer {
+			border-top: 1px solid @gray-darkest;
+		}
+	}
+}

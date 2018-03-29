@@ -1,0 +1,56 @@
+@import '~@zimbra/x-ui/helpers.less';
+
+.addressList {
+	margin-bottom: 3px;
+	font-size: 13px;
+	color: @placeholder-color;
+
+	.addressType {
+		margin-right: 8px;
+		text-transform: capitalize;
+	}
+
+	.addressDetail {
+		font-weight: normal;
+		margin-left: 8px;
+	}
+}
+
+.addresses {
+	position: relative;
+}
+
+.address {
+	position: relative;
+	overflow: visible;
+	padding: 2px 5px;
+	margin: 0 -1px;
+	border-radius: 2px;
+	cursor: default;
+	user-select: none;
+	user-drag: element;
+
+	&:hover,
+	&:focus {
+		cursor: normal;
+		background: @link-color;
+		color: white;
+
+		&::after {
+			color: transparent;
+		}
+	}
+
+	&:not(:last-child)::after {
+		position: absolute;
+		right: 1px;
+		bottom: 0;
+		content: ',';
+	}
+}
+
+.bold,
+.addresses-from {
+	color: #000;
+	font-weight: bold;
+}

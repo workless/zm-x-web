@@ -1,0 +1,99 @@
+@import '~@zimbra/x-ui/helpers.less';
+
+.addressField {
+	display: flex;
+	position: relative;
+	overflow: visible;
+	padding: 13px 0 8px;
+
+	.label {
+		margin: 0;
+		font-weight: inherit;
+		font-style: inherit;
+		font-family: inherit;
+	}
+
+	.input {
+		display: block;
+		box-sizing: border-box;
+		width: 100%;
+		margin-left: 12px;
+		border: none;
+		border-radius: 0;
+		box-shadow: none;
+
+		&.formSize {
+			padding-bottom: 1px;
+		}
+	}
+
+	.token {
+		position: relative;
+		overflow: visible;
+
+		.tokenLabel {
+			padding: 4px;
+			margin: 0 1px 1px 0;
+			border-radius: 3px;
+			background: none;
+			border: none;
+			appearance: none;
+			user-select: none;
+
+			&::after {
+				content: ',';
+			}
+
+			&:hover {
+				background: @link-color;
+				color: white;
+				&::after {
+					visibility: hidden;
+				}
+			}
+		}
+
+		&.invalid {
+			button {
+				color: @brand-danger;
+			}
+
+			&.selected .tokenLabel,
+			&.active .tokenLabel {
+				background: @brand-danger;
+			}
+		}
+
+		&.selected .tokenLabel,
+		&.active .tokenLabel {
+			background: @gray;
+			color: white;
+
+			&::after {
+				visibility: hidden;
+			}
+		}
+	}
+
+	.suggestions {
+		position: absolute;
+		left: 0;
+		top: 100%;
+		min-width: 300px;
+		max-width: 100%;
+		background: #fff;
+		border: 1px solid @gray-lighter;
+		z-index: 999;
+	}
+}
+
+@media (max-width: (@screen-xs - 1))  {
+	.addressField {
+		position: initial;
+		.suggestions {
+			left: -16px;
+			right: -16px;
+			max-width: initial;
+		}
+	}
+}

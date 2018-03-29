@@ -1,0 +1,35 @@
+@import '~@zimbra/x-ui/helpers.less';
+
+.popoverContainer {
+	right: 0;
+	left: initial !important;
+}
+
+.actionButton {
+	margin: 10px 4px;
+	flex-shrink: 0;
+	width: 36px;
+	height: 36px;
+	padding: 0;
+}
+
+.actionButtons {
+	display: flex;
+	justify-content: flex-end;
+	flex: 1;
+	flex-shrink: 0;
+	margin-right: 4px;
+}
+
+.composeButton {
+	background-color: @brand-primary;
+	color: white;
+	border-radius: 2px;
+	&:hover {
+		color: white;
+	}
+}
+
+.arrowBackIcon {
+	background: url('../../assets/arrow-back.svg') center/contain no-repeat;
+}

@@ -1,0 +1,3 @@
+mutation createSharedCalendar($sharedCalendar: SharedCalendarInput!) {
+	createSharedCalendar(sharedCalendar: $sharedCalendar)
+}

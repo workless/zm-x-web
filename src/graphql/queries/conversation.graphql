@@ -1,0 +1,21 @@
+#import "../fragments/conversation.graphql"
+
+query getConversation(
+	$id: ID!,
+	$headers: [MailItemHeaderInput],
+	$html: Boolean,
+	$max: Int,
+	$needExp: Boolean,
+	$fetch: String
+) {
+	conversation: getConversation(
+		id: $id,
+		headers: $headers,
+		html: $html,
+		max: $max,
+		needExp: $needExp,
+		fetch: $fetch
+	) {
+		...conversationFields
+	}
+}

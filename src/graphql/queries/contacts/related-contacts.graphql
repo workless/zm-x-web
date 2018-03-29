@@ -1,0 +1,9 @@
+query relatedContacts($email: String!) {
+	relatedContacts(email: $email) {
+		relatedContacts {
+			email
+			scope
+			p
+		}
+	}
+}

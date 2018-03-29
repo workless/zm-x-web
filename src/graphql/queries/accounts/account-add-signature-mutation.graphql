@@ -1,0 +1,5 @@
+mutation addSignature($name: String!, $contentType: String, $value: String!) {
+	addSignature(name: $name, contentType: $contentType, value: $value) {
+		id
+	}
+}
