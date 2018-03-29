@@ -34,7 +34,7 @@ module.exports = function(env) {
 			AppCache: false,
 			responseStrategy: env.production ? 'cache-first' : 'network-first',
 			excludes: env.production ? ['*.map'] : ['**'],
-			caches: {
+			caches: env.production && {
 				main: ['bundle.js', 'bundle.css', 'mail-screen*.chunk.js'], //download these and cache them right away - has the same effect as preload in browser header
 				optional: [':rest:']
 			},
