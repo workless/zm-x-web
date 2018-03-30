@@ -25,6 +25,7 @@ import ActionMenuGroup from '../../components/action-menu-group';
 import ActionMenuItem from '../../components/action-menu-item';
 import DraggableCard from '../../components/draggable-card';
 import ContextMenu from '../../components/context-menu';
+import ActionMenu, { DropDownWrapper } from '../../components/action-menu';
 
 let components = {
 	...allBlocks,
@@ -38,6 +39,8 @@ let components = {
 	ConfirmModalDialog,
 	ModalDialog,
 	TextInput,
+	ActionMenu,
+	DropDownWrapper,
 	ActionMenuItem,
 	ActionMenuGroup,
 	DraggableCard,
