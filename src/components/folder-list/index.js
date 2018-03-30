@@ -14,6 +14,7 @@ import FolderListItem from './item';
 import FolderGroup from './group';
 import NewFolder from './new-folder';
 import FolderInput from '../folder-input';
+import ZimletSlot from '../zimlet-slot';
 import { connect } from 'preact-redux';
 import cx from 'classnames';
 import { defaultProps, withProps, branch, renderNothing } from 'recompose';
@@ -265,6 +266,8 @@ export default class FolderList extends PureComponent {
 			<div {...props} class={cx(style.folderList, props.class)}>
 				{specialFolders.map(this.folderMap())}
 
+				<ZimletSlot name="folder-list-middle" />
+
 				{divided &&
 					specialFolders.length > 0 &&
 					folders.length > 0 && (
@@ -301,6 +304,8 @@ export default class FolderList extends PureComponent {
 							</div>
 						}
 					>
+						<ZimletSlot name="folder-group" />
+
 						{isAddingNewFolder && (
 							<NewFolder
 								class={style.topLevelInput}
@@ -330,6 +335,7 @@ export default class FolderList extends PureComponent {
 				) : (
 					customFolders.map(this.folderMap())
 				)}
+				<ZimletSlot name="folder-list-end" />
 			</div>
 		);
 	}
