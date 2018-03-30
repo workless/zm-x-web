@@ -127,7 +127,7 @@ export default class Provide extends Component {
 
 	render(props) {
 		const cache = new ZimbraInMemoryCache();
-		const { schema } = createZimbraSchema({
+		const { client: batchClient, schema } = createZimbraSchema({
 			cache,
 			zimbraOrigin: config.zimbraOrigin
 		});
@@ -153,6 +153,7 @@ export default class Provide extends Component {
 				shortcutCommandHandler={this.shortcutCommandHandler}
 				webSearches={this.content.webSearches}
 				schema={schema}
+				batchClient={batchClient}
 				link={link}
 			>
 				<IntlProvider definition={definition}>
