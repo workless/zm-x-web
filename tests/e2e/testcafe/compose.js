@@ -730,7 +730,7 @@ test.skip('L2 | Attachments > Attach GIF | C648040 | SKIP:PREAPPS-302', async t 
 	await t.expect(elements.plusSignMenuPopularGIFsItemButton.nth(0).exists).ok({ timeout: 10000 });
 });
 
-test.skip('L2 | Attachments > Attach Web Link | C648041 || SKIP:PREAPPS-302', async t => {
+test.skip('L2 | Attachments > Attach Web Link | C648041 | SKIP:PREAPPS-302', async t => {
 	await t.expect(elements.componentsToolbarMiddleSelector.exists).ok({ timeout: 10000 });
 	await compose.selectComposeToolbarPopmenu('Attachments', 'Attach Web Link');
 	await t.expect(elements.buttonWithText('shopping').exists).ok({ timeout: 10000 });
