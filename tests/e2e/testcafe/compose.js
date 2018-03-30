@@ -29,7 +29,7 @@ fixture `Compose: Basic Compose & Send`
 		await soap.deleteAccount(t.ctx.user.id, t.fixtureCtx.adminAuthToken);
 	});
 
-test('L1 | Compose, Send: To Self (basic) | C581664 ||', async t => {
+test('L1 | Compose, Send: To Self (basic) | C581664', async t => {
 	let emailTo = t.ctx.user.email;
 	let emailSubject = 'Daily test new email';
 	let emailBodyText = 'Enter sample text in compose body area';
@@ -49,7 +49,7 @@ test('L1 | Compose, Send: To Self (basic) | C581664 ||', async t => {
 	await t.expect(elements.mailListSubjectSelector.withText(emailSubject).exists).notOk();
 });
 
-test('L1 | Compose, Send: CC only (basic) | C581665 ||', async t => {
+test('L1 | Compose, Send: CC only (basic) | C581665', async t => {
 	let userEmail = t.ctx.user.email;
 	let emailSubject = 'test CC';
 	await compose.clickCompose();
@@ -68,7 +68,7 @@ test('L1 | Compose, Send: CC only (basic) | C581665 ||', async t => {
 	await t.expect(await elements.inboxReadPane().innerText).contains(emailSubject);
 });
 
-test('L1 | Compose, Send: BCC only (basic) | C581666 ||', async t => {
+test('L1 | Compose, Send: BCC only (basic) | C581666', async t => {
 	let userEmail = t.ctx.user.email;
 	let emailSubject = 'test BCC';
 	await compose.clickCompose();
@@ -87,7 +87,7 @@ test('L1 | Compose, Send: BCC only (basic) | C581666 ||', async t => {
 	await t.expect(await elements.inboxReadPane().innerText).contains(emailSubject);
 });
 
-test('L2 | Compose, Send: No Subject (basic) | C581668 ||', async t => {
+test('L2 | Compose, Send: No Subject (basic) | C581668', async t => {
 	let userEmail = t.ctx.user.email;
 	let emailSubject = '[No subject]';
 	let emailBodyText = 'Send: No Subject';
@@ -106,7 +106,7 @@ test('L2 | Compose, Send: No Subject (basic) | C581668 ||', async t => {
 	await t.expect(elements.mailListSubjectSelector.withText(emailSubject).exists).ok({ timeout: 5000 });
 });
 
-test('L2 | Compose, Send: No Message Body (basic) | C581670 ||', async t => {
+test('L2 | Compose, Send: No Message Body (basic) | C581670', async t => {
 	let userEmail = t.ctx.user.email;
 	let emailSubject = 'Send: No Message Body';
 	await compose.clickCompose();
@@ -121,7 +121,7 @@ test('L2 | Compose, Send: No Message Body (basic) | C581670 ||', async t => {
 	await t.expect(await elements.inboxReadPane().innerText).contains(emailSubject);
 });
 
-test('L1 | Compose, Send: To 3rd party (basic) | C581663 ||', async t => {
+test('L1 | Compose, Send: To 3rd party (basic) | C581663', async t => {
 	let userEmail = 'yang.cai@synacor.com';
 	let emailSubject = 'email subject';
 	await compose.clickCompose();
@@ -136,7 +136,7 @@ test('L1 | Compose, Send: To 3rd party (basic) | C581663 ||', async t => {
 	await t.expect(await elements.inboxReadPane().innerText).contains(emailSubject);
 });
 
-test('L1 | Compose, Send: To, CC, BCC (basic) | C581667 | PREAPPS-357 | ##TODO-add Bcc verify after', async t => {
+test('L1 | Compose, Send: To, CC, BCC (basic) | C581667 | Bug:PREAPPS-357 | ##TODO-add Bcc verify after', async t => {
 	let user1Email = 'yang.cai@synacor.com';
 	let user2Email = 'ui.testing@ec2-13-58-225-137.us-east-2.compute.amazonaws.com';
 	let user3Email = 'caiiac@hotmail.com';
@@ -165,7 +165,7 @@ test('L1 | Compose, Send: To, CC, BCC (basic) | C581667 | PREAPPS-357 | ##TODO-a
 /****************************/
 /*** Compose, Functional  ***/
 
-test('L2 | Compose: No Data, Send | C581629 || Smoke', async t => {
+test('L2 | Compose: No Data, Send | C581629 | Smoke', async t => {
 	let errorMessage = 'No recipient addresses';
 	await compose.clickCompose();
 	await compose.sendEmail();
@@ -195,7 +195,7 @@ fixture `Compose: Composer view fixture`
 		await soap.deleteAccount(t.ctx.user.id, t.fixtureCtx.adminAuthToken);
 	});
 
-test('L1 | Enter multiple emails to To text field | C945626 ||', async t => {
+test('L1 | Enter multiple emails to To text field | C945626', async t => {
 	let testMailA = 'aa@mail.com';
 	let testMailB = 'bb@mail.com';
 	let testMailC = 'cc@mail.com';
@@ -209,7 +209,7 @@ test('L1 | Enter multiple emails to To text field | C945626 ||', async t => {
 		.expect(await elements.buttonListAddressFieldTokenLabel.count).eql(3);
 });
 
-test('L1 | Enter email address into Cc/Bcc address field || C945627', async t => {
+test('L1 | Enter email address into Cc/Bcc address field | C945627', async t => {
 	let ccMail = 'Cc@mail.com';
 	let bccMail = 'Bcc@mail.com';
 	await t.click(elements.ccBccButton);
@@ -223,13 +223,13 @@ test('L1 | Enter email address into Cc/Bcc address field || C945627', async t =>
 		.expect(await elements.buttonListAddressFieldTokenLabel.count).eql(4);
 });
 
-test('L1 | Compose: No Data, Exit (X) | C581628 ||', async t => {
+test('L1 | Compose: No Data, Exit (X) | C581628', async t => {
 	await t.click(elements.ccBccButton);
 	await compose.closeCompose();
 	await t.expect(elements.composerBody.exists).notOk({ timeout: 5000 });
 });
 
-test.skip('Lx | Compose: Hover and click plus sign menu image thumbnail to add/remove attachments | ID || SKIP: Hover is not working ', async t => {
+test.skip('Lx | Compose: Hover and click plus sign menu image thumbnail to add/remove attachments | Cxxxxxx | SKIP: Hover is not working ', async t => {
 	for (let i = 0; i < 4; i ++) {
 		await compose.clickPlusSign();
 		await t
@@ -259,7 +259,7 @@ test.skip('Lx | Compose: Hover and click plus sign menu image thumbnail to add/r
 		await compose.clickCompose();
 	});
 
-test.skip('L2 | Images Tab, Drag/Drop into ATTACH drop zone | C565555 || SKIP:PREAPPS-302', async t => {
+test.skip('L2 | Images Tab, Drag/Drop into ATTACH drop zone | C565555 | SKIP:PREAPPS-302', async t => {
 	await compose.clickPlusSign();
 	await utilFunc.verifyDragDropArea.with({ dependencies: { getDropzone: elements.dragDropFileArea } })();
 	await t.dragToElement(elements.plusSignMenuPhotoFromEmailAreaItemButton.nth(0), elements.richtextToolbarContainer, { speed: 0.1 });
@@ -282,7 +282,7 @@ test.skip('L2 | Images Tab, Drag/Drop into ATTACH drop zone | C565555 || SKIP:PR
 		await compose.clickCompose();
 	});
 
-test.skip('L2 | Images Tab, Drag/Drop into EMBED drop zone | C565554 || SKIP:PREAPPS-302 | ##TODO: C648032 L2: Images Tab, Search', async t => {
+test.skip('L2 | Images Tab, Drag/Drop into EMBED drop zone | C565554 | SKIP:PREAPPS-302 | ##TODO: C648032 L2: Images Tab, Search', async t => {
 	await compose.clickPlusSign();
 	await utilFunc.verifyDragDropArea.with({ dependencies: { getDropzone: elements.dragDropInlineImageArea } })();
 	await t.dragToElement(elements.plusSignMenuPhotoFromEmailAreaItemButton.nth(0), elements.richtextarea, { speed: 0.1 });
@@ -303,7 +303,7 @@ test.skip('L2 | Images Tab, Drag/Drop into EMBED drop zone | C565554 || SKIP:PRE
 		await compose.clickCompose();
 	});
 
-test.skip('L1 | Images Tab, Filtering | C548609 || SKIP:PREAPPS-302', async t => {
+test.skip('L1 | Images Tab, Filtering | C548609 | SKIP:PREAPPS-302', async t => {
 	let searchText = 'zimbra-logo-color';
 	await compose.clickPlusSign();
 	//enter "a" to search field
@@ -331,7 +331,7 @@ test.skip('L1 | Images Tab, Filtering | C548609 || SKIP:PREAPPS-302', async t =>
 		await compose.clickCompose();
 	});
 
-test.skip('L1 | Files Tab, Filtering | C548610 || SKIP:PREAPPS-302 | ##TODO: C648033 L2: Files Tab, Search ', async t => {
+test.skip('L1 | Files Tab, Filtering | C548610 | SKIP:PREAPPS-302 | ##TODO: C648033 L2: Files Tab, Search ', async t => {
 	let fileName = 'PDFFile.pdf';
 	await compose.clickPlusSign();
 	await compose.clickPlusSignMenuNavItem(1);
@@ -350,7 +350,7 @@ test.skip('L1 | Files Tab, Filtering | C548610 || SKIP:PREAPPS-302 | ##TODO: C64
 		await compose.clickCompose();
 	});
 
-test.skip('L2 | Files Tab, Drag/Drop into EMBED drop zone | C565556 || SKIP:PREAPPS-302', async t => {
+test.skip('L2 | Files Tab, Drag/Drop into EMBED drop zone | C565556 | SKIP:PREAPPS-302', async t => {
 	let fileName = 'PDFFile.pdf';
 	await compose.clickPlusSign();
 	await compose.clickPlusSignMenuNavItem(1);
@@ -372,7 +372,7 @@ test.skip('L2 | Files Tab, Drag/Drop into EMBED drop zone | C565556 || SKIP:PREA
 		await compose.clickCompose();
 	});
 
-test.skip('L2 | Files Tab, Drag/Drop into ATTACH drop zone | C565557 || SKIP:PREAPPS-302', async t => {
+test.skip('L2 | Files Tab, Drag/Drop into ATTACH drop zone | C565557 | SKIP:PREAPPS-302', async t => {
 	let fileName = 'PDFFile.pdf';
 	await compose.clickPlusSign();
 	await compose.clickPlusSignMenuNavItem(1);
@@ -394,7 +394,7 @@ test.skip('L2 | Files Tab, Drag/Drop into ATTACH drop zone | C565557 || SKIP:PRE
 		await compose.clickCompose();
 	});
 
-test.skip('L2 | GIF Hover, click to add popular gifs as inline attachments | C733285 | PREAPPS-175 | SKIP:PREAPPS-302', async t => {
+test.skip('L2 | GIF Hover, click to add popular gifs as inline attachments | C733285 | Bug:PREAPPS-175 | SKIP:PREAPPS-302', async t => {
 	await compose.clickPlusSign();
 	await compose.clickPlusSignMenuNavItem(2);
 	for (let i = 0; i < 4; i ++) {
@@ -416,7 +416,7 @@ test.skip('L2 | GIF Hover, click to add popular gifs as inline attachments | C73
 	await t.expect(actualAttachedImageIdArray).eql(expectedAttachedImageIdArray);
 });
 
-test.skip('L2 | GIF Tab, Search | C648034 || SKIP:PREAPPS-302 | ##TODO:C548611 L1: GIF Tab, Filtering ', async t => {
+test.skip('L2 | GIF Tab, Search | C648034 | SKIP:PREAPPS-302 | ##TODO:C548611 L1: GIF Tab, Filtering ', async t => {
 	let buttonText = 'thumbs up';
 	await compose.clickPlusSign();
 	await compose.clickPlusSignMenuNavItem(2);
@@ -430,7 +430,7 @@ test.skip('L2 | GIF Tab, Search | C648034 || SKIP:PREAPPS-302 | ##TODO:C548611 L
 		.expect(elements.plusSignMenuGifsItemButton.nth(0).exists).ok();
 });
 
-test.skip('L1 | Web Link Tab, Filtering | C548612 | PREAPPS-305', async t => {
+test.skip('L1 | Web Link Tab, Filtering | C548612 | Bug:PREAPPS-305', async t => {
 	let searchText = 'shopping';
 	await compose.clickPlusSign();
 	await compose.clickPlusSignMenuNavItem(3);
@@ -443,7 +443,7 @@ test.skip('L1 | Web Link Tab, Filtering | C548612 | PREAPPS-305', async t => {
 	await t.expect(elements.buttonWithText(searchText).exists).ok({ timeout: 5000 });
 });
 
-test('L1 | Compose: Data visibility (view, addresses, subject) | C581633 || Compose: Test address field suggestions ', async t => {
+test('L1 | Compose: Data visibility (view, addresses, subject) | C581633 | Compose: Test address field suggestions ', async t => {
 	let labelText = 'ui.testing';
 	let selectLabelText = 'test user';
 	await t
@@ -470,7 +470,7 @@ test('L1 | Compose: Data visibility (view, addresses, subject) | C581633 || Comp
 		await compose.clickCompose();
 	});
 
-test('L2 | Compose, Autocompleter, CC - Match on Email Address, select | C581673 || ', async t => {
+test('L2 | Compose, Autocompleter, CC - Match on Email Address, select | C581673', async t => {
 	let labelText = 'ui.testing';
 	let selectLabelText = 'test user';
 	await t.click(elements.ccBccButton);
@@ -498,7 +498,7 @@ test('L2 | Compose, Autocompleter, CC - Match on Email Address, select | C581673
 		await compose.clickCompose();
 	});
 
-test('L2 | Compose, Autocompleter, BCC - Match on Email Address, select | C581674 ||', async t => {
+test('L2 | Compose, Autocompleter, BCC - Match on Email Address, select | C581674', async t => {
 	let labelText = 'ui.testing';
 	let selectLabelText = 'test user';
 	await t.click(elements.ccBccButton);
@@ -526,7 +526,7 @@ test('L2 | Compose, Autocompleter, BCC - Match on Email Address, select | C58167
 		await compose.clickCompose();
 	});
 
-test.skip('L1 | General Behavior, Open/Close | C548608 || SKIP:PREAPPS-302', async t => {
+test.skip('L1 | General Behavior, Open/Close | C548608 | SKIP:PREAPPS-302', async t => {
 	await t.expect(elements.menuSearchSelector.exists).notOk({ timeout: 2000 });
 	await compose.clickPlusSign();
 	await t.expect(elements.menuSearchSelector.visible).ok({ timeout: 2000 });
@@ -559,7 +559,7 @@ fixture `Compose: Scroll fixture`
 		await soap.deleteAccount(t.ctx.user.id, t.fixtureCtx.adminAuthToken);
 	});
 
-test.skip('L2 | Images tab, Endless Scroll | C500831 || SKIP:PREAPPS-302', async t => {
+test.skip('L2 | Images tab, Endless Scroll | C500831 | SKIP:PREAPPS-302', async t => {
 	await compose.clickPlusSign();
 	const startRectTop = await elements.plusSignMenuPhotoFromEmailAreaItemButton.nth(0).getBoundingClientRectProperty('top');
 	await utilFunc.scrollElement.with({ dependencies: { scrollPosition: 'down' } })(elements.plusSignScrollVirtualListSelector);
@@ -582,7 +582,7 @@ test.skip('L2 | Images tab, Endless Scroll | C500831 || SKIP:PREAPPS-302', async
 		await compose.clickCompose();
 	});
 
-test.skip('L2 | Files tab, Endless Scroll | C500832 || SKIP:PREAPPS-302', async t => {
+test.skip('L2 | Files tab, Endless Scroll | C500832 | SKIP:PREAPPS-302', async t => {
 	let fileName = 'PDFFile.pdf';
 	await compose.clickPlusSign();
 	await compose.clickPlusSignMenuNavItem(1);
@@ -608,7 +608,7 @@ test.skip('L2 | Files tab, Endless Scroll | C500832 || SKIP:PREAPPS-302', async 
 		await compose.clickCompose();
 	});
 
-test.skip('L2 | GIF tab, Endless Scroll | C500833 || SKIP:PREAPPS-302', async t => {
+test.skip('L2 | GIF tab, Endless Scroll | C500833 | SKIP:PREAPPS-302', async t => {
 	let buttonText = 'thumbs up';
 	await compose.clickPlusSign();
 	await compose.clickPlusSignMenuNavItem(2);
@@ -624,7 +624,7 @@ test.skip('L2 | GIF tab, Endless Scroll | C500833 || SKIP:PREAPPS-302', async t 
 		.expect(startRectTop > endRectTop);
 });
 
-test.skip('L2 | Web link tab, Endless Scroll | C500834 | PREAPPS-305', async t => {
+test.skip('L2 | Web link tab, Endless Scroll | C500834 | Bug:PREAPPS-305', async t => {
 	let searchText = 'shopping';
 	await compose.clickPlusSign();
 	await compose.clickPlusSignMenuNavItem(3);
@@ -661,7 +661,7 @@ fixture `Compose: Rich Text Editor fixture`
 		await soap.deleteAccount(t.ctx.user.id, t.fixtureCtx.adminAuthToken);
 	});
 
-test('L2 | RTE Toolbar Elements | C610129 ||', async t => {
+test('L2 | RTE Toolbar Elements | C610129', async t => {
 	await t.expect(elements.componentsToolbarMiddleSelector.exists).ok({ timeout: 10000 });
 	const toolbarItemCount = await elements.componentsToolbarMiddleSelector.child().count;
 	await t
@@ -676,7 +676,7 @@ test('L2 | RTE Toolbar Elements | C610129 ||', async t => {
 		.expect(await elements.componentsToolbarMiddleSelector.child().count).eql(toolbarItemCount);
 });
 
-test('L1 | Responsive Composer Toolbar | C610130 || Fixed:PREAPPS-206', async t => {
+test('L1 | Responsive Composer Toolbar | C610130 | Fixed:PREAPPS-206', async t => {
 	await t.expect(elements.componentsToolbarMiddleSelector.exists).ok({ timeout: 10000 });
 	const toolbarItemCount = await elements.componentsToolbarMiddleSelector.child().count;
 	await t
@@ -691,7 +691,7 @@ test('L1 | Responsive Composer Toolbar | C610130 || Fixed:PREAPPS-206', async t 
 		.expect(await elements.componentsToolbarMiddleSelector.child().count).eql(toolbarItemCount);
 });
 
-test.skip('L2 | Attachments > Attach Photo From Email | C648038 || SKIP:PREAPPS-302', async t => {
+test.skip('L2 | Attachments > Attach Photo From Email | C648038 | SKIP:PREAPPS-302', async t => {
 	await t.expect(elements.componentsToolbarMiddleSelector.exists).ok({ timeout: 10000 });
 	await compose.selectComposeToolbarPopmenu('Attachments', 'Attach Photo From Email');
 	await t.expect(elements.plusSignMenuPhotoFromEmailAreaItemButton.nth(0).exists).ok({ timeout: 10000 });
@@ -707,7 +707,7 @@ test.skip('L2 | Attachments > Attach Photo From Email | C648038 || SKIP:PREAPPS-
 		await compose.clickCompose();
 	});
 
-test.skip('L2 | Attachments > Attach File From Email | C648039 || SKIP:PREAPPS-302', async t => {
+test.skip('L2 | Attachments > Attach File From Email | C648039 | SKIP:PREAPPS-302', async t => {
 	let fileName = 'WordDocFile.docx';
 	await t.expect(elements.componentsToolbarMiddleSelector.exists).ok({ timeout: 10000 });
 	await compose.selectComposeToolbarPopmenu('Attachments', 'Attach File From Email');
@@ -724,7 +724,7 @@ test.skip('L2 | Attachments > Attach File From Email | C648039 || SKIP:PREAPPS-3
 		await compose.clickCompose();
 	});
 
-test.skip('L2 | Attachments > Attach GIF | C648040 || SKIP:PREAPPS-302', async t => {
+test.skip('L2 | Attachments > Attach GIF | C648040 | SKIP:PREAPPS-302', async t => {
 	await t.expect(elements.componentsToolbarMiddleSelector.exists).ok({ timeout: 10000 });
 	await compose.selectComposeToolbarPopmenu('Attachments', 'Attach GIF');
 	await t.expect(elements.plusSignMenuPopularGIFsItemButton.nth(0).exists).ok({ timeout: 10000 });
@@ -736,7 +736,7 @@ test.skip('L2 | Attachments > Attach Web Link | C648041 || SKIP:PREAPPS-302', as
 	await t.expect(elements.buttonWithText('shopping').exists).ok({ timeout: 10000 });
 });
 
-test.skip('L2 | Font > Type | C665561 | PREAPPS-250', async t => {
+test.skip('L2 | Font > Type | C665561 | Bug:PREAPPS-250', async t => {
 	let emailBodyText = 'Font';
 	//await t.selectText(elements.richtextareaTextContentSelector, 0, emailBodyText.length);
 	await t.click(elements.richtextareaTextContentSelector);
@@ -746,7 +746,7 @@ test.skip('L2 | Font > Type | C665561 | PREAPPS-250', async t => {
 	await t.expect(await elements.richtextareaTextContentSelector.find('font').getAttribute('face')).contains('TimesNewRoman');
 });
 
-test.skip('L2 | Font > Size | C665562 | PREAPPS-250', async t => {
+test.skip('L2 | Font > Size | C665562 | Bug:PREAPPS-250', async t => {
 	let emailBodyText = 'Size';
 	await compose.enterBodyText(emailBodyText);
 	await t.wait(500);
@@ -757,7 +757,7 @@ test.skip('L2 | Font > Size | C665562 | PREAPPS-250', async t => {
 	await t.expect(await elements.richtextareaTextContentSelector.find('font').getAttribute('size')).eql('5');
 });
 
-test.skip('L2 | Font > Bold | C665611 ||', async t => {
+test.skip('L2 | Font > Bold | C665611', async t => {
 	let emailBodyText = 'Bold';
 	await compose.enterBodyText(emailBodyText);
 	await t.wait(500);
@@ -768,7 +768,7 @@ test.skip('L2 | Font > Bold | C665611 ||', async t => {
 	await t.expect(await elements.richtextareaTextContentSelector.find('b').exists).ok();
 });
 
-test.skip('L2 | Font > Italics | C665612 ||', async t => {
+test.skip('L2 | Font > Italics | C665612', async t => {
 	let emailBodyText = 'Test';
 	await compose.enterBodyText(emailBodyText);
 	await t.wait(500);
@@ -779,7 +779,7 @@ test.skip('L2 | Font > Italics | C665612 ||', async t => {
 	await t.expect(await elements.richtextareaTextContentSelector.find('i').exists).ok();
 });
 
-test.skip('L2 | Font > Underline | C665613 ||', async t => {
+test.skip('L2 | Font > Underline | C665613', async t => {
 	let emailBodyText = 'Test';
 	await compose.enterBodyText(emailBodyText);
 	await t.wait(500);
@@ -790,7 +790,7 @@ test.skip('L2 | Font > Underline | C665613 ||', async t => {
 	await t.expect(await elements.richtextareaTextContentSelector.find('u').exists).ok();
 });
 
-test.skip('L2 | Font > Text, Background Color | C665614 ||', async t => {
+test.skip('L2 | Font > Text, Background Color | C665614', async t => {
 	let expectedFontColor = '#888888';
 	let expectedFontBackgroundColor = 'rgb(136, 136, 136)';
 	let emailBodyText = 'Test';
@@ -804,7 +804,7 @@ test.skip('L2 | Font > Text, Background Color | C665614 ||', async t => {
 	await t.expect(await elements.richtextareaTextContentSelector.find('font').getAttribute('color')).eql(expectedFontColor);
 });
 
-test('L2 | Font > Bulleting | C668231 ||', async t => {
+test('L2 | Font > Bulleting | C668231', async t => {
 	let emailBodyText = 'This is line 1<br>This is line 2';
 	await compose.enterBodyText(emailBodyText);
 	await t.wait(500);
@@ -817,7 +817,7 @@ test('L2 | Font > Bulleting | C668231 ||', async t => {
 	await t.expect(await elements.richtextareaTextContentSelector.find('ol').find('li').exists).ok();
 });
 
-test('L2 | Font > Indent | C668232 ||', async t => {
+test('L2 | Font > Indent | C668232', async t => {
 	let emailBodyText = 'This is line 1<br>This is line 2';
 	await compose.enterBodyText(emailBodyText);
 	await t.wait(500);
@@ -830,7 +830,7 @@ test('L2 | Font > Indent | C668232 ||', async t => {
 	await t.expect(await elements.richtextareaTextContentSelector.find('blockquote').exists).notOk({ timeout: 30000 });
 });
 
-test('L2 | Font > Alignment | C668233 ||', async t => {
+test('L2 | Font > Alignment | C668233', async t => {
 	let emailBodyText = 'Test';
 	await compose.enterBodyText(emailBodyText);
 	await t.wait(500);
@@ -846,7 +846,7 @@ test('L2 | Font > Alignment | C668233 ||', async t => {
 	await t.expect(await elements.richtextareaTextContentSelector.find('div').getStyleProperty('text-align')).eql('right');
 });
 
-test('L2 | Hyperlink > Insert Link | C668234 || (Fixed:PREAPPS-274)', async t => {
+test('L2 | Hyperlink > Insert Link | C668234 | Fixed:PREAPPS-274', async t => {
 	let emailBodyText = 'test';
 	let linkUrl = 'http://www.google.ca';
 	await compose.selectComposeToolbarPopmenu('Link', 'Insert Link');
@@ -859,7 +859,7 @@ test('L2 | Hyperlink > Insert Link | C668234 || (Fixed:PREAPPS-274)', async t =>
 		.expect((await elements.richtextareaTextContentSelector.innerText).split(emailBodyText).length - 1).eql(1);
 });
 
-test.skip('L2 | Hyperlink > Search for Web Link | C668237 | PREAPPS-305', async t => {
+test.skip('L2 | Hyperlink > Search for Web Link | C668237 | Bug:PREAPPS-305', async t => {
 	let searchText = 'shopping';
 	await compose.selectComposeToolbarPopmenu('Link', 'Search For Web Link');
 	await t.wait(500);
@@ -872,7 +872,7 @@ test.skip('L2 | Hyperlink > Search for Web Link | C668237 | PREAPPS-305', async 
 	await t.expect(elements.buttonWithText(searchText).exists).ok({ timeout: 5000 });
 });
 
-test.skip('L1 | Emoticon button | C668238 | PREAPPS-383', async t => {
+test.skip('L1 | Emoticon button | C668238 | Bug:PREAPPS-383', async t => {
 	const expectedEmojiData = await compose.insertEmoji(0);
 	const actualEmojiData = await elements.richtextareaTextContentSelector.find('img').getAttribute('src');
 	await t.expect(expectedEmojiData).eql(actualEmojiData);
@@ -898,7 +898,7 @@ fixture `Compose: Attachement upload Files`
 		await soap.deleteAccount(t.ctx.user.id, t.fixtureCtx.adminAuthToken);
 	});
 
-test('L2 | Compose, Send: File Attachment, No Message Body | C581643 || ##TODO: C548614 L1: Add Attachments ', async t => {
+test('L2 | Compose, Send: File Attachment, No Message Body | C581643 | ##TODO: C548614 L1: Add Attachments ', async t => {
 	let emailSubject = '[No subject]';
 	let emailTo = t.ctx.user.email;
 	const filePath = path.join(__dirname, './data/files/JPEG_Image.jpg');
@@ -923,7 +923,7 @@ test('L2 | Compose, Send: File Attachment, No Message Body | C581643 || ##TODO: 
 		.expect(elements.attachmentNameSelector.innerText).contains('JPEG_Image');
 });
 
-test('L2 | Compose, Send: File Attachment, Message Body | C581642 ||', async t => {
+test('L2 | Compose, Send: File Attachment, Message Body | C581642', async t => {
 	let emailContent = 'email text';
 	let emailTo = t.ctx.user.email;
 	const filePath = path.join(__dirname, './data/files/JPEG_Image.jpg');
@@ -952,7 +952,7 @@ test('L2 | Compose, Send: File Attachment, Message Body | C581642 ||', async t =
 		.expect(elements.attachmentNameSelector.innerText).contains('JPEG_Image');
 });
 
-test('L2 | Compose, Send, File Attachment, File Type Support | C813888 ||', async t => {
+test('L2 | Compose, Send, File Attachment, File Type Support | C813888', async t => {
 	let fs = require('fs');
 	let emailTo = t.ctx.user.email;
 	const folderPath = path.join(__dirname, './data/files/');
