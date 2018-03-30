@@ -23,6 +23,7 @@ import CaptureBeforeUnload from '../../components/capture-before-unload';
 import TextInput from '../../components/text-input';
 import ActionMenuGroup from '../../components/action-menu-group';
 import ActionMenuItem from '../../components/action-menu-item';
+import DraggableCard from '../../components/draggable-card';
 
 let components = {
 	...allBlocks,
@@ -37,7 +38,8 @@ let components = {
 	ModalDialog,
 	TextInput,
 	ActionMenuItem,
-	ActionMenuGroup
+	ActionMenuGroup,
+	DraggableCard
 };
 
 const SHOW_ZIMLETS_URL_FLAG= /[?&#]zimletSlots=show(?:&|$)/;
