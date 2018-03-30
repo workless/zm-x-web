@@ -13,6 +13,7 @@ import * as allBlocks from '@zimbra/blocks';
 // import allComponents from '../../components/**/index.js';
 import MenuItem from '../../components/menu-item';
 import Sidebar from '../../components/sidebar';
+import MailSidebar from '../../components/mail-sidebar';
 import FolderList from '../../components/folder-list';
 import SmartList from '../../components/smart-list';
 import ActionMenuMoveFolder from '../../components/action-menu-move-folder';
@@ -31,6 +32,7 @@ let components = {
 	...allBlocks,
 	MenuItem,
 	Sidebar,
+	MailSidebar,
 	FolderList,
 	SmartList,
 	ActionMenuMoveFolder,
