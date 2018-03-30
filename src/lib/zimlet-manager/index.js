@@ -13,6 +13,7 @@ import * as allBlocks from '@zimbra/blocks';
 // import allComponents from '../../components/**/index.js';
 import MenuItem from '../../components/menu-item';
 import Sidebar from '../../components/sidebar';
+import MailSidebar from '../../components/mail-sidebar';
 import FolderList from '../../components/folder-list';
 import SmartList from '../../components/smart-list';
 import ActionMenuMoveFolder from '../../components/action-menu-move-folder';
@@ -23,11 +24,15 @@ import CaptureBeforeUnload from '../../components/capture-before-unload';
 import TextInput from '../../components/text-input';
 import ActionMenuGroup from '../../components/action-menu-group';
 import ActionMenuItem from '../../components/action-menu-item';
+import DraggableCard from '../../components/draggable-card';
+import ContextMenu from '../../components/context-menu';
+import ActionMenu, { DropDownWrapper } from '../../components/action-menu';
 
 let components = {
 	...allBlocks,
 	MenuItem,
 	Sidebar,
+	MailSidebar,
 	FolderList,
 	SmartList,
 	ActionMenuMoveFolder,
@@ -36,8 +41,12 @@ let components = {
 	ConfirmModalDialog,
 	ModalDialog,
 	TextInput,
+	ActionMenu,
+	DropDownWrapper,
 	ActionMenuItem,
-	ActionMenuGroup
+	ActionMenuGroup,
+	DraggableCard,
+	ContextMenu
 };
 
 const SHOW_ZIMLETS_URL_FLAG= /[?&#]zimletSlots=show(?:&|$)/;
