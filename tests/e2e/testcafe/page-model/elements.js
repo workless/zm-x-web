@@ -21,7 +21,7 @@ class Elements {
     progressIndicatorSelector = Selector(clientName + '_progress-indicator_progress');
     folderInput = clientName + '_folder-input_folderInput';
     folderListItemSelector = Selector(clientName + '_folder-list_item');
-    folderListCollapsibleControlSelector = Selector(clientName + '_folder-list_collapsibleControl');
+    folderListCollapsibleControlSelector = Selector(clientName + '_collapsible-control_open');
     foldersGroupToggleSelector = Selector(clientName + '_folder-list_groupToggle'); // Unused selector
     folderToggleSelector = Selector(clientName + '_folder-list_customFolderToggle');
     folderInputContainerSelector = Selector(clientName + '_folder-list_folderInputContainer');
@@ -59,7 +59,10 @@ class Elements {
     mailListSubjectSelector = this.mailListPaneSelector.find(this.mailSubject); // Refactor
     messageViewerHeaderTextSelector = Selector(clientName + '_viewer-title_headerText');
     mailListFooterSelector = Selector(clientName + '_mail-list-footer_footer');
-
+    addressListAddressDetail = Selector(clientName + '_address-list_addressDetail');
+    addressListAddress = Selector(clientName + '_address-list_address');
+    addressListAddressType = Selector(clientName + '_address-list_addressType');
+    
     // Dialog Elements
     blocksDialogOverlaySelector = Selector('.blocks_dialog_overlay');
     dialogSelector = Selector(clientName + '_modal-dialog_dialog');
@@ -73,12 +76,12 @@ class Elements {
     componentsToolbarMiddleSelector = Selector(clientName + '_gui-rich-text-area_components_toolbar_middle');
     emojiItemButton = Selector(clientName + '_gui-rich-text-area_components_toolbar_emojiItem');
     componentsToolbarColorMenuSelector = this.componentsToolbarMiddleSelector.find(clientName + '_gui-rich-text-area_components_toolbar_colorMenu'); // Refactor
-    rteToolbarDeleteSelector = Selector(clientName + '_gui-rich-text-area_components_toolbar_delete')
-
+    rteToolbarDeleteSelector = Selector(clientName + '_gui-rich-text-area_components_toolbar_delete');
+    composerScrollContainer = Selector(clientName + '_composer_editor');
 
     // Compose - Plus Sign Menu Elements
     plusMenuBlockSpinner = Selector('.blocks_spinner_blockSpinner');
-    plusSignIcon = Selector(clientName + '_plus-sign-menu_icon');
+    plusSignIcon = Selector(clientName + '_media-menu_icon');
     plusSignMenuTabs = Selector(clientName + '_plus-sign-menu_tabs');
     plusSignMenuNavBar = Selector('.blocks_tabs_nav');
     plusSignMenuNavItem = Selector('.blocks_tabs_nav-item');
@@ -95,7 +98,7 @@ class Elements {
     plusSignMenuPopularGIFsItemButton = this.plusSignMenuPopularGIFs.find('.blocks_card_square').withAttribute('role', 'button'); //Refactor
     plusSignMenuSearchesItemButton = this.plusSignMenuSearches.find('*').withAttribute('draggable','true').withAttribute('role', 'button'); //Refactor
     plusSignMenuGifsItemButton = this.plusSignMenuGifs.find('.blocks_card_square').withAttribute('role', 'button'); //Refactor
-
+    
 
     //Compose Elements
     buttonWithText = buttonText => Selector('button').withText(buttonText); // Refactor
@@ -120,6 +123,7 @@ class Elements {
     dragDropInlineImageArea = this.richtextareaContainer.withText('Drag and drop inline images here'); // Refactor
     dragDropFileArea = this.richtextToolbarContainer.find('div').withText('Drag and drop attachments here'); // Refactor
     ccBccButton = this.composerField.find('button').withText('CC/BCC'); // Refactor
+    ccBccHideButton = this.composerField.find('button').withText('Hide CC/BCC');
     iframeEl = this.richtextarea.find('iframe'); // Refactor
     iframeAttachedImageElements = this.richtextarea.find('img'); // Refactor
     buttonClearSearch = this.menuSearchSelector.find('button').withAttribute('aria-label', 'Clear Search');  // Refactor
