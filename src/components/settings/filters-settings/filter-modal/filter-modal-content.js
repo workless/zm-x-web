@@ -1,6 +1,5 @@
 import { Component, h } from 'preact';
 import { Text } from 'preact-i18n';
-import { connect } from 'preact-redux';
 import style from './style.less';
 import cx from 'classnames';
 import get from 'lodash-es/get';
@@ -11,7 +10,8 @@ import findIndex from 'lodash-es/findIndex';
 import merge from 'lodash-es/merge';
 import has from 'lodash-es/has';
 import cloneDeep from 'lodash-es/cloneDeep';
-import { getFolders } from '../../../../store/folders/selectors';
+import { withProps } from 'recompose';
+import getMailFolders from '../../../../graphql-decorators/get-mail-folders';
 import {
 	FILTER_TEST_TYPE,
 	FILTER_CONDITION_DISPLAY,
@@ -110,16 +110,12 @@ const FILTER_CONDITIONS_CONFIG = [
 	}
 ];
 
-@connect(
-	(state) => {
-		const folders = getFolders(state, 'message') || [];
-		return {
-			folders: folders
-				.filter((folder) => folder.absFolderPath)
-				.map(({ absFolderPath }) => normalizePath(absFolderPath))
-		};
-	}
-)
+@getMailFolders()
+@withProps(({ folders }) => ({
+	folders: folders
+		.filter((folder) => folder.absFolderPath)
+		.map(({ absFolderPath }) => normalizePath(absFolderPath))
+}))
 export default class FilterModalContent extends Component {
 	onRulePredicateChange = rulePath => ev => {
 		const value = cloneDeep(this.props.value);
