@@ -47,13 +47,9 @@ export class SplitPaneMenu extends Component {
 					active={active}
 					onToggle={this.handleTogglePopover}
 					anchor="start"
-					useMouseDownEvents
 					class={styles.submenuWrapper}
 					toggleClass={cx(styles.toggle, styles.toolbarButton)}
-					popoverClass={cx(active && styles.active, styles.dropupMenu)}
-					text={
-						<Icon name={menuIcon} />
-					}
+					text={<Icon name={menuIcon} />}
 					tooltip={<Text id={`compose.toolbar.${title}`} />}
 				>
 					{ submenu.map(this.renderSubMenuPane) }
