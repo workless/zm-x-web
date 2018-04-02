@@ -220,11 +220,6 @@ class MonthView extends Component {
 					: 0
 			}),
 			end = addDays(start, 41), //always show an even 6 weeks so the height of the minical doesn't jumpt around
-			// end = endOfWeek(endOfMonth(displayDate), {
-			// 	weekStartsOn: preferences
-			// 		? parseInt(preferences.zimbraPrefCalendarFirstDayOfWeek, 10)
-			// 		: 6
-			// }),
 			dates = eachDay(start, end),
 			weeks = dates.reduce(toWeeks, []);
 
