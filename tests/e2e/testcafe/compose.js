@@ -172,7 +172,7 @@ test('L2 | Compose: No Data, Send | C581629 | Smoke', async t => {
 	await t.expect(elements.composerFooter.withText(errorMessage).exists).ok({ timeout: 10000 });
 });
 
-test('L1 | Compose: Data Present, Exit (X) | C581630 ||', async t => {
+test('L1 | Compose: Data Present, Exit (X) | C581630', async t => {
 	let userEmail = t.ctx.user.email;
 	let emailSubject = 'email subject';
 	await compose.clickCompose();
@@ -189,7 +189,7 @@ test('L1 | Compose: Data Present, Exit (X) | C581630 ||', async t => {
 	await t.expect(await elements.inboxReadPane().innerText).contains(emailSubject);
 });
 
-test('L1 | Compose: Data visibility | C666681 ||', async t => {
+test('L1 | Compose: Data visibility | C666681', async t => {
 	let emailBodyText = '';
 	for (let i = 0; i < 100; i++) {
 		emailBodyText = emailBodyText + i + '<br>';
