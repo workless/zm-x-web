@@ -1,6 +1,7 @@
 import { h, Component } from 'preact';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import debounce from 'lodash-es/debounce';
 import flatten from 'lodash-es/flatten';
 import findIndex from 'lodash-es/findIndex';
 import scrollIntoViewIfNeeded from 'scroll-into-view-if-needed';
@@ -97,7 +98,7 @@ export default class FolderSelect extends Component {
 		keyboardSelection: null // [<groupIndex>, <itemIndex>]
 	};
 
-	handleFilterChange = (e, folders) => {
+	handleFilterChange = debounce((e, folders) => {
 		const value = e.target.value;
 		const newFolderGroups = [filteredFolders(folders, value)];
 		const newSelection = value === ''
@@ -108,7 +109,7 @@ export default class FolderSelect extends Component {
 			filterValue: value,
 			keyboardSelection: newSelection
 		});
-	}
+	}, 100)
 
 	handleFilterKeydown = (e) => {
 		if (e.keyCode === KeyCodes.DOWN_ARROW || e.keyCode === KeyCodes.UP_ARROW) {

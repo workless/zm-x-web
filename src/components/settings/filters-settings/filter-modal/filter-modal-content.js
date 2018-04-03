@@ -10,6 +10,7 @@ import findIndex from 'lodash-es/findIndex';
 import merge from 'lodash-es/merge';
 import has from 'lodash-es/has';
 import cloneDeep from 'lodash-es/cloneDeep';
+import { flattenFolders } from '../../../../utils/folders';
 import { withProps } from 'recompose';
 import getMailFolders from '../../../../graphql-decorators/get-mail-folders';
 import {
@@ -112,7 +113,7 @@ const FILTER_CONDITIONS_CONFIG = [
 
 @getMailFolders()
 @withProps(({ folders }) => ({
-	folders: folders
+	folders: flattenFolders(folders)
 		.filter((folder) => folder.absFolderPath)
 		.map(({ absFolderPath }) => normalizePath(absFolderPath))
 }))

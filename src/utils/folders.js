@@ -88,10 +88,10 @@ export function renamedFolderAbsPath(prevAbsPath, newName) {
 }
 
 export function flattenFolders(folders) {
-	return flatMapDeep(folders, (f => f.folder
-		? [{ ...f, folder: undefined }, flattenFolders(f.folder)]
-		: [f]
-	));
+	return flatMapDeep(folders, (f => ([
+		f,
+		...(f.folders ? flattenFolders(f.folders) : [])
+	])));
 }
 
 export function filteredFolders(folders, query) {
