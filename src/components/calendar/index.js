@@ -158,11 +158,9 @@ function getDOW({ preferences }) {
 @withMediaQuery(minWidth(screenMd), 'matchesScreenMd')
 @connect(
 	({ calendar = {} }) => ({
-		localView: calendar.view,
 		date: calendar.date
 	}),
 	{
-		setLocalView: calendarActionCreators.setView,
 		setDate: calendarActionCreators.setDate
 	}
 )
@@ -174,7 +172,7 @@ function getDOW({ preferences }) {
 })
 @graphql(CalendarsAndAppointmentsQuery, {
 	name: 'calendarsData',
-	options: ({ localView, date, preferencesData }) => {
+	options: ({ date, preferencesData }) => {
 		if (!preferencesData.preferences) {
 			return { skip: true };
 		}
@@ -187,7 +185,7 @@ function getDOW({ preferences }) {
 			}
 		});
 
-		const view = localView || getView(preferencesData);
+		const view = getView(preferencesData);
 		let start = new Date(date);
 		let end;
 
@@ -462,7 +460,6 @@ export default class Calendar extends Component {
 		const viewPref = VIEW_TO_PREF[view];
 		if (viewPref) {
 			this.clearNewEvent();
-			this.props.setLocalView(viewPref);
 			this.props.setView(viewPref);
 		}
 	};
@@ -538,10 +535,10 @@ export default class Calendar extends Component {
 	}
 
 	render(
-		{ localView, date, calendarsData, preferencesData, pending, matchesScreenMd },
+		{ date, calendarsData, preferencesData, pending, matchesScreenMd },
 		{ newEvent, quickAddBounds, activeModal, activeModalProps }
 	) {
-		const view = localView || getView(preferencesData);
+		const view = getView(preferencesData);
 		if (!view) {
 			return null;
 		}
