@@ -31,12 +31,7 @@ import { withoutAccountAddresses } from '../../utils/account';
 
 import {
 	readMailItem,
-	archiveMailItem,
-	unarchiveMailItem,
 	bulkDeleteMessages,
-	spamMailItem,
-	flagMailItem,
-	moveMailItem,
 	clearSelected,
 	toggleSelected,
 	toggleAllSelected
@@ -161,14 +156,9 @@ function updateFlags(flags, variables) {
 		toggleSelected,
 		toggleAllSelected,
 		readMailItem,
-		archiveMailItem,
 		bulkDeleteMessages,
-		spamMailItem,
-		flagMailItem,
-		moveMailItem,
 		openModalCompose,
 		notify,
-		unarchiveMailItem,
 		setMailboxMetadata,
 		removeTab
 	}

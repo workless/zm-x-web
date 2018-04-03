@@ -3,42 +3,14 @@ import { createAction } from 'redux-actions';
 import { normalize } from 'normalizr';
 import findIndex from 'lodash-es/findIndex';
 import intersection from 'lodash-es/intersection';
-import {
-	conversation as conversationType,
-	message as messageType
-} from '../../constants/types';
 import { DEFAULT_UNDO_DURATION } from '../../constants/undo-timeout';
 import * as Schema from '../schema';
 import { notify } from '../notifications/actions';
-import { removeTabs } from '../navigation/actions';
 import { getMailFolder } from './selectors';
-import { notifyFolderMove } from '../folders/actions';
-import { getFolderByName, getFolder } from '../folders/selectors';
-import { getId } from '../../lib/util';
-import array from '@zimbra/util/src/array';
-
-const MAIL_ITEM_NAMES = {
-	[conversationType]: { plural: 'conversations', title: 'Conversation' },
-	[messageType]: { plural: 'messages', title: 'Message' }
-};
-
-function subject(options) {
-	return Array.isArray(options.id) && options.id.length > 1
-		? `${options.id.length} ${MAIL_ITEM_NAMES[options.type].plural}`
-		: MAIL_ITEM_NAMES[options.type].title;
-}
 
 function zimbraNamespace(zimbra, type) {
 	return zimbra[`${type}s`];
 }
-
-const notifyConversationMove = (payload) => (
-	notifyFolderMove({
-		...payload,
-		subject: subject(payload.options),
-		undoAction: moveMailItem
-	})
-);
 
 function getPageIndex(state, { id, currentFolder }) {
 	if (!currentFolder) {
@@ -55,10 +27,6 @@ function getPageIndex(state, { id, currentFolder }) {
 	);
 
 	return index !== -1 ? index : 0;
-}
-
-function removeAllTabsFromOptions({ id, type }) {
-	return removeTabs(array(id).map(currentId => ({ id: currentId, type })));
 }
 
 export const loadMailCollection = createAsyncAction(
@@ -125,42 +93,6 @@ export const reloadCurrentFolderPage = options => (dispatch, getState) => {
 	);
 };
 
-function normalizeConversation(c) {
-	return normalize(
-		{
-			...c,
-			full: true,
-			messages: c.messages.map(m => ({
-				...m,
-				full: true,
-				autoSendTime: m.autoSendTime || null
-			}))
-		},
-		Schema.conversation
-	);
-}
-
-function normalizeMessage(m) {
-	return normalize({
-		...m,
-		full: true,
-		autoSendTime: m.autoSendTime || null
-	}, Schema.message);
-}
-
-export const loadMailItem = createAsyncAction(
-	'mail load.item',
-	({ options, zimbra }) =>
-		zimbraNamespace(zimbra, options.type)
-			.read(getId(options.id))
-			.then(
-				i =>
-					options.type === 'conversation'
-						? normalizeConversation(i)
-						: normalizeMessage(i)
-			)
-);
-
 export const toggleSelected = createAction('mail toggle.selected');
 
 export const toggleAllSelected = createAction('mail toggle.allSelected');
@@ -177,94 +109,6 @@ export const flagMailItem = createAsyncAction(
 	'mail flag.item',
 	({ options, zimbra }) =>
 		zimbraNamespace(zimbra, options.type).flag(options.id, options.value)
-);
-
-export const spamMailItem = createAsyncAction(
-	'mail spam.item',
-	({ options, zimbra, dispatch }) =>
-		zimbraNamespace(zimbra, options.type)
-			.spam(options.id, options.value)
-			.then(data => {
-				!options.isUndo &&
-					options.currentFolder &&
-					dispatch(
-						notify({
-							message: `${subject(options)} ${options.value
-								? 'marked as Spam. Thank you for helping us improve spam filtering.'
-								: 'marked as Not Spam.'}`,
-							action: {
-								label: 'Undo',
-								fn: () => {
-									dispatch(
-										spamMailItem({
-											...options,
-											isUndo: true,
-											value: !options.value
-										})
-									);
-								}
-							}
-						})
-					);
-
-				dispatch(removeAllTabsFromOptions(options));
-				dispatch(reloadCurrentFolderPage(options));
-				return data;
-			})
-);
-
-export const moveMailItem = createAsyncAction(
-	'mail move.item',
-	({ options, zimbra, dispatch, getState }) =>
-		zimbraNamespace(zimbra, options.type)
-			.move(options.id, options.destFolderId)
-			.then(data => {
-				const destFolder = getFolder(getState(), options.destFolderId);
-				notifyConversationMove({ dispatch, destFolder, options });
-				dispatch(removeAllTabsFromOptions(options));
-				dispatch(reloadCurrentFolderPage(options));
-				return data;
-			})
-);
-
-export const archiveMailItem = createAsyncAction(
-	'mail archive.item',
-	({ options, zimbra, dispatch, getState }) => {
-		const archiveFolder = getFolderByName(getState(), 'Archive');
-
-		if (!archiveFolder) {
-			throw new Error("The Archive folder doesn't exist");
-		}
-
-		return zimbraNamespace(zimbra, options.type)
-			.move(options.id, archiveFolder.id)
-			.then((data) => {
-				notifyConversationMove({ dispatch, destFolder: archiveFolder, options });
-				dispatch(removeAllTabsFromOptions(options));
-				dispatch(reloadCurrentFolderPage(options));
-				return data;
-			});
-	}
-);
-
-export const unarchiveMailItem = createAsyncAction(
-	'mail unarchive.item',
-	({ options, zimbra, dispatch, getState }) => {
-		const inboxFolder = getFolderByName(getState(), 'Inbox');
-
-		if (!inboxFolder) {
-			throw new Error("The Archive folder doesn't exist");
-		}
-
-		return zimbraNamespace(zimbra, options.type)
-			.move(options.id, inboxFolder.id)
-			.then(data => {
-				notifyConversationMove({ dispatch, destFolder: inboxFolder, options });
-				dispatch(removeAllTabsFromOptions(options));
-				dispatch(reloadCurrentFolderPage(options));
-				return data;
-			});
-	}
 );
 
 export const createReplyDraft = createAsyncAction(

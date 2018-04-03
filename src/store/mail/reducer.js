@@ -1,10 +1,7 @@
 import { combineReducers } from 'redux';
 import reduceReducers from 'reduce-reducers';
-import { handleActions, combineActions } from 'redux-actions';
+import { handleActions } from 'redux-actions';
 import paginate from '@zimbra/util/src/redux/paginate';
-import { pendingAction } from '@zimbra/util/src/redux/async-action';
-import array from '@zimbra/util/src/array';
-import without from 'lodash-es/without';
 import * as actionCreators from './actions';
 
 const initialState = {
@@ -23,11 +20,6 @@ function paginateFolder(collectionType, state) {
 	});
 }
 
-function collectionTypeFor(itemType) {
-	return `${itemType}s`;
-}
-
-
 export default reduceReducers(
 	combineReducers({
 		conversations: paginateFolder('conversations', initialState.conversations),
@@ -43,40 +35,5 @@ export default reduceReducers(
 			[actionCreators.toggleAllSelected]: (state, action) => state.size === 0 ? new Set(action.payload.items.map(i => i.id)) : new Set()
 
 		}, initialState.selectedIds)
-	}),
-	handleActions(
-		{
-			[combineActions(
-				pendingAction(actionCreators.moveMailItem),
-				pendingAction(actionCreators.archiveMailItem)
-			)]: (state, action) => {
-				const { currentFolder, type } = action.payload.options;
-				if (!currentFolder) {
-					return state;
-				}
-
-				const collectionType = collectionTypeFor(type);
-				if (!state[collectionType]) {
-					return state;
-				}
-
-				const folderKey = currentFolder.absFolderPath.replace('/', '');
-				if (!state[collectionType][folderKey]) {
-					return state;
-				}
-
-				return {
-					...state,
-					[collectionType]: {
-						...state[collectionType],
-						[folderKey]: {
-							...state[collectionType][folderKey],
-							pages: state[collectionType][folderKey].pages.map(p => without(p, ...array(action.payload.options.id)))
-						}
-					}
-				};
-			}
-		},
-		initialState
-	)
+	})
 );

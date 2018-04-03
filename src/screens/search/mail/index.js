@@ -32,7 +32,6 @@ import MailListFooter from '../../../components/mail-list-footer';
 import MailPane from '../../../components/mail-pane';
 import ContactFrequencyCard from '../../../components/contact-frequency-card';
 import RelatedContactsCard from '../../../components/related-contacts-card';
-import { loadMailItem } from '../../../store/mail/actions';
 import { isImageDeep } from '../../../utils/attachments';
 import { getConversationFolder, findFolder } from '../../../utils/folders';
 import AttachmentsPane from '../../../components/attachments-pane';
@@ -64,7 +63,7 @@ function getAttachments(messages) {
 		groupBy: getUserPref(state, groupMailBy.name) || groupMailBy.default,
 		view: state.url.view
 	}),
-	{ loadItem: loadMailItem, preview: setPreviewAttachment }
+	{ preview: setPreviewAttachment }
 )
 @getMailboxMetadata()
 @getMailFolders()

@@ -11,7 +11,6 @@ import includes from 'lodash/includes';
 import { configure } from '../../config';
 import { MAIL_VIEW, ALL_VIEW } from '../../constants/views';
 
-import { moveMailItem } from '../../store/mail/actions';
 import { loadFolders } from '../../store/folders/actions';
 import { setActiveAccountId } from '../../store/active-account/actions';
 
@@ -50,7 +49,6 @@ const { ActionType } = apiClientTypes;
 		activeAccountId: get(state, 'activeAccount.id')
 	}),
 	{
-		moveMailItem,
 		loadFolders,
 		setActiveAccountId
 	}
