@@ -44,21 +44,23 @@
 
 }
 
-[aria-haspopup][class].toolbarButton {
-	background: @body-bg;
-	border: 0;
-	color: lighten(@gray-base, 58.5%);
-	cursor: pointer;
-	display: inline-block;
-	font-size: 120%;
-	text-align: center;
-	width: 35px;
+div, button {
+  &[class].toolbarButton {
+		background: @body-bg;
+		border: 0;
+		color: lighten(@gray-base, 58.5%);
+		cursor: pointer;
+		display: inline-block;
+		font-size: 120%;
+		text-align: center;
+		width: 35px;
 
-	&:hover,
-	&:focus,
-	&.active {
-		color: @gray-base;
-		background-color: transparent;
+		&:hover,
+		&:focus,
+		&.active {
+			color: @gray-base;
+			background-color: transparent;
+		}
 	}
 }
 
