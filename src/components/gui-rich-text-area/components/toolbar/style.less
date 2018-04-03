@@ -44,7 +44,7 @@
 
 }
 
-.toolbarButton {
+[class].toolbarButton {
 	background: @body-bg;
 	border: 0;
 	color: lighten(@gray-base, 58.5%);
@@ -114,13 +114,6 @@
 		}
 	}
 
-	.selectedItem {
-		font-size: 13px;
-		left: 10px;
-		position: absolute;
-		top: 50%;
-		transform: translateY(-50%);
-	}
 
 }
 
@@ -233,9 +226,20 @@
 
 	.paneItem {
 		padding: 0 32px;
+		border: none;
+
 		&:hover,
 		&:focus {
 			background: @list-hover-bg;
+			border: none;
+		}
+
+		.selectedItem {
+			font-size: 13px;
+			left: 10px;
+			position: absolute;
+			top: 50%;
+			transform: translateY(-50%);
 		}
 	}
 	.fontSize1 {
