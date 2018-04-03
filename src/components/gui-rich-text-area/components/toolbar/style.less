@@ -86,13 +86,8 @@
 .submenuWrapper {
 	padding: 0;
 	&.iconMenu {
-		ul > .item {
-			:global(.blocks_select_itemTitle) {
-				padding-right: 0;
-			}
-		}
-		:global(.blocks_select_dropup) {
-			min-width: 10px;
+		ul > li.item[class] > div {
+			padding-right: 0;
 		}
 	}
 
