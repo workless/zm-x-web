@@ -47,7 +47,6 @@ export default reduceReducers(
 	handleActions(
 		{
 			[combineActions(
-				pendingAction(actionCreators.deleteMailItem),
 				pendingAction(actionCreators.moveMailItem),
 				pendingAction(actionCreators.archiveMailItem)
 			)]: (state, action) => {

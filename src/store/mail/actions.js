@@ -179,25 +179,6 @@ export const flagMailItem = createAsyncAction(
 		zimbraNamespace(zimbra, options.type).flag(options.id, options.value)
 );
 
-export const deleteMailItem = createAsyncAction(
-	'mail delete.item',
-	({ options, zimbra, dispatch, getState }) =>
-		zimbraNamespace(zimbra, options.type)
-			.trash(options.id, options.value)
-			.then((result) => {
-				const trashFolder = getFolderByName(getState(), 'Trash');
-
-				if (!trashFolder) {
-					throw new Error("The Trash folder doesn't exist");
-				}
-
-				notifyConversationMove({ dispatch, destFolder: trashFolder, options });
-				dispatch(removeAllTabsFromOptions(options));
-				dispatch(reloadCurrentFolderPage(options));
-				return result;
-			})
-);
-
 export const spamMailItem = createAsyncAction(
 	'mail spam.item',
 	({ options, zimbra, dispatch }) =>
