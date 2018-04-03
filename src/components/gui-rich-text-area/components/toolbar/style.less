@@ -86,8 +86,12 @@
 .submenuWrapper {
 	padding: 0;
 	&.iconMenu {
-		ul > li.item[class] > div {
-			padding-right: 0;
+		ul {
+			min-width: unset;
+
+			> li.item[class] > div {
+				padding-right: 0;
+			}
 		}
 	}
 
