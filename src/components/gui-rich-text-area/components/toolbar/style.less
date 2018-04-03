@@ -44,7 +44,7 @@
 
 }
 
-[class].toolbarButton {
+[aria-haspopup][class].toolbarButton {
 	background: @body-bg;
 	border: 0;
 	color: lighten(@gray-base, 58.5%);
@@ -227,6 +227,7 @@
 	.paneItem {
 		padding: 0 32px;
 		border: none;
+		min-height: 24px;
 
 		&:hover,
 		&:focus {
@@ -235,7 +236,6 @@
 		}
 
 		.selectedItem {
-			font-size: 13px;
 			left: 10px;
 			position: absolute;
 			top: 50%;
