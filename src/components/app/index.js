@@ -32,7 +32,6 @@ import createwebSearchClient from '../../lib/webSearch-client';
 import * as urlActionCreators from '../../store/url/actions';
 import * as emailActionCreators from '../../store/email/actions';
 import { applyServerChanges } from '../../store/entities/actions';
-import { loadMailCollection } from '../../store/mail/actions';
 import { setPreviewAttachment } from '../../store/attachment-preview/actions';
 import { getSelectedAttachmentPreview } from '../../store/attachment-preview/selectors';
 import { getSearchQuery, getSearchEmail } from '../../store/url/selectors';
@@ -180,8 +179,7 @@ export default class Provide extends Component {
 	{
 		...urlActionCreators,
 		...emailActionCreators,
-		closeAttachmentPreview: setPreviewAttachment,
-		loadMailCollection
+		closeAttachmentPreview: setPreviewAttachment
 	}
 )
 @graphql(NoopQuery, {
