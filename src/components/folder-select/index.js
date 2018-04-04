@@ -109,7 +109,7 @@ export default class FolderSelect extends Component {
 			filterValue: value,
 			keyboardSelection: newSelection
 		});
-	}, 100)
+	}, 225)
 
 	handleFilterKeydown = (e) => {
 		if (e.keyCode === KeyCodes.DOWN_ARROW || e.keyCode === KeyCodes.UP_ARROW) {
