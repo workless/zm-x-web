@@ -20,7 +20,7 @@ fixture `Tasks fixture`
 	});
     
 
-test('C827434 - Create new task list and add a new task using plus icon', async t => {
+test('L0 | Create new task list and add a new task using plus icon | C827434', async t => {
 	const taskListName = 'Sample List';
 	const taskName = 'Sample Task';
 	await t.expect(await tasks.tasksHeaderSelector.innerText).contains('Tasks - List', 'Header name should be Tasks - List');
@@ -35,7 +35,7 @@ test('C827434 - Create new task list and add a new task using plus icon', async 
 	await t.expect(await tasks.panel.checkTaskExists(taskListName,taskName)).ok();
 });
 
-test('C827418, C870200 - Add a new task using plus icon in default task list | Smoke ', async t => {
+test('L0 | Add a new task using plus icon in default task list | C827418 | Smoke', async t => {
 	const taskListName = t.ctx.user.email;
 	const taskName = 'Sample Task';
 	await t.expect(await tasks.tasksHeaderSelector.innerText).contains('Tasks - List');
@@ -46,16 +46,24 @@ test('C827418, C870200 - Add a new task using plus icon in default task list | S
 	await t.expect(await tasks.panel.checkTaskExists(taskListName,taskName)).ok();
 });
 
-test('Quick add a new task in default task list | Smoke ', async t => {
+test('L1 | Add Task - Plus Button(+) - Task List View  | C870200', async t => {
+	const taskListName = t.ctx.user.email;
+	await t.expect(await tasks.tasksHeaderSelector.innerText).contains('Tasks - List');
+	await t.expect(await tasks.panel.checkTaskListExists(taskListName)).ok();
+	await tasks.panel.clickTaskListPlusIcon(taskListName);
+	await t.expect(await tasks.dialog.isDialogPresent('Add Task')).ok('Verify that Add Task dailog is present');
+});
+
+/* test('Quick add a new task in default task list | Smoke ', async t => {
 	const taskListName = t.ctx.user.email;
 	const taskName = 'Sample Task';
 	await t.expect(await tasks.tasksHeaderSelector.innerText).contains('Tasks - List');
 	await t.expect(await tasks.panel.checkTaskListExists(taskListName)).ok();
 	await tasks.panel.enterAddTaskText(taskListName, taskName);
 	await t.expect(await tasks.panel.checkTaskExists(taskListName,taskName)).ok();
-});
+}); */
 
-test('C827415 - Add new Task using Hover on task listname', async t => {
+test('L0 | Add new Task using Hover on task listname | C827415 | Smoke', async t => {
 	const taskListName = t.ctx.user.email;
 	const taskName = 'Sample Task';
 	await t.expect(await tasks.tasksHeaderSelector.innerText).contains('Tasks - List');
@@ -67,7 +75,7 @@ test('C827415 - Add new Task using Hover on task listname', async t => {
 	await t.expect(await tasks.panel.isCheckboxEnable(taskListName,taskName)).ok();
 });
 
-test('C827416 - Add new task using setting option', async t => {
+test('L1 | Add new task using setting option | C827416', async t => {
 	const taskListName = t.ctx.user.email;
 	const taskName = 'Sample Task';
 	await t.expect(await tasks.tasksHeaderSelector.innerText).contains('Tasks - List');
@@ -80,7 +88,7 @@ test('C827416 - Add new task using setting option', async t => {
 	await t.expect(await tasks.panel.isCheckboxEnable(taskListName,taskName)).ok();
 });
 
-test('C870199 - Select the Task view as priority and Add new Urgent task', async t => {
+test('L1 | Select the Task view as priority and Add new Urgent task | C870199', async t => {
 	const priorityName = 'URGENT !!';
 	const taskName = 'Sample Task';
 	await t.expect(await tasks.tasksHeaderSelector.innerText).contains('Tasks - List');
@@ -92,7 +100,7 @@ test('C870199 - Select the Task view as priority and Add new Urgent task', async
 	await t.expect(await tasks.panel.checkTaskExists(priorityName,taskName,'Priorityview')).ok();
 });
 
-test('C870202 - Select the Task view as Due Date and Add new Due today task', async t => {
+test('L1 | Select the Task view as Due Date and Add new Due today task | C870202', async t => {
 	const dueName = 'DUE TODAY';
 	const taskName = 'Sample Task';
 	await t.expect(await tasks.tasksHeaderSelector.innerText).contains('Tasks - List');
@@ -105,7 +113,29 @@ test('C870202 - Select the Task view as Due Date and Add new Due today task', as
 });
 
 
-test('Bug: PREAPPS-343 C827432, C827433 - Create a Task with Due date and priority value', async t => {
+test('L1 | Create a Task with Priority value | C827433 | Bug: PREAPPS-343', async t => {
+	const taskName = 'Sample Task';
+	const taskNotes = 'Sample Notes';
+	const taskListName = 'Test Tasklist';
+	await soap.createTaskList(t.ctx.userAuth,taskListName);
+	await t.eval(() => location.reload(true));
+	await t.expect(await tasks.tasksHeaderSelector.innerText).contains('Tasks - List');
+	await tasks.header.clickTasksSettingsIcon();
+	await tasks.header.selectMenuItem('New Task');
+	await tasks.dialog.enterNewTaskText(taskName);
+	await tasks.dialog.selectTaskList(taskListName);
+	await tasks.dialog.selectPriority('Urgent !!');
+	await tasks.dialog.enterNotesText(taskNotes);
+	await tasks.dialog.clickModalDialogFooterButton('Save');
+	await t.expect(await tasks.panel.checkTaskExists(taskListName,taskName)).ok();
+	await tasks.panel.singleClickonTask(taskListName,taskName);
+	await t.expect(await tasks.popup.isTaskPresentInPopup(taskName)).ok('Verify the task name in popup');
+	await t.expect(await tasks.popup.isNotesPresentInPopup(taskNotes)).ok('Verify the task notes in popup');
+	await t.expect(await tasks.panel.taskExclamationMark(taskListName, taskName)).contains('!!','Verify the task priority');
+	
+});
+
+test('L1 | Create a Task with Due Date value | C827432 | Bug: PREAPPS-343', async t => {
 	const dueDate = await utilFunc.getDatemmddyy(1);
 	const taskName = 'Sample Task';
 	const taskNotes = 'Sample Notes';
@@ -118,7 +148,6 @@ test('Bug: PREAPPS-343 C827432, C827433 - Create a Task with Due date and priori
 	await tasks.dialog.enterNewTaskText(taskName);
 	await tasks.dialog.enterDate(dueDate);
 	await tasks.dialog.selectTaskList(taskListName);
-	await tasks.dialog.selectPriority('Urgent !!');
 	await tasks.dialog.enterNotesText(taskNotes);
 	await tasks.dialog.clickModalDialogFooterButton('Save');
 	await t.expect(await tasks.panel.checkTaskExists(taskListName,taskName)).ok();
@@ -126,11 +155,9 @@ test('Bug: PREAPPS-343 C827432, C827433 - Create a Task with Due date and priori
 	await t.expect(await tasks.popup.isTaskPresentInPopup(taskName)).ok('Verify the task name in popup');
 	await t.expect(await tasks.popup.isNotesPresentInPopup(taskNotes)).ok('Verify the task notes in popup');
 	await t.expect(await tasks.panel.taskDueDateVal(taskListName,taskName)).eql(await utilFunc.calculateDueDate(dueDate), 'Verify the due date of task');
-	await t.expect(await tasks.panel.taskExclamationMark(taskListName, taskName)).contains('!!','Verify the task priority');
-	
 });
 
-test('C871013 - Add duplicate task in the same tasklist', async t => {
+test('L2 | Add duplicate task in the same tasklist | C871013', async t => {
 	const taskListName = t.ctx.user.email;
 	const taskName = 'Sample Task';
 	await t.expect(await tasks.tasksHeaderSelector.innerText).contains('Tasks - List');
@@ -149,7 +176,7 @@ test('C871013 - Add duplicate task in the same tasklist', async t => {
 });
 
 
-test('C827436 - Hover on task listname and create task with giving whitespaces name', async t => {
+test('L2 | Hover on task listname and create task with giving whitespaces name | C827436', async t => {
 	const taskListName = t.ctx.user.email;
 	const taskName = '   ';
 	await t.expect(await tasks.tasksHeaderSelector.innerText).contains('Tasks - List');
@@ -161,7 +188,7 @@ test('C827436 - Hover on task listname and create task with giving whitespaces n
 });
 
 
-test('C870192 - Add a new task without entering name value', async t => {
+test('L2 | Add a new task without entering name value | C870192', async t => {
 	const taskListName = t.ctx.user.email;
 	await t.expect(await tasks.tasksHeaderSelector.innerText).contains('Tasks - List');
 	await t.expect(await tasks.panel.checkTaskListExists(taskListName)).ok();
@@ -170,7 +197,7 @@ test('C870192 - Add a new task without entering name value', async t => {
 	await t.expect(await tasks.dialog.isModalDialogFooterButtonDisable('Save')).ok('Verify the Save button is disable');
 });
 
-test('C870193 - Add a new task with whitespace name value', async t => {
+test('L2 | Add a new task with whitespace name value | C870193', async t => {
 	const taskListName = t.ctx.user.email;
 	const taskName = '   ';
 	await t.expect(await tasks.tasksHeaderSelector.innerText).contains('Tasks - List');
@@ -181,7 +208,7 @@ test('C870193 - Add a new task with whitespace name value', async t => {
 	await t.expect(await tasks.dialog.isModalDialogFooterButtonDisable('Save')).ok('Verify the Save button is disable');
 });
 
-test('C876362 - Right click on task and verify the Edit dialog', async t => {
+test('L0 | Right click on task and verify the Edit dialog | C876362', async t => {
 	const taskListName = t.ctx.user.email;
 	const taskName = 'Sample Task';
 	const parentFolderID = await soap.getTaskFolder(t.ctx.userAuth);
@@ -195,21 +222,7 @@ test('C876362 - Right click on task and verify the Edit dialog', async t => {
 	await t.expect(await tasks.popup.isTaskPresentInPopup(taskName)).ok('Verification of Task Name');
 });
 
-test('C827517 - Edit task name using double click', async t => {
-	const taskListName = t.ctx.user.email;
-	const taskName = 'Sample Task';
-	const newtaskName = 'New Name';
-	const parentFolderID = await soap.getTaskFolder(t.ctx.userAuth);
-	await soap.createTask(t.ctx.userAuth,parentFolderID, taskName, t.ctx.user.email);
-	await t.eval(() => location.reload(true));
-	await t.expect(await tasks.tasksHeaderSelector.innerText).contains('Tasks - List');
-	await t.expect(await tasks.panel.checkTaskExists(taskListName,taskName)).ok();
-	await tasks.panel.doubleClickonTask(taskListName,taskName);
-	await tasks.panel.editTaskText(newtaskName);
-	await t.expect(await tasks.panel.checkTaskExists(taskListName, newtaskName)).ok('Verify that updated task name is present in the panel');
-});
-
-test('Bug: PREAPPS-343 C870191 - Edit the task details', async t => {
+test('L1 | Edit the task details | C870191 | PREAPPS-343', async t => {
 	const taskListName = t.ctx.user.email;
 	const oldtaskName = 'Old Task';
 	const newtaskName = 'New Task';
@@ -230,7 +243,7 @@ test('Bug: PREAPPS-343 C870191 - Edit the task details', async t => {
 	await t.expect(await tasks.popup.isNotesPresentInPopup(newNotes)).ok('Verification of Notes details');
 });
 
-test('C870195, C827422 - Mark Done task and verify in Done view', async t => {
+test('L1 | Mark Done task | C870195', async t => {
 	const taskListName = t.ctx.user.email;
 	const taskName = 'Sample Task';
 	await t.expect(await tasks.tasksHeaderSelector.innerText).contains('Tasks - List');
@@ -245,7 +258,28 @@ test('C870195, C827422 - Mark Done task and verify in Done view', async t => {
 	await t.expect(await tasks.panel.checkTaskExists(taskListName, taskName,'Doneview')).ok('Verification the present of task in Done view');
 });
 
-test('Bug: PREAPPS-343 C870196 - Edit the done task', async t => {
+test('L0 | verify  Done view | C827422', async t => {
+	const taskListName = t.ctx.user.email;
+	const taskName = 'Sample Task';
+	
+	const parentFolderID = await soap.getTaskFolder(t.ctx.userAuth);
+	await soap.createTask(t.ctx.userAuth,parentFolderID, taskName, t.ctx.user.email,await utilFunc.getDateyyyymmdd(0));
+	await tasks.header.clickTasksSettingsIcon();
+	await tasks.header.selectMenuItem('Done View');
+	await t.expect(await tasks.tasksHeaderSelector.innerText).contains('Tasks - Done');
+	await tasks.header.clickTasksSettingsIcon();
+	await tasks.header.selectMenuItem('List View');
+	await t.expect(await tasks.tasksHeaderSelector.innerText).contains('Tasks - List');
+	await t.expect(await tasks.panel.checkTaskListExists(taskListName)).ok();
+	await tasks.panel.hoveroverTaskList(taskListName);
+	await tasks.panel.markTaskAsDone(taskListName, taskName);
+	await tasks.header.clickTasksSettingsIcon();
+	await tasks.header.selectMenuItem('Done View');
+	await t.expect(await tasks.tasksHeaderSelector.innerText).contains('Tasks - Done');
+	await t.expect(await tasks.panel.checkTaskExists(taskListName, taskName,'Doneview')).ok('Verification the present of task in Done view');
+});
+
+test('L2 | Edit the done task | C870196 | Bug: PREAPPS-343', async t => {
 	const taskListName = t.ctx.user.email;
 	const oldtaskName = 'Old Task';
 	const newtaskName = 'New Name';
@@ -273,7 +307,7 @@ test('Bug: PREAPPS-343 C870196 - Edit the done task', async t => {
 
 });
 
-test('C870197 - Uncheck the done task', async t => {
+test('L1 | Uncheck the done task | C870197', async t => {
 	const taskListName = t.ctx.user.email;
 	const taskName = 'Done Task';
 	const parentFolderID = await soap.getTaskFolder(t.ctx.userAuth);
@@ -289,7 +323,7 @@ test('C870197 - Uncheck the done task', async t => {
 	await t.expect(await tasks.panel.checkTaskExists(taskListName,taskName,'Doneview')).notOk('Verify task no longer shows in the Done view');
 });
 
-test('Bug: PREAPPS-342 C871062 - Delete tasks from Priority view', async t => {
+test('L2 | Delete tasks from Priority view | C871062 | Bug: PREAPPS-342', async t => {
 	const priorityName = ['URGENT !!', 'IMPORTANT !', 'NORMAL'];
 	const taskName = ['Task1', 'Task2', 'Task3'];
 	const parentFolderID = await soap.getTaskFolder(t.ctx.userAuth);
@@ -307,7 +341,7 @@ test('Bug: PREAPPS-342 C871062 - Delete tasks from Priority view', async t => {
 	await t.expect(await tasks.panel.checkTaskExists(priorityName[2],taskName[2],'Priorityview')).notOk();
 });
 
-test('Bug: PREAPPS-342 C871063 - Delete tasks from Due Date view', async t => {
+test('L2 | Delete tasks from Due Date view | C871063 | Bug: PREAPPS-342', async t => {
 	const dueDate = ['PAST DUE', 'DUE TODAY', 'UPCOMING'];
 	const taskName = ['Task1', 'Task2', 'Task3'];
 	const parentFolderID = await soap.getTaskFolder(t.ctx.userAuth);
@@ -325,7 +359,7 @@ test('Bug: PREAPPS-342 C871063 - Delete tasks from Due Date view', async t => {
 	await t.expect(await tasks.panel.checkTaskExists(dueDate[2],taskName[2],'DueDateview')).notOk();
 });
 
-test('Bug: PREAPPS-342 C871064 - Delete tasks from Done view', async t => {
+test('L2 | Delete tasks from Done view | C871064 | Bug: PREAPPS-342', async t => {
 	const taskListName = t.ctx.user.email;
 	const taskName = 'Done Task';
 	const parentFolderID = await soap.getTaskFolder(t.ctx.userAuth);
@@ -340,7 +374,7 @@ test('Bug: PREAPPS-342 C871064 - Delete tasks from Done view', async t => {
 	await t.expect(await tasks.panel.checkTaskExists(taskListName,taskName,'Doneview')).notOk();
 });
 
-test('C827419 - Verify List view', async t => {
+test('L0 | Verify List view | C827419', async t => {
 	const taskListName = t.ctx.user.email;
 	const priorityName = ['URGENT !!', 'IMPORTANT !', 'NORMAL'];
 	const taskName = ['Task1', 'Task2', 'Task3'];
@@ -360,7 +394,7 @@ test('C827419 - Verify List view', async t => {
 });
 
 
-test('C827437 - Add a new task list with whitespace name value', async t => {
+test('L2 | Add a new task list with whitespace name value | C827437', async t => {
 	const taskListName = '   ';
 	await t.expect(await tasks.tasksHeaderSelector.innerText).contains('Tasks - List');
 	await tasks.header.clickTasksSettingsIcon();
@@ -369,7 +403,7 @@ test('C827437 - Add a new task list with whitespace name value', async t => {
 	await t.expect(await tasks.dialog.isModalDialogFooterButtonDisable('Create List')).ok('Verify the Create List button is disable');
 });
 
-test('C870203 - Rename Task list on double click on it', async t => {
+test('L1 | Rename Task list on double click on it | C870203', async t => {
 	const oldTaskListName = 'Old Tasklist';
 	const newTaskListName = 'New Tasklist';
 	await soap.createTaskList(t.ctx.userAuth,oldTaskListName);
@@ -380,7 +414,7 @@ test('C870203 - Rename Task list on double click on it', async t => {
 	await t.expect(await tasks.panel.checkTaskListExists(newTaskListName.toUpperCase())).ok('Verify the Tasklist name');
 });
 
-test('C870204 - Rename task list using context menu', async t => {
+test('L1 | Rename task list using context menu | C870204', async t => {
 	const oldTaskListName = 'Old Tasklist';
 	const newTaskListName = 'New Tasklist';
 	await soap.createTaskList(t.ctx.userAuth,oldTaskListName);
@@ -391,7 +425,7 @@ test('C870204 - Rename task list using context menu', async t => {
 	await t.expect(await tasks.panel.checkTaskListExists(newTaskListName.toUpperCase())).ok('Verify the Tasklist name');
 });
 
-test('C827439 - Add Duplicate Task list name', async t => {
+test('L1 | Add Duplicate Task list name | C827439', async t => {
 	const taskListName = 'First Tasklist';
 	await soap.createTaskList(t.ctx.userAuth,taskListName);
 	await t.eval(() => location.reload(true));
@@ -404,7 +438,7 @@ test('C827439 - Add Duplicate Task list name', async t => {
 	await t.expect(await tasks.dialog.getErrorMessage()).contains('A task list with this name already exists. Please enter a different name for your task list.','Verify the expected error message');
 });
 
-test('Bug: PREAPPS-342 C875258, C871061 - Task Delete operation', async t => {
+test('L1 | Task Delete operation | C871061 | Bug: PREAPPS-342 | C875258', async t => {
 	const taskListName = t.ctx.user.email;
 	const taskName = 'Sample Task';
 	const Notes = 'Sample Notes';
@@ -415,7 +449,7 @@ test('Bug: PREAPPS-342 C875258, C871061 - Task Delete operation', async t => {
 	await t.expect(await actions.getToastMessage()).contains('Task deleted.','Verification of Toast Message');
 });
 
-test('Bug: PREAPPS-342 C875259, C871060 - Undo operation after task Delete operation', async t => {
+test('L2 | Undo operation after task Delete operation | C871060 | Bug: PREAPPS-342 | C875259', async t => {
 	const taskListName = t.ctx.user.email;
 	const taskName = 'Sample Task';
 	const Notes = 'Sample Notes';
@@ -428,7 +462,7 @@ test('Bug: PREAPPS-342 C875259, C871060 - Undo operation after task Delete opera
 	await t.expect(await tasks.panel.checkTaskExists(taskListName, taskName));
 });
 
-test('Bug: PREAPPS-343 C875251 - Add Task from task list contect menu', async t => {
+test('L2 | Add Task from task list contect menu | C875251 | Bug: PREAPPS-343', async t => {
 	const taskListName = t.ctx.user.email;
 	const taskName = 'Sample Task';
 	const Notes = 'Sample Notes';
@@ -442,7 +476,7 @@ test('Bug: PREAPPS-343 C875251 - Add Task from task list contect menu', async t 
 	await t.expect(await tasks.popup.isNotesPresentInPopup(Notes)).ok('Verification of Notes details');
 });
 
-test('C875252 - Add Task from task list contect menu and click Cancel', async t => {
+test('L2 | Add Task from task list contect menu and click Cancel | C875252', async t => {
 	const taskListName = t.ctx.user.email;
 	const taskName = 'Sample Task';
 	
@@ -452,7 +486,7 @@ test('C875252 - Add Task from task list contect menu and click Cancel', async t 
 	await t.expect(await tasks.panel.checkTaskExists(taskListName,taskName)).notOk('Verify that task is not added');
 });
 
-test('C876498 - View task details for task without notes', async t => {
+test('L3 | View task details for task without notes | C876498', async t => {
 	const taskListName = t.ctx.user.email;
 	const taskName = 'Sample Task';
 	await tasks.panel.rightClickonTaskListAndSelectOption(taskListName,'New Task');
@@ -463,7 +497,7 @@ test('C876498 - View task details for task without notes', async t => {
 	await t.expect(await tasks.popup.isHorizontalDividerInPopup()).notOk('Verification of Horizontal divider');
 });
 
-test('C876499 - Verify scroll bar for task with long notes', async t => {
+test('L2 | Verify scroll bar for task with long notes | C876499', async t => {
 	const taskListName = t.ctx.user.email;
 	const taskName = 'Sample Task';
 	const Notes = 'Test \n First line \n Second line \n Third line \n Forth line \n Fifth line';
