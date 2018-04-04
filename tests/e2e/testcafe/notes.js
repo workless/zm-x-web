@@ -7,6 +7,7 @@ import { dialog } from './page-model/dialog';
 import { soap } from './utils/soap-client';
 
 fixture `Notes fixture`
+	.skip //skip fixture 
 	.page(profile.hostURL)
 	.before( async ctx => {
 		ctx.adminAuthToken = await soap.getAdminAuthToken();
