@@ -13,7 +13,6 @@ class Elements {
     username = 'input[type="text"]';
     password = 'input[type="password"]';
     login = clientName + '_login_buttons button';
-    clientName = clientName;
 
     // Main Page Elements - Navbar, Sidebar, Folder, Context Menu, Progress indicator
 	navButtonList = Selector(clientName + '_app-navigation_nav');
@@ -45,6 +44,7 @@ class Elements {
     conversationSectionSelector = Selector(clientName + '_conversation-viewer_section');
     conversationSubjectSelector = Selector(clientName + '_viewer-title_subject');
     mailViewerBodySelector = Selector(clientName + '_viewer_body');
+    clientHtmlViewerInner = Selector(clientName + '_html-viewer_inner');
     // Mail Elements - Toolbar
     actionButton = clientName + '_action-button_button';
     actionMenuGroup = clientName + '_action-menu-group_group';

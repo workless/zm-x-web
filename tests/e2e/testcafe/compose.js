@@ -122,7 +122,7 @@ test('L2 | Compose, Send: No Message Body (basic) | C581670', async t => {
 });
 
 test('L1 | Compose, Send: To 3rd party (basic) | C581663', async t => {
-	let userEmail = 'yang.cai@synacor.com';
+	let userEmail = 'synacorusa@gmail.com';
 	let emailSubject = 'email subject';
 	await compose.clickCompose();
 	await compose.enterTextToFieldElement(userEmail, compose.addressFieldTextField('To'));
@@ -137,9 +137,9 @@ test('L1 | Compose, Send: To 3rd party (basic) | C581663', async t => {
 });
 
 test('L1 | Compose, Send: To, CC, BCC (basic) | C581667 | Bug:PREAPPS-357 | ##TODO-add Bcc verify after', async t => {
-	let user1Email = 'yang.cai@synacor.com';
+	let user1Email = 'synacorusa@gmail.com';
 	let user2Email = 'ui.testing@ec2-13-58-225-137.us-east-2.compute.amazonaws.com';
-	let user3Email = 'caiiac@hotmail.com';
+	let user3Email = 'synacorusa@outlook.com';
 	let emailSubject = 'email subject';
 	await compose.clickCompose();
 	await t.click(elements.ccBccButton);
@@ -157,10 +157,35 @@ test('L1 | Compose, Send: To, CC, BCC (basic) | C581667 | Bug:PREAPPS-357 | ##TO
 	await compose.openMessageWithSubject(emailSubject);
 	await t
 		.expect(elements.addressListAddress.find('span').withAttribute('title', user1Email).exists).ok({ timeout: 5000 })
-		.expect(elements.addressListAddressType.withText('To').parent('div').find('span').withText('yang cai').exists).ok()
+		.expect(elements.addressListAddressType.withText('To').parent('div').find('span').withText('synacorusa').exists).ok()
 		.expect(elements.addressListAddress.find('span').withAttribute('title', user2Email).exists).ok()
 		.expect(elements.addressListAddressType.withText('Cc').parent('div').find('span').withText('ui testing').exists).ok();
 });
+
+test('L1 | Reply to Message Containing Inline Attachments | C881169', async t => {
+	let emailBodyText = 'reply email';
+	let replyEmailSubject = 'Re: Inline attachement';
+	await compose.openNewMessage();
+	await compose.clickReplyButton();
+	await compose.enterBodyText(emailBodyText);
+	await compose.sendEmail();
+	await sidebar.clickSidebarContent('Sent');
+	await t.eval(() => location.reload(true));
+	await compose.openMessageWithSubject(replyEmailSubject);
+	await mail.openCondensedMessage(0);
+	await t
+		.expect(elements.clientHtmlViewerInner.find('img').exists).ok({ timeout: 5000 })
+		.expect(await elements.clientHtmlViewerInner.nth(1).innerText).contains(emailBodyText);
+})
+	.before( async t => {
+		t.ctx.user = await soap.createAccount(t.fixtureCtx.adminAuthToken);
+		t.ctx.userAuth = await soap.getUserAuthToken(t.ctx.user.email, t.ctx.user.password);
+		const lmtp = new LmtpClient();
+		const filePath = path.join(__dirname, './data/mime/emails/single-inline-attachment.txt');
+		await lmtp.send(t.ctx.user.email, filePath);
+		await actions.loginEmailPage(t.ctx.user.email, t.ctx.user.password);
+		await t.expect(sidebar.checkSidebarItemExists('Inbox')).ok({ timeout: 15000 });
+	});
 
 /****************************/
 /*** Compose, Functional  ***/
