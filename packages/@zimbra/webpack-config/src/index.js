@@ -14,7 +14,6 @@ import lessJsonPlugin from './lib/less-plugin-load-json';
 import merge from 'deepmerge';
 import { getClientConfig, configFile, mergeStaticAppConfigArrays } from './lib/client-config';
 import { isDir, isFile, readFile, crossPlatformPathRegex, matchesPath, isJsNextModule } from './lib/util';
-import HappyPack from 'happypack';
 import LodashWebpackPlugin from 'lodash-webpack-plugin';
 // import optimizeCss from './lib/optimize-css';
 
@@ -92,6 +91,7 @@ export default function(env) {
 	};
 
 	let postCssLoaderOptions = {
+		sourceMap: true,
 		plugins: [
 			cssnext({
 				browsers: ['last 2 versions', 'not ie > 0', 'iOS >= 8'],
@@ -129,6 +129,7 @@ export default function(env) {
 	}
 
 	let webpackConfig = {
+		mode: PROD ? 'production' : 'development',
 		context,
 		entry: './' + path.relative(context, entry),
 
@@ -176,13 +177,55 @@ export default function(env) {
 					test: /\.jsx?$/,
 					// only transpile npm packages that define a modules/jsnext:main entry
 					include: filepath => !filepath.match(crossPlatformPathRegex(/\/node_modules\//)) || isJsNextModule(filepath),
-					loaders: 'happypack/loader'
+					use: [
+						{
+							loader: 'babel-loader',
+							options: {
+								babelrc: false,
+								comments: false,
+								cacheDirectory: true,
+								presets: [
+									//modules:false is required for webpack 2 tree shaking, but breaks ability to stub es6 modules, so turn off for testing
+									[require.resolve('babel-preset-es2015'), TEST_MODE ? { loose: false } : { loose: true, modules: false }],
+									require.resolve('babel-preset-stage-0')
+								],
+								plugins: [
+									require.resolve('babel-plugin-lodash'),
+									require.resolve('babel-plugin-transform-decorators-legacy'),
+									require.resolve('babel-plugin-transform-object-assign'),
+									require.resolve('babel-plugin-recharts'),
+									[require.resolve('babel-plugin-transform-react-jsx'), { pragma: env.pragma || 'h' }],
+									TEST_MODE && env.coverage!==false && [require.resolve('babel-plugin-__coverage__'), { only: context }]
+								].filter(Boolean)
+							}
+						}
+					]
 				},
 				{
 					test: /\.tsx?$/,
 					exclude: /node_modules/,
 					use: [
-						{ loader: 'happypack/loader' },
+						{
+							loader: 'babel-loader',
+							options: {
+								babelrc: false,
+								comments: false,
+								cacheDirectory: true,
+								presets: [
+									//modules:false is required for webpack 2 tree shaking, but breaks ability to stub es6 modules, so turn off for testing
+									[require.resolve('babel-preset-es2015'), TEST_MODE ? { loose: false } : { loose: true, modules: false }],
+									require.resolve('babel-preset-stage-0')
+								],
+								plugins: [
+									require.resolve('babel-plugin-lodash'),
+									require.resolve('babel-plugin-transform-decorators-legacy'),
+									require.resolve('babel-plugin-transform-object-assign'),
+									require.resolve('babel-plugin-recharts'),
+									[require.resolve('babel-plugin-transform-react-jsx'), { pragma: env.pragma || 'h' }],
+									TEST_MODE && env.coverage!==false && [require.resolve('babel-plugin-__coverage__'), { only: context }]
+								].filter(Boolean)
+							}
+						},
 						{ loader: 'ts-loader' }
 					]
 				},
@@ -243,6 +286,7 @@ export default function(env) {
 
 				{
 					test: matchesPath(/^(clients|config)\/default\/config\.json$/, cwd),
+					type: 'javascript/auto', // webpack4 changes behavior for json-to-js loaders - https://github.com/webpack/webpack/issues/6572
 					loader: 'config-loader',
 					options: {
 						client,
@@ -301,35 +345,6 @@ export default function(env) {
 		profile: env.profile,
 
 		plugins: [].concat(
-			new HappyPack({
-				// loaders is the only required parameter:
-				loaders: [
-					{
-						test: /\.[jt]sx?$/,
-						// only transpile npm packages that define a modules/jsnext:main entry
-						include: filepath => !filepath.match(crossPlatformPathRegex(/\/node_modules\//)) || isJsNextModule(filepath),
-						loader: 'babel-loader',
-						options: {
-							babelrc: false,
-							comments: false,
-							cacheDirectory: true,
-							presets: [
-								//modules:false is required for webpack 2 tree shaking, but breaks ability to stub es6 modules, so turn off for testing
-								[require.resolve('babel-preset-es2015'), TEST_MODE ? { loose: false } : { loose: true, modules: false }],
-								require.resolve('babel-preset-stage-0')
-							],
-							plugins: [
-								require.resolve('babel-plugin-lodash'),
-								require.resolve('babel-plugin-transform-decorators-legacy'),
-								require.resolve('babel-plugin-transform-object-assign'),
-								require.resolve('babel-plugin-recharts'),
-								[require.resolve('babel-plugin-transform-react-jsx'), { pragma: env.pragma || 'h' }],
-								TEST_MODE && env.coverage!==false && [require.resolve('babel-plugin-__coverage__'), { only: context }]
-							].filter(Boolean)
-						}
-					}
-				]
-			}),
 			PROD ? [
 				new webpack.NoEmitOnErrorsPlugin(),
 				new webpack.HashedModuleIdsPlugin()
@@ -362,13 +377,6 @@ export default function(env) {
 				// wipe output dir
 				clean: true,
 				disable: watch
-			}),
-
-			new webpack.optimize.CommonsChunkPlugin({
-				// filename: 'common.[chunkhash].chunk.js',
-				children: true,
-				async: false,								// false moves to entry, true creates a shared dependency chunk
-				minChunks: Math.round(env.minChunks) || 4	// # of duplicates needed to move
 			}),
 
 			new webpack.DefinePlugin({
