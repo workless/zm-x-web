@@ -109,6 +109,9 @@ export default class Login extends Component {
 			else if (error.match(/maintenance mode/)) {
 				error = <Text id="loginScreen.errors.inMaintainance" />;
 			}
+			else if (error.match(/^Error: /)) {
+				error = error.replace(/^Error: /, '');
+			}
 		}
 
 		const emailInputId = `${a11yId}-email`;
