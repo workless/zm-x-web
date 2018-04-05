@@ -1,9 +1,10 @@
 @import '~@zimbra/x-ui/helpers.less';
 
 .wrap {
-	position: static;
-	width: 0;
-	height: 0;
+	// flexbox changeover
+	display: flex;
+	flex: 0 0 auto;
+
 	overflow: visible;
 
 	> iframe {
@@ -13,32 +14,30 @@
 	}
 }
 
-.wrap.inline + * {
-	margin-left: @sidebar-width !important;
-}
+	// flexbox changeover
+//.wrap.inline + * {
+//	margin-left: @sidebar-width !important;
+//}
 
 .wrap.inline .sidebar .inner {
 	background: none;
 }
 
 .sidebar {
-	position: absolute;
-	left: 0;
-	top: 0;
 	width: @sidebar-width;
-	height: 100%;
 	background-color: @sidebar-bg-color;
 	font-family: @branding-font-family-regular;
 	border-right: solid 1px @border-color;
-	.scroll();
+
+	// flexbox changeover
+	flex: 0 0 auto;
+	overflow: auto;
 
 	.backdrop {
 		display: none;
 	}
 
 	.inner {
-		.fit();
-		.scroll();
 		@media(min-width: @screen-sm-max) {
 			padding: 0 @spacing-md;
 		}
