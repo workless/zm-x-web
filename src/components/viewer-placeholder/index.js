@@ -6,7 +6,7 @@ import s from './style.less';
 
 const ViewerPlaceholder = ({ numSelected }) => (
 	<div class={s.placeholder}>
-		<Icon name="envelope" />
+		<Icon name="client:envelope" />
 		{numSelected > 0 &&
 			<div class={s.numOverlay}>
 				{numSelected}
