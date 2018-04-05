@@ -23,7 +23,7 @@ class Elements {
     folderListCollapsibleControlSelector = Selector(clientName + '_collapsible-control_open');
     foldersGroupToggleSelector = Selector(clientName + '_folder-list_groupToggle'); // Unused selector
     folderToggleSelector = Selector(clientName + '_folder-list_customFolderToggle');
-    folderInputContainerSelector = Selector(clientName + '_folder-list_folderInputContainer');
+    folderInputContainerSelector = Selector(clientName + '_folder-input_folderInputContainer');
     contextMenusDefaultContainerSelector = Selector(clientName + '_context-menus_defaultContainer');
     contextMenuBackdropSelector = Selector(clientName + '_context-menu_backdrop');
     contextMenuDefaultContainerSelector = Selector(clientName + '_context-menus_defaultContainer');
