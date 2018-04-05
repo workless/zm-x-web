@@ -54,14 +54,6 @@ test('L1 | Add Task - Plus Button(+) - Task List View  | C870200', async t => {
 	await t.expect(await tasks.dialog.isDialogPresent('Add Task')).ok('Verify that Add Task dailog is present');
 });
 
-/* test('Quick add a new task in default task list | Smoke ', async t => {
-	const taskListName = t.ctx.user.email;
-	const taskName = 'Sample Task';
-	await t.expect(await tasks.tasksHeaderSelector.innerText).contains('Tasks - List');
-	await t.expect(await tasks.panel.checkTaskListExists(taskListName)).ok();
-	await tasks.panel.enterAddTaskText(taskListName, taskName);
-	await t.expect(await tasks.panel.checkTaskExists(taskListName,taskName)).ok();
-}); */
 
 test('L0 | Add new Task using Hover on task listname | C827415 | Smoke', async t => {
 	const taskListName = t.ctx.user.email;
@@ -258,7 +250,7 @@ test('L1 | Mark Done task | C870195', async t => {
 	await t.expect(await tasks.panel.checkTaskExists(taskListName, taskName,'Doneview')).ok('Verification the present of task in Done view');
 });
 
-test('L0 | verify  Done view | C827422', async t => {
+test('L0 | Verify  Done view | C827422', async t => {
 	const taskListName = t.ctx.user.email;
 	const taskName = 'Sample Task';
 	
@@ -438,7 +430,7 @@ test('L1 | Add Duplicate Task list name | C827439', async t => {
 	await t.expect(await tasks.dialog.getErrorMessage()).contains('A task list with this name already exists. Please enter a different name for your task list.','Verify the expected error message');
 });
 
-test('L1 | Task Delete operation | C871061 | Bug: PREAPPS-342 | C875258', async t => {
+test('L1 | Task Delete operation | C871061 | Bug: PREAPPS-342', async t => {
 	const taskListName = t.ctx.user.email;
 	const taskName = 'Sample Task';
 	const Notes = 'Sample Notes';
@@ -449,7 +441,17 @@ test('L1 | Task Delete operation | C871061 | Bug: PREAPPS-342 | C875258', async 
 	await t.expect(await actions.getToastMessage()).contains('Task deleted.','Verification of Toast Message');
 });
 
-test('L2 | Undo operation after task Delete operation | C871060 | Bug: PREAPPS-342 | C875259', async t => {
+test('L2 | Task List Context Menu - Delete Task List | C875258', async t => {
+	const taskListName = 'New Task List';
+	await soap.createTaskList(t.ctx.userAuth,taskListName);
+	await t.eval(() => location.reload(true));
+	await t.expect(await tasks.tasksHeaderSelector.innerText).contains('Tasks - List');
+	await t.expect(await tasks.panel.checkTaskListExists(taskListName.toUpperCase())).ok('Verify the Tasklist name');
+	await tasks.panel.rightClickonTaskListAndSelectOption(taskListName,'Delete Task List');
+	await t.expect(await actions.getToastMessage()).contains('Task List Deleted.','Verification of Toast Message');
+});
+
+test('L2 | Undo operation after task Delete operation | C871060 | Bug: PREAPPS-342', async t => {
 	const taskListName = t.ctx.user.email;
 	const taskName = 'Sample Task';
 	const Notes = 'Sample Notes';
@@ -460,6 +462,22 @@ test('L2 | Undo operation after task Delete operation | C871060 | Bug: PREAPPS-3
 	await t.expect(await actions.getToastMessage()).contains('Task deleted.','Verification of Toast Message');
 	await actions.clickOnUndo();
 	await t.expect(await tasks.panel.checkTaskExists(taskListName, taskName));
+});
+
+test('L3 | Task List Context Menu - Delete Task List - Undo | C875259 | Bug: PREAPPS-513', async t => {
+	
+	const taskListName = 'New Task List';
+	await soap.createTaskList(t.ctx.userAuth,taskListName);
+	await t.eval(() => location.reload(true));
+	await t.expect(await tasks.tasksHeaderSelector.innerText).contains('Tasks - List');
+	await t.expect(await tasks.panel.checkTaskListExists(taskListName.toUpperCase())).ok('Verify the Tasklist name');
+	await tasks.panel.rightClickonTaskListAndSelectOption(taskListName,'Delete Task List');
+	await t.expect(await actions.getToastMessage()).contains('Task List Deleted.','Verification of Toast Message');
+	await actions.clickOnUndo();
+	await t.expect(await actions.getToastMessage()).contains('Task List Restored.','Verification of Toast Message');
+	await t.eval(() => location.reload(true));
+	await t.expect(await tasks.tasksHeaderSelector.innerText).contains('Tasks - List');
+	await t.expect(await tasks.panel.checkTaskListExists(taskListName.toUpperCase())).ok('Verify the Tasklist restored or not');
 });
 
 test('L2 | Add Task from task list contect menu | C875251 | Bug: PREAPPS-343', async t => {
