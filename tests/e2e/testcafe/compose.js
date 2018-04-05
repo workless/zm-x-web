@@ -172,6 +172,40 @@ test('L2 | Compose: No Data, Send | C581629 | Smoke', async t => {
 	await t.expect(elements.composerFooter.withText(errorMessage).exists).ok({ timeout: 10000 });
 });
 
+test('L1 | Compose: Data Present, Exit (X) | C581630', async t => {
+	let userEmail = t.ctx.user.email;
+	let emailSubject = 'email subject';
+	await compose.clickCompose();
+	await compose.enterTextToFieldElement(userEmail, compose.addressFieldTextField('To'));
+	await compose.enterTextToFieldElement(emailSubject, elements.composerSubject);
+	await compose.enterBodyText(emailSubject);
+	await t.wait(2000);
+	await compose.closeCompose();
+	await t.expect(compose.addressFieldTextField('To').exists).notOk({ timeout: 2000 });
+	await sidebar.clickSidebarContent('Drafts');
+	await t.eval(() => location.reload(true));
+	await compose.openMessageWithSubject(emailSubject);
+	await t.expect(elements.inboxReadPane().exists).ok({ timeout: 10000 });
+	await t.expect(await elements.inboxReadPane().innerText).contains(emailSubject);
+});
+
+test('L1 | Compose: Data visibility | C666681', async t => {
+	let emailBodyText = '';
+	for (let i = 0; i < 100; i++) {
+		emailBodyText = emailBodyText + i + '<br>';
+	}
+	await compose.clickCompose();
+	await compose.enterBodyText(emailBodyText);
+	const startRectTop = await elements.richtextareaContainer.getBoundingClientRectProperty('top');
+	await utilFunc.scrollElement.with({ dependencies: { scrollPosition: 'down' } })(elements.composerScrollContainer);
+	await t.wait(1000);
+	const endRectTop = await elements.richtextareaContainer.getBoundingClientRectProperty('top');
+	await utilFunc.scrollElement.with({ dependencies: { scrollPosition: 'up' } })(elements.composerScrollContainer);
+	await t
+		.expect(await elements.richtextareaContainer.getBoundingClientRectProperty('top')).eql(startRectTop)
+		.expect(startRectTop > endRectTop).ok();
+});
+
 /***************************************/
 /*** Compose: Composer view fixture  ***/
 /***************************************/

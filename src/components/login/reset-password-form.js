@@ -33,7 +33,7 @@ export default class ResetPasswordForm extends Component {
 				this.props.onLogin();
 			})
 			.catch((err) => {
-				err.message = err.message.replace(/Error: GraphQL error: /, ''); // https://github.com/apollographql/apollo-client/issues/1812
+				err.message = err.message.replace(/GraphQL error: /, ''); // https://github.com/apollographql/apollo-client/issues/1812
 				this.props.onError && this.props.onError(err);
 				this.setState({ submitting: false });
 			});
@@ -69,7 +69,7 @@ export default class ResetPasswordForm extends Component {
 					disabled={submitting}
 				/>
 
-				<Button disabled={submitting} class={style.continue} type="submit" styleType="primary">
+				<Button disabled={!loginNewPassword || !loginConfirmNewPassword || submitting} class={style.continue} type="submit" styleType="primary">
 					<Text id="buttons.continue" />
 				</Button>
 			</form>
