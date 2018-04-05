@@ -13,6 +13,12 @@ class PageActions {
     		.click(elements.login);
 	}
 
+	//
+	async logoutEmailPage(userEmail) {
+		
+		await t.click(elements.mainHeaderActions.find('button').withText(userName);
+	}
+
 	// Click nav bar menu item
 	async clickNavBarMenuItem(text) {
     		await t.click(elements.navButtonList.find('*').withText(text));

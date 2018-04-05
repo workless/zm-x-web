@@ -162,6 +162,107 @@ test('L1 | Compose, Send: To, CC, BCC (basic) | C581667 | Bug:PREAPPS-357 | ##TO
 		.expect(elements.addressListAddressType.withText('Cc').parent('div').find('span').withText('ui testing').exists).ok();
 });
 
+test('L1 | Reply to Message Containing Inline Attachments | C881169 ', async t => {
+	let emailBodyText = 'reply email';
+	let replyEmailSubject = 'Re: Inline attachement';
+	await compose.openNewMessage();
+	await compose.clickReplyButton();
+	await compose.enterBodyText(emailBodyText);
+	await compose.sendEmail();
+	await sidebar.clickSidebarContent('Sent');
+	await t.eval(() => location.reload(true));
+	await compose.openMessageWithSubject(replyEmailSubject);
+	await mail.openCondensedMessage(0);
+	await t
+		.expect(elements.clientHtmlViewerInner.find('img').exists).ok({ timeout: 5000 })
+		.expect(await elements.clientHtmlViewerInner.nth(1).innerText).contains(emailBodyText);
+})
+	.before( async t => {
+		t.ctx.user = await soap.createAccount(t.fixtureCtx.adminAuthToken);
+		t.ctx.userAuth = await soap.getUserAuthToken(t.ctx.user.email, t.ctx.user.password);
+		const lmtp = new LmtpClient();
+		const filePath = path.join(__dirname, './data/mime/emails/single-inline-attachment.txt');
+		await lmtp.send(t.ctx.user.email, filePath);
+		await t.maximizeWindow();
+		await actions.loginEmailPage(t.ctx.user.email, t.ctx.user.password);
+		await t.expect(sidebar.checkSidebarItemExists('Inbox')).ok({ timeout: 15000 });
+	});
+
+	test('L1 | Reply to Message Containing File Attachments, Add New Recipient, Include Orig. Attachments | C881170', async t => {
+		let emailBodyText = 'reply email';
+		let replyEmailSubject = 'Re: file attachment';
+		let userEmail = 'synacorusa@outlook.com';
+		let fileName = 'PDF_Document.pdf';
+		await compose.openNewMessage();
+		await compose.clickReplyButton();
+		await compose.enterTextToFieldElement(userEmail, compose.addressFieldTextField('To'));
+		await compose.enterBodyText(emailBodyText);
+		await compose.sendEmail();
+		await t
+			.expect(elements.dialogSelector.exists).ok({ timeout: 5000 })
+			.expect(await elements.dialogSelector.innerText).contains('Include original attachments?');
+		await t.click(elements.dialogSelector.find('button').withText('Yes'));
+		await sidebar.clickSidebarContent('Sent');
+		await t.eval(() => location.reload(true));
+		await compose.openMessageWithSubject(replyEmailSubject);
+		await mail.openCondensedMessage(0);
+		await t
+			.expect(elements.attachmentNameSelector.withText(fileName)).ok({ timeout: 5000 })
+			.expect(await elements.clientHtmlViewerInner.nth(1).innerText).contains(emailBodyText);
+
+	})
+		.before( async t => {
+			t.ctx.user = await soap.createAccount(t.fixtureCtx.adminAuthToken);
+			t.ctx.userAuth = await soap.getUserAuthToken(t.ctx.user.email, t.ctx.user.password);
+			const lmtp = new LmtpClient();
+			const filePath = path.join(__dirname, './data/mime/emails/single-file-attachment.txt');
+			await lmtp.send(t.ctx.user.email, filePath);
+			await t.maximizeWindow();
+			await actions.loginEmailPage(t.ctx.user.email, t.ctx.user.password);
+			await t.expect(sidebar.checkSidebarItemExists('Inbox')).ok({ timeout: 15000 }); 
+		});
+
+	test('L1 | Reply to Message Containing File Attachments, Add New Recipient, Do Not Include Orig | C881171', async t => {
+		let emailBodyText = 'reply email';
+		let replyEmailSubject = 'Re: file attachment';
+		let userEmail = 'synacorusa@outlook.com';
+		let fileName = 'PDF_Document.pdf';
+		await compose.openNewMessage();
+		await compose.clickReplyButton();
+		await compose.enterTextToFieldElement(userEmail, compose.addressFieldTextField('To'));
+		await compose.enterBodyText(emailBodyText);
+		await compose.sendEmail();
+		await t
+			.expect(elements.dialogSelector.exists).ok({ timeout: 5000 })
+			.expect(await elements.dialogSelector.innerText).contains('Include original attachments?');
+		await t.click(elements.dialogSelector.find('button').withText('No'));
+		await sidebar.clickSidebarContent('Sent');
+		await t.eval(() => location.reload(true));
+		await compose.openMessageWithSubject(replyEmailSubject);
+		await mail.openCondensedMessage(0);
+		await t.expect(await elements.clientHtmlViewerInner.nth(1).innerText).contains(emailBodyText);
+		//logout
+		
+		//switch to user2
+		await actions.loginEmailPage(t.ctx.user2.email, t.ctx.user2.password);
+		//delete user2
+
+		await t.expect(elements.attachmentNameSelector.withText(fileName)).notOk({ timeout: 5000 })
+		await soap.deleteAccount(t.ctx.user2.id, t.fixtureCtx.adminAuthToken);
+	})
+	.before( async t => {
+		t.ctx.user1 = await soap.createAccount(t.fixtureCtx.adminAuthToken);
+		t.ctx.user1Auth = await soap.getUserAuthToken(t.ctx.user1.email, t.ctx.user1.password);
+		t.ctx.user2 = await soap.createAccount(t.fixtureCtx.adminAuthToken);
+		t.ctx.user2Auth = await soap.getUserAuthToken(t.ctx.user2.email, t.ctx.user2.password);
+		const lmtp = new LmtpClient();
+		const filePath = path.join(__dirname, './data/mime/emails/single-file-attachment.txt');
+		await lmtp.send(t.ctx.user1.email, filePath);
+		await t.maximizeWindow();
+		await actions.loginEmailPage(t.ctx.user1.email, t.ctx.user1.password);
+		await t.expect(sidebar.checkSidebarItemExists('Inbox')).ok({ timeout: 15000 }); 
+	});
+
 /****************************/
 /*** Compose, Functional  ***/
 
