@@ -136,7 +136,7 @@ test('C945625 L1: Dragging a mail into a folder ', async t => {
 	await t.expect(messageCountBefore - messageCountAfter).eql(1);
 });
 
-test.skip('C726324 L1 : Create folder from context menu | SKIP: Hover is not working', async t => {
+test('C726324 L1 : Create folder from context menu | SKIP: Hover is not working', async t => {
 	let newFolderName = 'newFolderName';
 	await sidebar.createNewFolder(/^Folders/, newFolderName);
 	await t.click(sidebar.sidebarContentItemWithText(newFolderName));
@@ -162,7 +162,7 @@ test('C945624 L1: Collapse folder Folder context menu ', async t => {
 	await t.expect(sidebar.sidebarContentItemWithText('testFolder').exists).ok();
 });
 
-test.skip('C826803 L1 : Tap on search icon to search folder. SKIP: Hover is not working', async t => {
+test('C826803 L1 : Tap on search icon to search folder. SKIP: Hover is not working', async t => {
 	let testFolderName = 'testFolder';
 	await sidebar.searchFolder(/^Folders/, testFolderName);
 	await t
