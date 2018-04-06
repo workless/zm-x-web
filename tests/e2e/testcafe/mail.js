@@ -521,7 +521,7 @@ test.skip('L2 | Font > Alignment | C826709 | PREAPPS-250', async t => {
 	await t.expect(await elements.richtextareaTextContentSelector.find('div').getStyleProperty('text-align')).eql('right');
 });
 
-test('L2 | Hyperlink > Insert Link | C826805 || (Bug:PREAPPS-274)', async t => {
+test('L2 | Hyperlink > Insert Link | C826805 | (Bug:PREAPPS-274)', async t => {
 	let emailBodyText = 'test';
 	let linkUrl = 'http://www.google.ca';
 	await t.wait(500);
