@@ -10,10 +10,16 @@ const notepadName = profile.notepadName;
 class Elements {
 
     // Login Page Elements
-    username = 'input[type="text"]';
-    password = 'input[type="password"]';
-    login = clientName + '_login_buttons button';
+    username = Selector(clientName + '_login').find('#login-form_2-email');
+    password = Selector(clientName + '_login').find('#login-form_2-password');
+    loginButton = Selector(clientName + '_login').find('button').withText('Sign in');
     clientName = clientName;
+
+    // popover
+    blocksPopover = Selector('.blocks_popover_popper');
+
+    // Main page header
+    mainHeaderActions = Selector(clientName + '_header-actions_headerActions');
 
     // Main Page Elements - Navbar, Sidebar, Folder, Context Menu, Progress indicator
 	navButtonList = Selector(clientName + '_app-navigation_nav');
