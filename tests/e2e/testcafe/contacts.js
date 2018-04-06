@@ -24,7 +24,7 @@ fixture `Contacts fixture`
 		await soap.deleteAccount(t.ctx.user.id, t.fixtureCtx.adminAuthToken);
 	});
 
-test('C543079 L1: Contacts, View Existing ', async t => {
+test('L1 | Contacts, View Existing | C543079', async t => {
 	// Get contacts parents folder ID
 	const parentFolderID = await soap.contactGetFolder(t.ctx.userAuth);
 	// Create contact
@@ -40,7 +40,7 @@ test('C543079 L1: Contacts, View Existing ', async t => {
 	await t.expect(elements.contactCard.innerText).contains('Aa Zz');
 });
 
-test('C543080 L1: Contacts, Add Contact after viewing existing contact. | L2: Contacts, Phone > 10 digits ', async t => {
+test('L1 | Contacts, Add Contact after viewing existing contact. | C543080 | L2: Contacts, Phone > 10 digits ', async t => {
 	let contactDetailFieldValue = '';
 	let contactDetailFieldID = profile.pageElements.id.contacts.detailField;
 	let testUserName = contactDetailFieldID.lastName + ', ' + contactDetailFieldID.firstName;
@@ -80,7 +80,7 @@ test('C543080 L1: Contacts, Add Contact after viewing existing contact. | L2: Co
 	await t.expect(elements.contactListItemWithName.withText(testUserName).exists).notOk();
 });
 
-test('C835454 L0: Verify the new recipient added to contact (Automated) | Smoke ', async t => {
+test('L0 | Verify the new recipient added to contact (Automated) | C835454 | Smoke ', async t => {
 	await contacts.deleteAllContacts('testLastName, testFirstName');
 	await t
 		.click(elements.newContactButton)
@@ -92,7 +92,7 @@ test('C835454 L0: Verify the new recipient added to contact (Automated) | Smoke 
 	await contacts.clickToobBarButton('Delete');
 });
 
-test('C432590 | C432591 | C432592 | C432593 L1: Sort by First Name, Last Name, Email and Reverse Sort Order ', async t => {
+test('L1 | Sort by First Name | C432590 | C432591 C432592  C432593 Last Name, Email and Reverse Sort Order', async t => {
 	let actionItemText = '';
 	let contactName1 = 'Zz, Aa';
 	let contactName2 = 'Aa, Zz';
@@ -160,7 +160,7 @@ test('C432590 | C432591 | C432592 | C432593 L1: Sort by First Name, Last Name, E
 		.expect(await contacts.isToolbarActionItemChecked('Sort by Last Name')).notOk();
 });
 
-test('C543083 | C543084: select single/multi/all contacts from contact list ', async t => {
+test('L2 | select single/multi/all contacts from contact list | C543083 | C543084', async t => {
 	// Get contacts parents folder ID
 	const parentFolderID = await soap.contactGetFolder(t.ctx.userAuth);
 	// Create contacts
@@ -202,7 +202,7 @@ test('C543083 | C543084: select single/multi/all contacts from contact list ', a
 });
 
 //Fixed bugs:PREAPPS-191
-test.skip('Bug:PREAPPS-260 C432966|C679095 - L1: Assign/unassign single contact to a contact list ', async t => {
+test.skip('L1 | Assign/unassign single contact to a contact list C432966 | PREAPPS-260 | C679095', async t => {
 	// Get contacts parents folder ID
 	const parentFolderID = await soap.contactGetFolder(t.ctx.userAuth);
 	// Create contact
@@ -230,7 +230,7 @@ test.skip('Bug:PREAPPS-260 C432966|C679095 - L1: Assign/unassign single contact 
 	await t.expect(elements.contactListInner.withText('Nothing to show.').exists).ok({ timeout: 10000 });
 });
 
-test.skip('Bug:PREAPPS-260 C679096|C679097 L1: Assign/unassign multiple contacts to a contact list ', async t => {
+test.skip('L1 | Assign/unassign multiple contacts to a contact list | C679096 | PREAPPS-260 | C679097', async t => {
 	// Get contacts parents folder ID
 	const parentFolderID = await soap.contactGetFolder(t.ctx.userAuth);
 	// Create contacts
@@ -257,7 +257,7 @@ test.skip('Bug:PREAPPS-260 C679096|C679097 L1: Assign/unassign multiple contacts
 	await t.expect(elements.contactListInner.withText('Nothing to show.').exists).ok({ timeout: 10000 });
 });
 
-test('C543076 - L1: Contacts, Scroll', async t => {
+test('L1 | Contacts, Scroll | C543076', async t => {
 	// Get contacts parents folder ID
 	const parentFolderID = await soap.contactGetFolder(t.ctx.userAuth);
 	// Create contacts
@@ -278,7 +278,7 @@ test('C543076 - L1: Contacts, Scroll', async t => {
 	await t.expect(await elements.checkboxList.getBoundingClientRectProperty('top')).eql(startRectTop);
 });
 
-test('C543075 L1: Contacts, Return to Mail |C835454 L0: Verify the new recipient added to contact ', async t => {
+test('L1 | Contacts, Return to Mail | C543075 | C835454 L0: Verify the new recipient added to contact ', async t => {
 	let emailTo = t.ctx.user.email;
 	let emailBodyText = 'test';
 	await sidebar.clickSidebarContent('Emailed Contacts');

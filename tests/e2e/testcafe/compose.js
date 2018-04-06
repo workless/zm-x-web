@@ -191,7 +191,7 @@ test('L1 | Reply to Message Containing Inline Attachments | C881169', async t =>
 	test('L1 | Reply to Message Containing File Attachments, Add New Recipient, Include Orig. Attachments | C881170', async t => {
 		let emailBodyText = 'reply email';
 		let replyEmailSubject = 'Re: file attachment';
-		let userEmail = 'synacorusa@outlook.com';
+		let userEmail = t.ctx.user2.email;
 		let fileName = 'PDF_Document.pdf';
 		await compose.openNewMessage();
 		await compose.clickReplyButton();
@@ -207,13 +207,22 @@ test('L1 | Reply to Message Containing Inline Attachments | C881169', async t =>
 		await compose.openMessageWithSubject(replyEmailSubject);
 		await mail.openCondensedMessage(0);
 		await t
-			.expect(elements.attachmentNameSelector.withText(fileName)).ok({ timeout: 5000 })
+			.expect(elements.attachmentNameSelector.withText(fileName).exists).ok({ timeout: 5000 })
 			.expect(await elements.clientHtmlViewerInner.nth(1).innerText).contains(emailBodyText);
-
+		await actions.logoutEmailPage(t.ctx.user.email);
+		await actions.loginEmailPage(t.ctx.user2.email, t.ctx.user2.password);
+		await sidebar.clickSidebarContent('Inbox');
+		await compose.openMessageWithSubject(replyEmailSubject);
+		await t
+			.expect(elements.attachmentNameSelector.withText(fileName).exists).ok({ timeout: 5000 })
+			.expect(await elements.clientHtmlViewerInner.innerText).contains(emailBodyText);
+		await soap.deleteAccount(t.ctx.user2.id, t.fixtureCtx.adminAuthToken);
 	})
 		.before( async t => {
 			t.ctx.user = await soap.createAccount(t.fixtureCtx.adminAuthToken);
 			t.ctx.userAuth = await soap.getUserAuthToken(t.ctx.user.email, t.ctx.user.password);
+			t.ctx.user2 = await soap.createAccount(t.fixtureCtx.adminAuthToken);
+			t.ctx.user2Auth = await soap.getUserAuthToken(t.ctx.user2.email, t.ctx.user2.password);
 			const lmtp = new LmtpClient();
 			const filePath = path.join(__dirname, './data/mime/emails/single-file-attachment.txt');
 			await lmtp.send(t.ctx.user.email, filePath);
@@ -225,7 +234,7 @@ test('L1 | Reply to Message Containing Inline Attachments | C881169', async t =>
 	test('L1 | Reply to Message Containing File Attachments, Add New Recipient, Do Not Include Orig | C881171', async t => {
 		let emailBodyText = 'reply email';
 		let replyEmailSubject = 'Re: file attachment';
-		let userEmail = 'synacorusa@outlook.com';
+		let userEmail = t.ctx.user2.email;
 		let fileName = 'PDF_Document.pdf';
 		await compose.openNewMessage();
 		await compose.clickReplyButton();
@@ -241,25 +250,25 @@ test('L1 | Reply to Message Containing Inline Attachments | C881169', async t =>
 		await compose.openMessageWithSubject(replyEmailSubject);
 		await mail.openCondensedMessage(0);
 		await t.expect(await elements.clientHtmlViewerInner.nth(1).innerText).contains(emailBodyText);
-		//logout
-		
-		//switch to user2
+		await actions.logoutEmailPage(t.ctx.user.email);
 		await actions.loginEmailPage(t.ctx.user2.email, t.ctx.user2.password);
-		//delete user2
-
-		await t.expect(elements.attachmentNameSelector.withText(fileName)).notOk({ timeout: 5000 })
+		await sidebar.clickSidebarContent('Inbox');
+		await compose.openMessageWithSubject(replyEmailSubject);
+		await t
+			.expect(elements.attachmentNameSelector.withText(fileName).exists).notOk({ timeout: 5000 })
+			.expect(await elements.clientHtmlViewerInner.innerText).contains(emailBodyText);
 		await soap.deleteAccount(t.ctx.user2.id, t.fixtureCtx.adminAuthToken);
 	})
 	.before( async t => {
-		t.ctx.user1 = await soap.createAccount(t.fixtureCtx.adminAuthToken);
-		t.ctx.user1Auth = await soap.getUserAuthToken(t.ctx.user1.email, t.ctx.user1.password);
+		t.ctx.user = await soap.createAccount(t.fixtureCtx.adminAuthToken);
+		t.ctx.userAuth = await soap.getUserAuthToken(t.ctx.user.email, t.ctx.user.password);
 		t.ctx.user2 = await soap.createAccount(t.fixtureCtx.adminAuthToken);
 		t.ctx.user2Auth = await soap.getUserAuthToken(t.ctx.user2.email, t.ctx.user2.password);
 		const lmtp = new LmtpClient();
 		const filePath = path.join(__dirname, './data/mime/emails/single-file-attachment.txt');
-		await lmtp.send(t.ctx.user1.email, filePath);
+		await lmtp.send(t.ctx.user.email, filePath);
 		await t.maximizeWindow();
-		await actions.loginEmailPage(t.ctx.user1.email, t.ctx.user1.password);
+		await actions.loginEmailPage(t.ctx.user.email, t.ctx.user.password);
 		await t.expect(sidebar.checkSidebarItemExists('Inbox')).ok({ timeout: 15000 }); 
 	});
 

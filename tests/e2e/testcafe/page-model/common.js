@@ -1,22 +1,23 @@
 /*eslint no-mixed-spaces-and-tabs: "off"*/
 /*eslint new-cap: ["error", { "capIsNew": false }]*/
-import { t, ClientFunction } from 'testcafe';
+import { t, ClientFunction, Selector } from 'testcafe';
 import { elements } from './elements';
 
 class PageActions {
 
 	//Login the email page
 	async loginEmailPage(name, password) {
+		const loginButton = await elements.loginButton();
     	await t
     		.typeText(elements.username, name)
     		.typeText(elements.password, password)
-    		.click(elements.login);
+    		.click(loginButton);
 	}
 
 	//
 	async logoutEmailPage(userEmail) {
-		
-		await t.click(elements.mainHeaderActions.find('button').withText(userName);
+		await t.click(elements.mainHeaderActions.find('button').withText(userEmail.substring(0, userEmail.indexOf('@'))));
+		await t.click(Selector('a').withText('Logout'));
 	}
 
 	// Click nav bar menu item
