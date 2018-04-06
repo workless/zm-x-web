@@ -22,6 +22,12 @@ class Tasks {
 
 	dialog =  {
 
+		async isDialogPresent(dialogName){
+			const dilaogHeaderSelector = elements.dialogSelector.find('h2').withText(dialogName);
+			return await dilaogHeaderSelector.exists;
+
+		},
+
 		async enterNewTaskText(text) {
 			const newTaskTextInputSelector = tasks.textInputSelector.withAttribute('placeholder', 'Add Task');
 			await t

@@ -48,7 +48,8 @@ export class UtilFunc {
 		let dd = today.getDate();
 		let mm = today.getMonth()+1; //January is 0!
 		let yyyy = today.getFullYear();
-		
+		dd = Number(dd) + Number(day);
+
 		if (dd<10) {
 			dd = '0'+dd;
 		}
@@ -56,7 +57,7 @@ export class UtilFunc {
 		if (mm<10) {
 			mm = '0'+mm;
 		}
-		return yyyy + '-' + mm + '-' + (Number(dd) + Number(day));
+		return yyyy + '-' + mm + '-' + dd ;
 	}
 
 	// Use this function when you want to enter date in Date Picker
