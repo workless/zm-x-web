@@ -32,7 +32,7 @@ fixture `Mail: Inbox fixture`
 		await soap.deleteAccount(t.ctx.user.id, t.fixtureCtx.adminAuthToken);
 	});
 
-test('L0 | Read Message : Check Subject, Message Count, Condensed Message Body | C581722 || Smoke ', async t => {
+test('L0 | Read Message : Check Subject, Message Count, Condensed Message Body | C581722 | Smoke ', async t => {
 	await t.expect(await mail.getConversationHeaderSubject()).eql(await mail.getMessageSubject(0));
 	await t.expect(await mail.getMessageLabelCount()).eql(await mail.getConverstationSectionCount() - 1);
 	await mail.openCondensedMessage(0);
@@ -174,7 +174,7 @@ test('L1 | Tap on search icon to search folder. SKIP: Hover is not working | C82
 		.expect(sidebar.sidebarContentItemWithText(testFolderName).exists).ok();
 });
 
-test('L1 | Move user created folder from context menu into/out from another folder | C726329 || (Fixed:PREAPPS-196)', async t => {
+test('L1 | Move user created folder from context menu into/out from another folder | C726329 | Fixed:PREAPPS-196', async t => {
 	let moveFolderName = 'moveFolder';
 	let moveToFolder = 'testFolder';
 	await sidebar.clickFolder(/^Folders/);
