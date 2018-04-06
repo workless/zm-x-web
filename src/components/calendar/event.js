@@ -7,6 +7,33 @@ import { hexToRgb } from '../../lib/util';
 
 import style from './style';
 
+import debounce from 'lodash-es/debounce';
+import pick from 'lodash-es/pick';
+class MouseTooltip extends Component {
+	static defaultProps = {
+		transformOrigin: {
+			x: 0,
+			y: 144
+		}
+	}
+	handleMouseMove = debounce((e) => {
+		this.setState(pick(e, [ 'clientX', 'clientY' ]));
+	}, 50)
+
+	componentWillMount() {
+		document.addEventListener('mousemove', this.handleMouseMove);
+	}
+	componentWillUnmount() {
+		document.removeEventListener('mousemove', this.handleMouseMove);
+	}
+
+	render({ transformOrigin, ...props }, { clientX, clientY }) {
+		return (
+			<div {...props} style={`position: fixed; top: ${clientY - transformOrigin.y}px; left: ${clientX - transformOrigin.x}px`} />
+		);
+	}
+}
+
 function styledGradientBackground(color, freeBusy) {
 	if (!(freeBusy === 'T' || freeBusy === 'F')) { return {}; }
 
@@ -73,20 +100,41 @@ export function CalendarEventWrapper(props) {
 	return child;
 }
 
-const SavedCalendarEvent = ({ view, title, event }) => {
-	const start = event.date;
-	return (
-		<div class={style.eventInner}>
-			{view === VIEW_MONTH &&
-				!event.allDay && (
-				<time title={start}>
-					{format(start, 'h:mm A').replace(':00', '')}
-				</time>
-			)}
-			{title}
-		</div>
-	);
-};
+class SavedCalendarEvent extends Component {
+	state = {
+		hover: false
+	}
+
+	handleMouseLeave = (e) => {
+		this.setState({ hover: false });
+	}
+
+	handleMouseEnter = (e) => {
+		this.setState({ hover: true });
+	}
+
+	handleMouseMove = (e) => {
+		//move the tooltip - optimizeME
+	}
+
+
+	render({ view, title, event }, { hover }) {
+		const start = event.date;
+		return (
+			<div class={style.eventInner} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
+				{view === VIEW_MONTH &&
+					!event.allDay && (
+					<time title={start}>
+						{format(start, 'h:mm A').replace(':00', '')}
+					</time>
+				)}
+				{title}
+
+				{hover && <MouseTooltip>Hovered</MouseTooltip>}
+			</div>
+		);
+	};
+}
 
 export default class QuickAddEvent extends Component {
 	update = () => {
