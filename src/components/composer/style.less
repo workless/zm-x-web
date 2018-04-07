@@ -15,10 +15,11 @@
 	}
 
 	textarea, rich-text-area {
-		min-height: 180px;
-		@media (max-height: @screen-sm-max) {
-			min-height: 0px
-		}
+		padding: 18px 40px;
+		flex: 1 0 auto;
+		outline: none;
+		border: none !important;
+		resize: none !important;
 	}
 
 
@@ -26,11 +27,6 @@
 		@media (max-width: (@screen-xs - 1)) {
 			position: initial !important;
 		}
-	}
-
-	richtextarea {
-		border: none !important;
-		resize: none !important;
 	}
 
 	.inner {
@@ -90,13 +86,11 @@
 		}
 
 
-		textarea,
 		.subject,
 		.from {
 			display: flex;
 			align-items: center;
 			padding: 17px 0 8px;
-			box-sizing: border-box;
 			width: 100%;
 			background: #FFF;
 			color: #000;
@@ -154,7 +148,6 @@
 		flex-direction: column;
 		flex: 1 1 auto;
 		overflow: auto;
-		outline: none;
 	}
 
 	.footer {
@@ -196,8 +189,6 @@
 }
 
 .composer rich-text-area :global {
-	padding: 18px 40px;
-
 	@media (max-width: @screen-sm-max) {
 		padding: 12px 16px 24px 16px;
 	}
