@@ -2,37 +2,11 @@ import { h, Component } from 'preact';
 import format from 'date-fns/format';
 import { STATUS_BUSY, STATUS_FREE, VIEW_MONTH } from './constants';
 import { connect } from 'preact-redux';
+import CalendarEventTooltip from './event-tooltip';
 import cx from 'classnames';
 import { hexToRgb } from '../../lib/util';
 
 import style from './style';
-
-import debounce from 'lodash-es/debounce';
-import pick from 'lodash-es/pick';
-class MouseTooltip extends Component {
-	static defaultProps = {
-		transformOrigin: {
-			x: 0,
-			y: 144
-		}
-	}
-	handleMouseMove = debounce((e) => {
-		this.setState(pick(e, [ 'clientX', 'clientY' ]));
-	}, 50)
-
-	componentWillMount() {
-		document.addEventListener('mousemove', this.handleMouseMove);
-	}
-	componentWillUnmount() {
-		document.removeEventListener('mousemove', this.handleMouseMove);
-	}
-
-	render({ transformOrigin, ...props }, { clientX, clientY }) {
-		return (
-			<div {...props} style={`position: fixed; top: ${clientY - transformOrigin.y}px; left: ${clientX - transformOrigin.x}px`} />
-		);
-	}
-}
 
 function styledGradientBackground(color, freeBusy) {
 	if (!(freeBusy === 'T' || freeBusy === 'F')) { return {}; }
@@ -105,23 +79,39 @@ class SavedCalendarEvent extends Component {
 		hover: false
 	}
 
-	handleMouseLeave = (e) => {
-		this.setState({ hover: false });
+	handleMouseEnter = ({ clientX, clientY }) => {
+		this.setState({
+			hover: {
+				x: clientX,
+				y: clientY
+			}
+		});
 	}
 
-	handleMouseEnter = (e) => {
-		this.setState({ hover: true });
+	handleMouseMove = ({ clientX, clientY }) => {
+		if (!this.state.hover) { return; }
+
+		const hoveredElement = document.elementFromPoint(clientX, clientY);
+
+		console.log('hovered:', hoveredElement);
+		if (this.base && hoveredElement.getAttribute('role') !== 'dialog' && !this.base.contains(hoveredElement)) {
+			console.log('clearing hover');
+			this.setState({ hover: false });
+		}
 	}
 
-	handleMouseMove = (e) => {
-		//move the tooltip - optimizeME
+	componentWillMount() {
+		document.addEventListener('mousemove', this.handleMouseMove);
 	}
 
+	componentWillUnmount() {
+		document.removeEventListener('mousemove', this.handleMouseMove);
+	}
 
 	render({ view, title, event }, { hover }) {
 		const start = event.date;
 		return (
-			<div class={style.eventInner} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
+			<div class={style.eventInner} onMouseEnter={this.handleMouseEnter}>
 				{view === VIEW_MONTH &&
 					!event.allDay && (
 					<time title={start}>
@@ -130,10 +120,12 @@ class SavedCalendarEvent extends Component {
 				)}
 				{title}
 
-				{hover && <MouseTooltip>Hovered</MouseTooltip>}
+				{hover && (
+					<CalendarEventTooltip origin={hover} event={event} />
+				)}
 			</div>
 		);
-	};
+	}
 }
 
 export default class QuickAddEvent extends Component {
