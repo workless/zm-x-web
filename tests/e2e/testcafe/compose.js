@@ -44,6 +44,7 @@ test('L1 | Compose, Send: To Self (basic) | C581664', async t => {
 	await t.expect(actualText).eql(emailBodyText);
 	await compose.sendEmail();
 	await sidebar.clickSidebarContent('Inbox');
+	await t.eval(() => location.reload(true));
 	await t.expect(elements.mailListItemUnread.exists).ok({ timeout: 15000 });
 	await compose.openMessageWithSubject(emailSubject);
 	await t.expect(elements.inboxReadPane().exists).ok();
