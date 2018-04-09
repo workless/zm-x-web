@@ -89,13 +89,10 @@ class SavedCalendarEvent extends Component {
 	}
 
 	handleMouseMove = ({ clientX, clientY }) => {
-		if (!this.state.hover) { return; }
+		if (!this.state.hover || !this.base) { return; }
 
 		const hoveredElement = document.elementFromPoint(clientX, clientY);
-
-		console.log('hovered:', hoveredElement);
-		if (this.base && hoveredElement.getAttribute('role') !== 'dialog' && !this.base.contains(hoveredElement)) {
-			console.log('clearing hover');
+		if (!this.base.contains(hoveredElement)) {
 			this.setState({ hover: false });
 		}
 	}

@@ -7,7 +7,7 @@
 
 const shell = require('shelljs');
 
-const ROOT = '../zm-x-api-js-client/src/schema';
+const ROOT = '../zm-api-js-client/src/schema';
 const SCHEMA = `${ROOT}/schema.graphql`;
 const INTROSPECTED_SCHEMA = '.tmp/introspected-schema.json';
 const TYPESCRIPT_TYPES_OUTPUT = `${ROOT}/generated-schema-types.ts`;

@@ -1,5 +1,4 @@
 import { h, Component } from 'preact';
-import { FixedDialog } from '@zimbra/blocks';
 
 export default class MouseTooltip extends Component {
 	static defaultProps = {
