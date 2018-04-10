@@ -170,9 +170,12 @@ function getDOW({ preferences }) {
 @graphql(PreferencesQuery, {
 	name: 'preferencesData'
 })
+@withProps(({ preferencesData }) => ({
+	view: getView(preferencesData)
+}))
 @graphql(CalendarsAndAppointmentsQuery, {
 	name: 'calendarsData',
-	options: ({ date, preferencesData }) => {
+	options: ({ date, preferencesData, view }) => {
 		if (!preferencesData.preferences) {
 			return { skip: true };
 		}
@@ -185,7 +188,6 @@ function getDOW({ preferences }) {
 			}
 		});
 
-		const view = getView(preferencesData);
 		let start = new Date(date);
 		let end;
 
@@ -471,8 +473,9 @@ export default class Calendar extends Component {
 		});
 	};
 
-	constructor() {
-		super();
+	constructor(props) {
+		super(props);
+
 		// BigCalendar passes through only whitelisted props, we can circumvent
 		// to pass through components bound to component methods. You could
 		// also e.g. rebind on render if necessary.
@@ -483,7 +486,9 @@ export default class Calendar extends Component {
 			})(CalendarToolbar),
 			dateHeader: CalendarDateHeader,
 			eventWrapper: CalendarEventWrapper,
-			event: CalendarEvent
+			event: withProps({
+				view: props.view
+			})(CalendarEvent)
 		};
 		this.MODALS = {
 			createCalendar: {
@@ -534,11 +539,16 @@ export default class Calendar extends Component {
 		};
 	}
 
+	componentWillReceiveProps({ view }) {
+		if (view !== this.props.view) {
+			this.BIG_CALENDAR_COMPONENTS.event = withProps({ view })(CalendarEvent);
+		}
+	}
+
 	render(
-		{ date, calendarsData, preferencesData, pending, matchesScreenMd },
+		{ view, date, calendarsData, pending, matchesScreenMd },
 		{ newEvent, quickAddBounds, activeModal, activeModalProps }
 	) {
-		const view = getView(preferencesData);
 		if (!view) {
 			return null;
 		}

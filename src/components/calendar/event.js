@@ -1,7 +1,6 @@
 import { h, Component } from 'preact';
 import format from 'date-fns/format';
 import { STATUS_BUSY, STATUS_FREE, VIEW_MONTH } from './constants';
-import { connect } from 'preact-redux';
 import CalendarEventTooltip from './event-tooltip';
 import cx from 'classnames';
 import { hexToRgb } from '../../lib/util';
@@ -109,8 +108,7 @@ class SavedCalendarEvent extends Component {
 		const start = event.date;
 		return (
 			<div class={style.eventInner} onMouseEnter={this.handleMouseEnter}>
-				{view === VIEW_MONTH &&
-					!event.allDay && (
+				{view === VIEW_MONTH && !event.allDay && (
 					<time title={start}>
 						{format(start, 'h:mm A').replace(':00', '')}
 					</time>
@@ -149,13 +147,10 @@ export default class QuickAddEvent extends Component {
 	}
 }
 
-export const CalendarEvent = connect(({ calendar }) => ({
-	view: calendar && calendar.view
-}))(
-	props =>
-		props.event.new ? (
-			<QuickAddEvent {...props} />
-		) : (
-			<SavedCalendarEvent {...props} />
-		)
-);
+export function CalendarEvent(props) {
+	return props.event.new ? (
+		<QuickAddEvent {...props} />
+	) : (
+		<SavedCalendarEvent {...props} />
+	);
+}
