@@ -75,12 +75,12 @@ export function CalendarEventWrapper(props) {
 
 class SavedCalendarEvent extends Component {
 	state = {
-		hover: false
+		hoverOrigin: false
 	}
 
 	handleMouseEnter = ({ clientX, clientY }) => {
 		this.setState({
-			hover: {
+			hoverOrigin: {
 				x: clientX,
 				y: clientY
 			}
@@ -88,11 +88,11 @@ class SavedCalendarEvent extends Component {
 	}
 
 	handleMouseMove = ({ clientX, clientY }) => {
-		if (!this.state.hover || !this.base) { return; }
+		if (!this.state.hoverOrigin || !this.base) { return; }
 
 		const hoveredElement = document.elementFromPoint(clientX, clientY);
 		if (!this.base.contains(hoveredElement)) {
-			this.setState({ hover: false });
+			this.setState({ hoverOrigin: false });
 		}
 	}
 
@@ -104,7 +104,7 @@ class SavedCalendarEvent extends Component {
 		document.removeEventListener('mousemove', this.handleMouseMove);
 	}
 
-	render({ view, title, event }, { hover }) {
+	render({ view, title, event }, { hoverOrigin }) {
 		const start = event.date;
 		return (
 			<div class={style.eventInner} onMouseEnter={this.handleMouseEnter}>
@@ -115,8 +115,8 @@ class SavedCalendarEvent extends Component {
 				)}
 				{title}
 
-				{hover && (
-					<CalendarEventTooltip origin={hover} event={event} />
+				{hoverOrigin && (
+					<CalendarEventTooltip origin={hoverOrigin} event={event} />
 				)}
 			</div>
 		);
