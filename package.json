@@ -90,7 +90,7 @@
   "dependencies": {
     "@zimbra/api-client": "^0.1.2",
     "@zimbra/x-ui": "^1.0.0",
-    "apollo-client": "^2.2.2",
+    "apollo-client": "^2.2.8",
     "choose-files": "^1.0.1",
     "classnames": "^2.2.5",
     "clipboard-polyfill": "^2.4.1",
@@ -132,7 +132,7 @@
     "pretty-bytes": "^4.0.2",
     "push.js": "^1.0.4",
     "query-string": "^5.0.0",
-    "react-apollo": "^2.1.0-beta.3",
+    "react-apollo": "^2.1.3",
     "react-big-calendar": "^0.18.0",
     "react-popper": "^0.7.5",
     "react-string-replace": "^0.4.0",
