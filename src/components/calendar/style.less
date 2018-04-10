@@ -132,12 +132,6 @@
 		border: none;
 		border-radius: 0;
 
-		time {
-			float: left;
-			padding: 0 5px 0 0;
-			font-weight: bold;
-		}
-
 		// Does this select anything? Leaving as commented...
 //		h4 {
 //			display: inline;
@@ -155,6 +149,12 @@
 			color: #000;
 			white-space: nowrap;
 			overflow: hidden;
+
+			> time {
+				float: left;
+				padding: 0 5px 0 0;
+				font-weight: bold;
+			}
 		}
 
 		&.isBusy {
@@ -255,6 +255,8 @@
 .eventTooltip {
 	padding: 26px 24px;
 	background-color: white;
+	border-radius: 3px;
+	box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.36);
 
 	span[role="img"] {
 		vertical-align: baseline;
