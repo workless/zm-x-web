@@ -1,5 +1,5 @@
 /*eslint new-cap: ["error", { "capIsNew": false }]*/
-
+import { Selector } from 'testcafe';
 import { profile } from './profile/profile';
 import { actions, utilFunc } from './page-model/common';
 import { mail } from './page-model/mail';
@@ -32,20 +32,19 @@ fixture `Mail: Inbox fixture`
 		await soap.deleteAccount(t.ctx.user.id, t.fixtureCtx.adminAuthToken);
 	});
 
-test('C581722 L0: Read Message : Check Subject, Message Count, Condensed Message Body | Smoke ', async t => {
+test('L0 | Read Message : Check Subject, Message Count, Condensed Message Body | C581722 | Smoke ', async t => {
 	await t.expect(await mail.getConversationHeaderSubject()).eql(await mail.getMessageSubject(0));
 	await t.expect(await mail.getMessageLabelCount()).eql(await mail.getConverstationSectionCount() - 1);
 	await mail.openCondensedMessage(0);
 	await t.expect(elements.mailViewerBodySelector).ok();
 });
 
-test('C881168 L0: Reply, No Attachments Present in Original ', async t => {
+test('L0 | Reply, No Attachments Present in Original | C881168', async t => {
 	let emailBodyText = 'email body text';
 	await mail.openCondensedMessage(0);
 	await compose.clickReplyButton();
 	await compose.enterBodyText(emailBodyText);
 	await compose.sendEmail();
-	await t.wait(2000);
 	await sidebar.clickSidebarContent('Inbox');
 	await t.eval(() => location.reload(true));
 	await compose.openNewMessage();
@@ -53,7 +52,7 @@ test('C881168 L0: Reply, No Attachments Present in Original ', async t => {
 	await t.expect(await elements.conversationSectionSelector.innerText).contains(emailBodyText);
 });
 
-test('C881172 L0: Forward, No Attachments Present in Original ', async t => {
+test('L0 | Forward, No Attachments Present in Original | C881172', async t => {
 	let emailTo = t.ctx.user.email;
 	let emailBodyText = 'email body text';
 	await mail.openCondensedMessage(0);
@@ -69,14 +68,14 @@ test('C881172 L0: Forward, No Attachments Present in Original ', async t => {
 	await t.expect(await elements.conversationSectionSelector.innerText).contains(emailBodyText);
 });
 
-test.skip('Bug:PREAPPS-262 | C798475 L2: Archive a Conversation ', async t => {
+test.skip('L2 | Archive a Conversation | C798475 | PREAPPS-262', async t => {
 	let messageSubject = await mail.getMessageSubject(0);
 	await mail.clickToolbarButton('Archive');
 	await t.expect(await mail.getConversationHeaderSubject()).notEql(messageSubject);
 	// await t.expect(await mail.getMessageSubject(0)).notEql(messageSubject);
 });
 
-test('C951764 L1: Move message from inbox to trash ', async t => {
+test('L1 | Move message from inbox to trash | C951764', async t => {
 	let messageSubject = await mail.getMessageSubject(0);
 	await mail.clickToolbarButton('Move');
 	await mail.clickPopoverMenuItem('Trash');
@@ -88,14 +87,14 @@ test('C951764 L1: Move message from inbox to trash ', async t => {
 	await t.expect(mail.checkMailExists(messageSubject)).notOk();
 });
 
-test('C951765 L0: Delete message ', async t => {
+test('L0 | Delete message | C951765', async t => {
 	let messageSubject = await mail.getMessageSubject(0);
 	await mail.clickToolbarButton('Delete');
 	await sidebar.clickSidebarContent('Trash');
 	await t.expect(mail.checkMailExists(messageSubject)).ok();
 });
 
-test.skip('Bug:PREAPPS-388 | C727488 L1 :Mark as star from more options ', async t => {
+test.skip('L1 | Mark as star from more options | C727488 | PREAPPS-388', async t => {
 	await mail.clickToolbarButton('More');
 	await mail.clickPopoverMenuItem('Star');
 	await t.expect(mail.checkStarEnabledInMailList()).ok();
@@ -124,7 +123,7 @@ fixture `Mail: Folders fixture`
 		await soap.deleteAccount(t.ctx.user.id, t.fixtureCtx.adminAuthToken);
 	});
 
-test('C945625 L1: Dragging a mail into a folder ', async t => {
+test('L1 | Move message to folder by drag-drop | C726318', async t => {
 	await sidebar.clickFolder(/^Folders/);
 	//##todo: drag all emails from testFolder to inbox
 	await t.dragToElement(mail.selectMail(0), sidebar.sidebarContentItemWithText('testFolder'));
@@ -136,7 +135,7 @@ test('C945625 L1: Dragging a mail into a folder ', async t => {
 	await t.expect(messageCountBefore - messageCountAfter).eql(1);
 });
 
-test.skip('C726324 L1 : Create folder from context menu | SKIP: Hover is not working', async t => {
+test('L1 | Create folder from context menu | C726324', async t => {
 	let newFolderName = 'newFolderName';
 	await sidebar.createNewFolder(/^Folders/, newFolderName);
 	await t.click(sidebar.sidebarContentItemWithText(newFolderName));
@@ -146,7 +145,7 @@ test.skip('C726324 L1 : Create folder from context menu | SKIP: Hover is not wor
 	await t.expect(sidebar.sidebarContentItemWithText(newFolderName).exists).notOk();
 });
 
-test('C607274 L2: Default Folder, Rename/Delete ', async t => {
+test('L2 | Default Folder, Rename/Delete | C607274', async t => {
 	await sidebar.clickFolder(/^Folders/);
 	let expectName = 'testFolder';
 	let newName = 'renameFolderTest';
@@ -156,13 +155,13 @@ test('C607274 L2: Default Folder, Rename/Delete ', async t => {
 	await t.expect(sidebar.sidebarContentItemWithText(expectName).exists).ok();
 });
 
-test('C945624 L1: Collapse folder Folder context menu ', async t => {
+test('L1 | Collapse folder Folder context menu | C945624', async t => {
 	await t.expect(sidebar.sidebarContentItemWithText('testFolder').exists).notOk();
 	await sidebar.clickFolder(/^Folders/);
 	await t.expect(sidebar.sidebarContentItemWithText('testFolder').exists).ok();
 });
 
-test.skip('C826803 L1 : Tap on search icon to search folder. SKIP: Hover is not working', async t => {
+test('L1 | Tap on search icon to search folder. SKIP: Hover is not working | C826803', async t => {
 	let testFolderName = 'testFolder';
 	await sidebar.searchFolder(/^Folders/, testFolderName);
 	await t
@@ -174,7 +173,7 @@ test.skip('C826803 L1 : Tap on search icon to search folder. SKIP: Hover is not 
 		.expect(sidebar.sidebarContentItemWithText(testFolderName).exists).ok();
 });
 
-test('C726329 L1 : Move user created folder from context menu into/out from another folder (Fixed:PREAPPS-196)', async t => {
+test('L1 | Move user created folder from context menu into/out from another folder | C726329 | Fixed:PREAPPS-196', async t => {
 	let moveFolderName = 'moveFolder';
 	let moveToFolder = 'testFolder';
 	await sidebar.clickFolder(/^Folders/);
@@ -219,7 +218,7 @@ fixture `Mail: Compose scroll fixture`
 		await soap.deleteAccount(t.ctx.user.id, t.fixtureCtx.adminAuthToken);
 	});
 
-test('C565544 - L2: Images tab, Endless Scroll', async t => {
+test('L2 | Images tab, Endless Scroll | C565544', async t => {
 	await mail.openEmail(0);
 	await mail.clickToolbarButton(0);
 	await compose.clickPlusSign();
@@ -243,7 +242,7 @@ test('C565544 - L2: Images tab, Endless Scroll', async t => {
 		await t.expect(sidebar.checkSidebarItemExists('Inbox')).ok({ timeout: 15000 });
 	});
 
-test('C565545 - L2: Files tab, Endless Scroll', async t => {
+test('L2 | Files tab, Endless Scroll | C565545', async t => {
 	let fileName = 'PDFFile.pdf';
 	await mail.openEmail(0);
 	await mail.clickToolbarButton(0);
@@ -269,7 +268,7 @@ test('C565545 - L2: Files tab, Endless Scroll', async t => {
 		await t.expect(sidebar.checkSidebarItemExists('Inbox')).ok({ timeout: 15000 });
 	});
 
-test('C565546 - L2: GIF tab, Endless Scroll', async t => {
+test('L2 | GIF tab, Endless Scroll | C565546', async t => {
 	let buttonText = 'thumbs up';
 	await mail.openEmail(0);
 	await mail.clickToolbarButton(0);
@@ -286,7 +285,7 @@ test('C565546 - L2: GIF tab, Endless Scroll', async t => {
 	await t.expect(startRectTop > endRectTop);
 });
 
-test.skip('Bug:PREAPPS-305 | C565547 - L2: Web link tab, Endless Scroll', async t => {
+test.skip('L2 | Web link tab, Endless Scroll | C565547 | PREAPPS-305', async t => {
 	let searchText = 'shopping';
 	await mail.openEmail(0);
 	await mail.clickToolbarButton(0);
@@ -302,7 +301,6 @@ test.skip('Bug:PREAPPS-305 | C565547 - L2: Web link tab, Endless Scroll', async 
 	const endRectTop = await elements.plusSignMenuSearchesItemButton(0).getBoundingClientRectProperty('top');
 	await t.expect(startRectTop > endRectTop);
 });
-
 
 /******************************/
 /*** Mail: Rich Text Editor ***/
@@ -329,7 +327,7 @@ fixture `Mail: Reply, Rich Text Editor fixture`
 		await soap.deleteAccount(t.ctx.user.id, t.fixtureCtx.adminAuthToken);
 	});
 
-test('C612377 - L2: RTE Toolbar Elements', async t => {
+test('L2 | RTE Toolbar Elements | C612377', async t => {
 	await t.expect(elements.componentsToolbarMiddleSelector.exists).ok({ timeout: 10000 });
 	const toolbarItemCount = await elements.componentsToolbarMiddleSelector.child().count;
 	await t
@@ -344,7 +342,7 @@ test('C612377 - L2: RTE Toolbar Elements', async t => {
 		.expect(await elements.componentsToolbarMiddleSelector.child().count).eql(toolbarItemCount);
 });
 
-test.skip('Bug:PREAPPS-206 | C612378 - L1: Responsive Composer Toolbar ', async t => {
+test.skip('L1 | Responsive Composer Toolbar | C612378 | PREAPPS-206', async t => {
 	await t.expect(elements.componentsToolbarMiddleSelector.exists).ok({ timeout: 10000 });
 	const toolbarItemCount = await elements.componentsToolbarMiddleSelector.child().count;
 	await t
@@ -359,7 +357,7 @@ test.skip('Bug:PREAPPS-206 | C612378 - L1: Responsive Composer Toolbar ', async 
 		.expect(await elements.componentsToolbarMiddleSelector.child().count).eql(toolbarItemCount);
 });
 
-test('C769871 - L2: Attachments > Attach Photo From Email ', async t => {
+test('L2 | Attachments > Attach Photo From Email | C769871', async t => {
 	await t.expect(elements.componentsToolbarMiddleSelector.exists).ok({ timeout: 10000 });
 	await compose.selectComposeToolbarPopmenu('Attachments', 'Attach Photo From Email');
 	await t.expect(elements.plusSignMenuPhotoFromEmailAreaItemButton.nth(0).exists).ok({ timeout: 10000 });
@@ -376,7 +374,7 @@ test('C769871 - L2: Attachments > Attach Photo From Email ', async t => {
 		await mail.clickToolbarButton(0);
 	});
 
-test('C769872 - L2: Attachments > Attach File From Email', async t => {
+test('L2 | Attachments > Attach File From Email | C769872', async t => {
 	let fileName = 'WordDocFile.docx';
 	await t.expect(elements.componentsToolbarMiddleSelector.exists).ok({ timeout: 10000 });
 	await compose.selectComposeToolbarPopmenu('Attachments', 'Attach File From Email');
@@ -394,19 +392,19 @@ test('C769872 - L2: Attachments > Attach File From Email', async t => {
 		await mail.clickToolbarButton(0);
 	});
 
-test('C769873 - L2: Attachments > Attach GIF', async t => {
+test('L2 | Attachments > Attach GIF | C769873', async t => {
 	await t.expect(elements.componentsToolbarMiddleSelector.exists).ok({ timeout: 10000 });
 	await compose.selectComposeToolbarPopmenu('Attachments', 'Attach GIF');
 	await t.expect(elements.plusSignMenuPopularGIFsItemButton.nth(0).exists).ok({ timeout: 10000 });
 });
 
-test('C769874 - L2: Attachments > Attach Web Link', async t => {
+test('L2 | Attachments > Attach Web Link | C769874', async t => {
 	await t.expect(elements.componentsToolbarMiddleSelector.exists).ok({ timeout: 10000 });
 	await compose.selectComposeToolbarPopmenu('Attachments', 'Attach Web Link');
 	await t.expect(elements.buttonWithText('shopping').exists).ok({ timeout: 10000 });
 });
 
-test.skip('Bug:PREAPPS-250 | C769875 - L2: Font > Type', async t => {
+test.skip('L2 | Font > Type | C769875 | PREAPPS-250', async t => {
 	let emailBodyText = 'Font';
 	await compose.enterBodyText(emailBodyText);
 	await t.wait(500);
@@ -417,7 +415,7 @@ test.skip('Bug:PREAPPS-250 | C769875 - L2: Font > Type', async t => {
 	await t.expect(await elements.richtextareaTextContentSelector.find('font').getAttribute('face')).contains('TimesNewRoman');
 });
 
-test.skip('C813884 - L2: Font > Size', async t => {
+test.skip('L2 | Font > Size | C813884', async t => {
 	let emailBodyText = 'Size';
 	await compose.enterBodyText(emailBodyText);
 	await t.wait(500);
@@ -428,7 +426,7 @@ test.skip('C813884 - L2: Font > Size', async t => {
 	await t.expect(await elements.richtextareaTextContentSelector.find('font').getAttribute('size')).eql('5');
 });
 
-test.skip('C813885 - L2: Font > Bold', async t => {
+test.skip('L2 | Font > Bold | C813885', async t => {
 	let emailBodyText = 'Bold';
 	await compose.enterBodyText(emailBodyText);
 	await t.wait(500);
@@ -439,7 +437,7 @@ test.skip('C813885 - L2: Font > Bold', async t => {
 	await t.expect(await elements.richtextareaTextContentSelector.find('b').exists).ok();
 });
 
-test.skip('C813886 - L2: Font > Italics', async t => {
+test.skip('L2 | Font > Italics | C813886', async t => {
 	let emailBodyText = 'Test';
 	await compose.enterBodyText(emailBodyText);
 	await t.wait(500);
@@ -450,7 +448,7 @@ test.skip('C813886 - L2: Font > Italics', async t => {
 	await t.expect(await elements.richtextareaTextContentSelector.find('i').exists).ok();
 });
 
-test.skip('C813887 - L2: Font > Underline', async t => {
+test.skip('L2 | Font > Underline | C813887', async t => {
 	let emailBodyText = 'Test';
 	await compose.enterBodyText(emailBodyText);
 	await t.wait(500);
@@ -461,7 +459,7 @@ test.skip('C813887 - L2: Font > Underline', async t => {
 	await t.expect(await elements.richtextareaTextContentSelector.find('u').exists).ok();
 });
 
-test.skip('Bug:PREAPPS-250 | C818253 - L2: Font > Text, Background Color', async t => {
+test.skip('L2 | Font > Text, Background Color | C818253 | PREAPPS-250', async t => {
 	let expectedFontColor = '#888888';
 	let expectedFontBackgroundColor = 'rgb(136, 136, 136)';
 	let emailBodyText = 'Test';
@@ -479,7 +477,7 @@ test.skip('Bug:PREAPPS-250 | C818253 - L2: Font > Text, Background Color', async
 	await t.expect(await elements.richtextareaTextContentSelector.find('font').getAttribute('color')).eql(expectedFontColor);
 });
 
-test('C826615 - L2: Font > Bulleting ', async t => {
+test('L2 | Font > Bulleting | C826615', async t => {
 	let emailBodyText = 'This is line 1<br>This is line 2';
 	await compose.enterBodyText(emailBodyText);
 	await t.wait(500);
@@ -492,7 +490,7 @@ test('C826615 - L2: Font > Bulleting ', async t => {
 	await t.expect(await elements.richtextareaTextContentSelector.find('ol').find('li').exists).ok();
 });
 
-test('C826662 - L2: Font > Indent', async t => {
+test('L2 | Font > Indent | C826662', async t => {
 	let emailBodyText = 'This is line 1<br>This is line 2';
 	await compose.enterBodyText(emailBodyText);
 	await t.wait(500);
@@ -505,7 +503,7 @@ test('C826662 - L2: Font > Indent', async t => {
 	await t.expect(await elements.richtextareaTextContentSelector.find('blockquote').exists).notOk();
 });
 
-test.skip('Bug:PREAPPS-250 | C826709 - L2: Font > Alignment', async t => {
+test.skip('L2 | Font > Alignment | C826709 | PREAPPS-250', async t => {
 	let emailBodyText = 'Test';
 	await compose.enterBodyText(emailBodyText);
 	await t.wait(500);
@@ -521,7 +519,7 @@ test.skip('Bug:PREAPPS-250 | C826709 - L2: Font > Alignment', async t => {
 	await t.expect(await elements.richtextareaTextContentSelector.find('div').getStyleProperty('text-align')).eql('right');
 });
 
-test('C826805 - L2: Hyperlink > Insert Link (Bug:PREAPPS-274)', async t => {
+test('L1 | Verify the insert link with respect to the cursor position | C871114 | (Bug:PREAPPS-274)', async t => {
 	let emailBodyText = 'test';
 	let linkUrl = 'http://www.google.ca';
 	await t.wait(500);
@@ -537,7 +535,7 @@ test('C826805 - L2: Hyperlink > Insert Link (Bug:PREAPPS-274)', async t => {
 		.expect((await elements.richtextareaTextContentSelector.innerText).split(emailBodyText).length - 1).eql(1);
 });
 
-test.skip('Bug:PREAPPS-305 | C828576 - L2: Hyperlink > Search for Web Link', async t => {
+test.skip('L2 | Hyperlink > Search for Web Link | C828576 | PREAPPS-305 ', async t => {
 	let searchText = 'shopping';
 	  await compose.selectComposeToolbarPopmenu('Link', 'Search For Web Link');
 	  await t.wait(500);
@@ -550,7 +548,60 @@ test.skip('Bug:PREAPPS-305 | C828576 - L2: Hyperlink > Search for Web Link', asy
 	  await t.expect(elements.buttonWithText(searchText).exists).ok({ timeout: 5000 });
 });
 
-test.skip('Bug:PREAPPS-250 | C828577 - L1: Emoticon button ', async t => {
+test.skip('L1 | Emoticon button | C828577 | PREAPPS-250', async t => {
+	const expectedEmojiData = await compose.insertEmoji(0);
+	const actualEmojiData = await elements.richtextareaTextContentSelector.find('img').getAttribute('src');
+	await t.expect(expectedEmojiData).eql(actualEmojiData);
+});
+
+/*******************************************/
+/*** Mail: Forward functions single user ***/
+/*******************************************/
+
+fixture `Mail: Forward functions single user`
+	.page(profile.hostURL)
+	.before( async ctx => {
+		ctx.adminAuthToken = await soap.getAdminAuthToken();
+	})
+	.beforeEach( async t => {
+		t.ctx.user = await soap.createAccount(t.fixtureCtx.adminAuthToken);
+		t.ctx.userAuth = await soap.getUserAuthToken(t.ctx.user.email, t.ctx.user.password);
+		const lmtp = new LmtpClient();
+		const filePath = path.join(__dirname, './data/mime/emails/empty.txt');
+		await lmtp.send(t.ctx.user.email, filePath);
+		await t.maximizeWindow();
+		await actions.loginEmailPage(t.ctx.user.email, t.ctx.user.password);
+		await t.expect(sidebar.checkSidebarItemExists('Inbox')).ok({ timeout: 15000 });
+		await compose.openNewMessage();
+		await compose.clickForwardButton();
+	})
+	.afterEach( async t  => {
+		await soap.deleteAccount(t.ctx.user.id, t.fixtureCtx.adminAuthToken);
+	});
+
+test('L1 | Forward email Add Attachments | C906307', async t => {
+	const filePath = path.join(__dirname, './data/files/JPEG_Image.jpg');
+	let emailBodyText = 'forward email';
+	let fwdEmailSubject = 'Fwd: empty';
+	await t.expect(elements.componentsToolbarMiddleSelector.exists).ok({ timeout: 10000 });
+	await compose.selectComposeToolbarPopmenu('Attachments', 'Attach From My Computer');
+	await t.setFilesToUpload(Selector('input').withAttribute('type', 'file'), filePath);
+	await t
+		.expect(elements.attachmentNameSelector.exists).ok({ timeout: 5000 })
+		.expect(elements.attachmentNameSelector.innerText).contains('JPEG_Image');
+});
+
+test('L1 | Responsive Composer Toolbar | C979092', async t => {
+	await t.expect(compose.toolbarButtonsSelector('Switch to Plain Text').exists).ok({ timeout: 5000 });
+	await t
+		.resizeWindow(1020,600)
+		.wait(2000);
+	await t.expect(elements.richtextToolbarContainer.find('button').withText('Send').exists).notOk({ timeout: 5000 });
+	await t.maximizeWindow();
+	await t.expect(compose.toolbarButtonsSelector('Switch to Plain Text').exists).ok({ timeout: 5000 });
+});
+
+test('L1 | Emoticon button | C979109', async t => {
 	const expectedEmojiData = await compose.insertEmoji(0);
 	const actualEmojiData = await elements.richtextareaTextContentSelector.find('img').getAttribute('src');
 	await t.expect(expectedEmojiData).eql(actualEmojiData);
