@@ -565,6 +565,7 @@ export default class Calendar extends Component {
 				c.appointments
 					? c.appointments.appointments.map(appointment => ({
 						...appointment,
+						parentFolderName: c.name,
 						color: colorForCalendar(c)
 					}))
 					: []

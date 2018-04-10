@@ -18,15 +18,29 @@ export default function CalendarEventTooltip({ event, onPrint, onDelete, onEdit,
 					<Icon name="close" />
 				</button>
 			</Localizer>
-			<h2>{event.name}</h2>
-			{event.location && <div class={style.location}>at {event.location}</div>}
-			<time>{`${format(new Date(event.start), 'ddd, MMM DD, hh:mm A')} - ${format(new Date(event.end), 'hh:mm A')}`}</time>
-			{<Icon size="sm" name={`fa:bell${event.alarm ? '' : '-slash'}`} />}
 
+			<h2>{event.name}</h2>
+
+			{event.location && (
+				<div class={style.location}>at {event.location}</div>
+			)}
+
+			<div>
+				<time>{`${format(new Date(event.start), 'ddd, MMM DD, hh:mm A')} - ${format(new Date(event.end), 'hh:mm A')}`}</time>
+				{<Icon size="xs" name={`fa:bell${event.alarm ? '' : '-slash'}`} />}
+			</div>
+
+			{!event.isOrganizer && event.organizer && event.organizer.address && (
+				<div class={style.organizer}>
+					<Text id="calendar.eventFields.organizer" />
+					{': '}
+					{event.organizer.address}
+				</div>
+			)}
 			<hr />
 
-			<ul class={style.tags}>
-				<li>{'{{Tags?}}'}</li>
+			<ul class={style.parentCalendar}>
+				<li><span style={`background-color: ${event.color}`} /> {event.parentFolderName}</li>
 			</ul>
 
 			<ul class={style.flags}>

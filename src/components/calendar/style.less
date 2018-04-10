@@ -282,11 +282,15 @@
 		margin-bottom: 8px;
 	}
 
+	.organizer {
+		margin-top: 8px;
+	}
+
 	> hr {
 		margin: 12px 0 12px 0;
 	}
 
-	.tags, .flags {
+	.parentCalendar, .flags {
 		margin: 0 0 8px 0;
 		padding: 0;
 
@@ -297,6 +301,13 @@
 				margin-left: 10px;
 			}
 		}
+	}
+
+	.parentCalendar > li > span {
+		display: inline-block;
+		width: @icon-size-xs;
+		height: @icon-size-xs;
+		border-radius: 50%;
 	}
 
 	> p {

@@ -27,6 +27,10 @@ fragment calendarWithAppointmentFields on Folder {
 			alarm
 			allDay
 			class
+			isOrganizer
+			organizer {
+				address
+			}
 			location
 			instances {
 				start

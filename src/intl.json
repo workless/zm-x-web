@@ -194,6 +194,9 @@
 	"calendar": {
 		"title": "Calendar",
 		"today": "Today",
+		"eventFields": {
+			"organizer": "Organizer"
+		},
 		"search": {
 			"refineHeader": "Refine by",
 			"results": "{{count}} {{types}} were found matching your search",
