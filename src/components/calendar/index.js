@@ -233,6 +233,9 @@ function getDOW({ preferences }) {
 					__typename: 'Mutation',
 					prefCalendarInitialView: value
 				},
+				refetchQueries: [
+					{ query: PreferencesQuery }
+				],
 				update: (cache, { data: { prefCalendarInitialView } }) => {
 					const data = cache.readQuery({ query: PreferencesQuery });
 					data.preferences.zimbraPrefCalendarInitialView = prefCalendarInitialView;
@@ -534,11 +537,17 @@ export default class Calendar extends Component {
 		};
 	}
 
+	componentWillReceiveProps({ preferencesData }) {
+		console.log('componentWillReceiveProps', preferencesData);
+	}
+
 	render(
 		{ date, calendarsData, preferencesData, pending, matchesScreenMd },
 		{ newEvent, quickAddBounds, activeModal, activeModalProps }
 	) {
+		console.log('preferencesData', preferencesData);
 		const view = getView(preferencesData);
+		console.log('view', view);
 		if (!view) {
 			return null;
 		}
