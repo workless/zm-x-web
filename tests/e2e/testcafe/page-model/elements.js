@@ -46,12 +46,15 @@ class Elements {
     messageItem = clientName + '_mail-list-item_message';
     messageLabel = clientName + '_mail-list-item_label';
     mailSubject = clientName + '_mail-list-item_subject';
+    sidebarRefreshButton = Selector(clientName + '_folder-list_refresh');
     // Mail Elements - Right Pane
     condensedMessage = clientName + '_condensed-message_message';
     conversationSectionSelector = Selector(clientName + '_conversation-viewer_section');
     conversationSubjectSelector = Selector(clientName + '_viewer-title_subject');
     mailViewerBodySelector = Selector(clientName + '_viewer_body');
     clientHtmlViewerInner = Selector(clientName + '_html-viewer_inner');
+    mailViewerTitleCountText = Selector(clientName + '_viewer-title_countText');
+    mailViewPlaceholderView = Selector(clientName + '_viewer-placeholder_placeholder');
     // Mail Elements - Toolbar
     actionButton = clientName + '_action-button_button';
     actionMenuGroup = clientName + '_action-menu-group_group';
