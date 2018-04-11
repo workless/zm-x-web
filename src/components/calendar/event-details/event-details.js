@@ -1,23 +1,13 @@
 import { h } from 'preact';
 import { Icon, Button } from '@zimbra/blocks';
-import { Localizer, Text } from 'preact-i18n';
+import { Text } from 'preact-i18n';
 import format from 'date-fns/format';
 import style from './style';
 import cx from 'classnames';
 
-export default function CalendarEventDetails({ event, onPrint, onDelete, onEdit, onClose, ...props }) {
+export default function CalendarEventDetails({ event, onPrint, onDelete, onEdit, ...props }) {
 	return (
 		<div {...props} class={cx(style.eventDetails, props.class)}>
-			<Localizer>
-				<button
-					class={style.close}
-					aria-label={<Text id="buttons.close" />}
-					onClick={onClose}
-				>
-					<Icon name="close" />
-				</button>
-			</Localizer>
-
 			<h2>{event.name}</h2>
 
 			{event.location && (

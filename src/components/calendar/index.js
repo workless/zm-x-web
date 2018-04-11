@@ -36,6 +36,7 @@ import CalendarRightbar from './rightbar';
 import CalendarDateHeader from './date-header';
 import CreateCalendarModal from './create-calendar-modal';
 import CreateSharedCalendarModal from './create-shared-calendar-modal';
+import { CalendarEventDetailsModal } from './event-details';
 import ImportCalendarModal from './import-calendar-modal';
 import ExportCalendarModal from './export-calendar-modal';
 import { CalendarEvent, CalendarEventWrapper, getEventProps } from './event';
@@ -428,11 +429,11 @@ export default class Calendar extends Component {
 	selectEvent = event => {
 		// eslint-disable-next-line no-console
 		console.log('selected event', event);
-		// TODO impelment actual click behavior, the deletion prompt here is just
-		// a test.
-		// if (confirm(`Delete ${event.name}?`)) { // eslint-disable-line no-alert
-		// 	this.props.deleteAppointment(event.inviteId);
-		// }
+
+		const { matchesScreenMd } = this.props;
+		if (!matchesScreenMd) {
+			this.setState({ activeModal: 'eventDetails', selectedEvent: event });
+		}
 	};
 
 	handleQuickAddRender = ({ bounds }) => {
@@ -524,6 +525,13 @@ export default class Calendar extends Component {
 					onClose: this.handleCancelAdd,
 					preferencesData: this.props.preferencesData,
 					accountInfoData: this.props.accountInfoData
+				})
+			},
+			eventDetails: {
+				Component: CalendarEventDetailsModal,
+				props: () => ({
+					event: this.state.selectedEvent,
+					onClose: () => { this.setState({ selectedEvent: null }); }
 				})
 			},
 			importCalendarModal: {

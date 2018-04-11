@@ -4,7 +4,7 @@ import { STATUS_BUSY, STATUS_FREE, VIEW_MONTH } from './constants';
 import { CalendarEventDetailsTooltip } from './event-details';
 import cx from 'classnames';
 import withMediaQuery from '../../enhancers/with-media-query';
-import { minWidth, screenSmMax } from '../../constants/breakpoints';
+import { minWidth, screenMd } from '../../constants/breakpoints';
 import { hexToRgb } from '../../lib/util';
 
 import style from './style';
@@ -75,7 +75,7 @@ export function CalendarEventWrapper(props) {
 	return child;
 }
 
-@withMediaQuery(minWidth(screenSmMax))
+@withMediaQuery(minWidth(screenMd), 'matchesScreenMd')
 class SavedCalendarEvent extends Component {
 	state = {
 		hoverOrigin: false
@@ -107,10 +107,10 @@ class SavedCalendarEvent extends Component {
 		document.removeEventListener('mousemove', this.handleMouseMove);
 	}
 
-	render({ view, title, event, matchesMediaQuery }, { hoverOrigin }) {
+	render({ view, title, event, matchesScreenMd }, { hoverOrigin }) {
 		const start = event.date;
 		return (
-			<div class={style.eventInner} onMouseEnter={matchesMediaQuery && this.handleMouseEnter}>
+			<div class={style.eventInner} onMouseEnter={matchesScreenMd && this.handleMouseEnter}>
 				{view === VIEW_MONTH && !event.allDay && (
 					<time title={start}>
 						{format(start, 'h:mm A').replace(':00', '')}
