@@ -138,8 +138,6 @@ test('L0 | Verify the linking of the friends calendar| C830215 | Bug: PREAPPS-36
 
 	let newuser = await soap.createAccount(t.fixtureCtx.adminAuthToken);
 	try {
-
-	
 		let newuserAuth = await soap.getUserAuthToken(newuser.email, newuser.password);
 		let startDateTime = new Date().setHours(15,30,0);
 		let endDateTime = new Date().setHours(16,30,0);
