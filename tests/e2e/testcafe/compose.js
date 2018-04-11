@@ -27,6 +27,9 @@ fixture `Compose: Basic Compose & Send`
 	})
 	.afterEach( async t  => {
 		await soap.deleteAccount(t.ctx.user.id, t.fixtureCtx.adminAuthToken);
+		if (typeof t.ctx.user2 != 'undefined') {
+			await soap.deleteAccount(t.ctx.user2.id, t.fixtureCtx.adminAuthToken);
+		}
 	});
 
 test('L1 | Compose, Send: To Self (basic) | C581664', async t => {
@@ -41,6 +44,7 @@ test('L1 | Compose, Send: To Self (basic) | C581664', async t => {
 	await t.expect(actualText).eql(emailBodyText);
 	await compose.sendEmail();
 	await sidebar.clickSidebarContent('Inbox');
+	await t.eval(() => location.reload(true));
 	await t.expect(elements.mailListItemUnread.exists).ok({ timeout: 15000 });
 	await compose.openMessageWithSubject(emailSubject);
 	await t.expect(elements.inboxReadPane().exists).ok();
@@ -122,7 +126,7 @@ test('L2 | Compose, Send: No Message Body (basic) | C581670', async t => {
 });
 
 test('L1 | Compose, Send: To 3rd party (basic) | C581663', async t => {
-	let userEmail = 'yang.cai@synacor.com';
+	let userEmail = 'synacorusa@gmail.com';
 	let emailSubject = 'email subject';
 	await compose.clickCompose();
 	await compose.enterTextToFieldElement(userEmail, compose.addressFieldTextField('To'));
@@ -137,9 +141,9 @@ test('L1 | Compose, Send: To 3rd party (basic) | C581663', async t => {
 });
 
 test('L1 | Compose, Send: To, CC, BCC (basic) | C581667 | Bug:PREAPPS-357 | ##TODO-add Bcc verify after', async t => {
-	let user1Email = 'yang.cai@synacor.com';
+	let user1Email = 'synacorusa@gmail.com';
 	let user2Email = 'ui.testing@ec2-13-58-225-137.us-east-2.compute.amazonaws.com';
-	let user3Email = 'caiiac@hotmail.com';
+	let user3Email = 'synacorusa@outlook.com';
 	let emailSubject = 'email subject';
 	await compose.clickCompose();
 	await t.click(elements.ccBccButton);
@@ -157,11 +161,219 @@ test('L1 | Compose, Send: To, CC, BCC (basic) | C581667 | Bug:PREAPPS-357 | ##TO
 	await compose.openMessageWithSubject(emailSubject);
 	await t
 		.expect(elements.addressListAddress.find('span').withAttribute('title', user1Email).exists).ok({ timeout: 5000 })
-		.expect(elements.addressListAddressType.withText('To').parent('div').find('span').withText('yang cai').exists).ok()
+		.expect(elements.addressListAddressType.withText('To').parent('div').find('span').withText('synacorusa').exists).ok()
 		.expect(elements.addressListAddress.find('span').withAttribute('title', user2Email).exists).ok()
 		.expect(elements.addressListAddressType.withText('Cc').parent('div').find('span').withText('ui testing').exists).ok();
 });
 
+test('L1 | Reply to Message Containing Inline Attachments | C881169', async t => {
+	let emailBodyText = 'reply email';
+	let replyEmailSubject = 'Re: Inline attachement';
+	await compose.openNewMessage();
+	await compose.clickReplyButton();
+	await compose.enterBodyText(emailBodyText);
+	await compose.sendEmail();
+	await sidebar.clickSidebarContent('Sent');
+	await t.eval(() => location.reload(true));
+	await compose.openMessageWithSubject(replyEmailSubject);
+	await mail.openCondensedMessage(0);
+	await t
+		.expect(elements.clientHtmlViewerInner.find('img').exists).ok({ timeout: 5000 })
+		.expect(await elements.clientHtmlViewerInner.nth(1).innerText).contains(emailBodyText);
+})
+	.before( async t => {
+		t.ctx.user = await soap.createAccount(t.fixtureCtx.adminAuthToken);
+		t.ctx.userAuth = await soap.getUserAuthToken(t.ctx.user.email, t.ctx.user.password);
+		const lmtp = new LmtpClient();
+		const filePath = path.join(__dirname, './data/mime/emails/single-inline-attachment.txt');
+		await lmtp.send(t.ctx.user.email, filePath);
+		await t.maximizeWindow();
+		await actions.loginEmailPage(t.ctx.user.email, t.ctx.user.password);
+		await t.expect(sidebar.checkSidebarItemExists('Inbox')).ok({ timeout: 15000 });
+	});
+
+	test('L1 | Reply to Message Containing File Attachments, Add New Recipient, Include Orig. Attachments | C881170', async t => {
+		let emailBodyText = 'reply email';
+		let replyEmailSubject = 'Re: file attachment';
+		let userEmail = t.ctx.user2.email;
+		let fileName = 'PDF_Document.pdf';
+		await compose.openNewMessage();
+		await compose.clickReplyButton();
+		await compose.enterTextToFieldElement(userEmail, compose.addressFieldTextField('To'));
+		await compose.enterBodyText(emailBodyText);
+		await compose.sendEmail();
+		await t
+			.expect(elements.dialogSelector.exists).ok({ timeout: 5000 })
+			.expect(await elements.dialogSelector.innerText).contains('Include original attachments?');
+		await t.click(elements.dialogSelector.find('button').withText('Yes'));
+		await sidebar.clickSidebarContent('Sent');
+		await t.eval(() => location.reload(true));
+		await compose.openMessageWithSubject(replyEmailSubject);
+		await mail.openCondensedMessage(0);
+		await t
+			.expect(elements.attachmentNameSelector.withText(fileName).exists).ok({ timeout: 5000 })
+			.expect(await elements.clientHtmlViewerInner.nth(1).innerText).contains(emailBodyText);
+		await actions.logoutEmailPage(t.ctx.user.email);
+		await actions.loginEmailPage(t.ctx.user2.email, t.ctx.user2.password);
+		await sidebar.clickSidebarContent('Inbox');
+		await compose.openMessageWithSubject(replyEmailSubject);
+		await t
+			.expect(elements.attachmentNameSelector.withText(fileName).exists).ok({ timeout: 5000 })
+			.expect(await elements.clientHtmlViewerInner.innerText).contains(emailBodyText);
+	})
+		.before( async t => {
+			t.ctx.user = await soap.createAccount(t.fixtureCtx.adminAuthToken);
+			t.ctx.userAuth = await soap.getUserAuthToken(t.ctx.user.email, t.ctx.user.password);
+			t.ctx.user2 = await soap.createAccount(t.fixtureCtx.adminAuthToken);
+			t.ctx.user2Auth = await soap.getUserAuthToken(t.ctx.user2.email, t.ctx.user2.password);
+			const lmtp = new LmtpClient();
+			const filePath = path.join(__dirname, './data/mime/emails/single-file-attachment.txt');
+			await lmtp.send(t.ctx.user.email, filePath);
+			await t.maximizeWindow();
+			await actions.loginEmailPage(t.ctx.user.email, t.ctx.user.password);
+			await t.expect(sidebar.checkSidebarItemExists('Inbox')).ok({ timeout: 15000 }); 
+		});
+
+	test('L1 | Reply to Message Containing File Attachments, Add New Recipient, Do Not Include Orig | C881171', async t => {
+		let emailBodyText = 'reply email';
+		let replyEmailSubject = 'Re: file attachment';
+		let userEmail = t.ctx.user2.email;
+		let fileName = 'PDF_Document.pdf';
+		await compose.openNewMessage();
+		await compose.clickReplyButton();
+		await compose.enterTextToFieldElement(userEmail, compose.addressFieldTextField('To'));
+		await compose.enterBodyText(emailBodyText);
+		await compose.sendEmail();
+		await t
+			.expect(elements.dialogSelector.exists).ok({ timeout: 5000 })
+			.expect(await elements.dialogSelector.innerText).contains('Include original attachments?');
+		await t.click(elements.dialogSelector.find('button').withText('No'));
+		await sidebar.clickSidebarContent('Sent');
+		await t.eval(() => location.reload(true));
+		await compose.openMessageWithSubject(replyEmailSubject);
+		await mail.openCondensedMessage(0);
+		await t.expect(await elements.clientHtmlViewerInner.nth(1).innerText).contains(emailBodyText);
+		await actions.logoutEmailPage(t.ctx.user.email);
+		await actions.loginEmailPage(t.ctx.user2.email, t.ctx.user2.password);
+		await sidebar.clickSidebarContent('Inbox');
+		await compose.openMessageWithSubject(replyEmailSubject);
+		await t
+			.expect(elements.attachmentNameSelector.withText(fileName).exists).notOk({ timeout: 5000 })
+			.expect(await elements.clientHtmlViewerInner.innerText).contains(emailBodyText);
+	})
+	.before( async t => {
+		t.ctx.user = await soap.createAccount(t.fixtureCtx.adminAuthToken);
+		t.ctx.userAuth = await soap.getUserAuthToken(t.ctx.user.email, t.ctx.user.password);
+		t.ctx.user2 = await soap.createAccount(t.fixtureCtx.adminAuthToken);
+		t.ctx.user2Auth = await soap.getUserAuthToken(t.ctx.user2.email, t.ctx.user2.password);
+		const lmtp = new LmtpClient();
+		const filePath = path.join(__dirname, './data/mime/emails/single-file-attachment.txt');
+		await lmtp.send(t.ctx.user.email, filePath);
+		await t.maximizeWindow();
+		await actions.loginEmailPage(t.ctx.user.email, t.ctx.user.password);
+		await t.expect(sidebar.checkSidebarItemExists('Inbox')).ok({ timeout: 15000 }); 
+	});
+
+	test.skip('L1 | Forward Message Containing Inline Attachments | C881173 | PREAPPS-306', async t => {
+		let emailBodyText = 'forward email';
+		let fwdEmailSubject = 'Fwd: Inline attachement';
+		let userEmail = t.ctx.user2.email;
+		await compose.openNewMessage();
+		await compose.clickForwardButton();
+		await compose.enterTextToFieldElement(userEmail, compose.addressFieldTextField('To'));
+		await compose.enterBodyText(emailBodyText);
+		await compose.sendEmail();
+		await sidebar.clickSidebarContent('Sent');
+		await t.eval(() => location.reload(true));
+		await compose.openMessageWithSubject(fwdEmailSubject);
+		await mail.openCondensedMessage(0);
+		await t
+			.expect(elements.clientHtmlViewerInner.find('img').exists).ok({ timeout: 5000 })
+			.expect(await elements.clientHtmlViewerInner.nth(1).innerText).contains(emailBodyText);
+		await actions.logoutEmailPage(t.ctx.user.email);
+		await actions.loginEmailPage(t.ctx.user2.email, t.ctx.user2.password);
+		await sidebar.clickSidebarContent('Inbox');
+		await compose.openMessageWithSubject(fwdEmailSubject);
+		await t
+			.expect(elements.clientHtmlViewerInner.find('img').exists).ok({ timeout: 5000 })
+			.expect(await elements.clientHtmlViewerInner.nth(1).innerText).contains(emailBodyText);
+	})
+		.before( async t => {
+			t.ctx.user = await soap.createAccount(t.fixtureCtx.adminAuthToken);
+			t.ctx.userAuth = await soap.getUserAuthToken(t.ctx.user.email, t.ctx.user.password);
+			t.ctx.user2 = await soap.createAccount(t.fixtureCtx.adminAuthToken);
+			t.ctx.user2Auth = await soap.getUserAuthToken(t.ctx.user2.email, t.ctx.user2.password);
+			const lmtp = new LmtpClient();
+			const filePath = path.join(__dirname, './data/mime/emails/single-inline-attachment.txt');
+			await lmtp.send(t.ctx.user.email, filePath);
+			await t.maximizeWindow();
+			await actions.loginEmailPage(t.ctx.user.email, t.ctx.user.password);
+			await t.expect(sidebar.checkSidebarItemExists('Inbox')).ok({ timeout: 15000 });
+		});
+
+	test('L1 | Forward Message Containing File Attachments | C881174', async t => {
+		let emailBodyText = 'forward email';
+		let fwdEmailSubject = 'Fwd: file attachment';
+		let userEmail = t.ctx.user2.email;
+		let fileName = 'PDF_Document.pdf';
+		await compose.openNewMessage();
+		await compose.clickForwardButton();
+		await compose.enterTextToFieldElement(userEmail, compose.addressFieldTextField('To'));
+		await compose.enterBodyText(emailBodyText);
+		await compose.sendEmail();
+		await sidebar.clickSidebarContent('Sent');
+		await t.eval(() => location.reload(true));
+		await compose.openMessageWithSubject(fwdEmailSubject);
+		await mail.openCondensedMessage(0);
+		await t.expect(await elements.clientHtmlViewerInner.nth(1).innerText).contains(emailBodyText);
+		await actions.logoutEmailPage(t.ctx.user.email);
+		await actions.loginEmailPage(t.ctx.user2.email, t.ctx.user2.password);
+		await sidebar.clickSidebarContent('Inbox');
+		await compose.openMessageWithSubject(fwdEmailSubject);
+		await t
+			.expect(elements.attachmentNameSelector.withText(fileName).exists).ok({ timeout: 5000 })
+			.expect(await elements.clientHtmlViewerInner.innerText).contains(emailBodyText);
+	})
+	.before( async t => {
+		t.ctx.user = await soap.createAccount(t.fixtureCtx.adminAuthToken);
+		t.ctx.userAuth = await soap.getUserAuthToken(t.ctx.user.email, t.ctx.user.password);
+		t.ctx.user2 = await soap.createAccount(t.fixtureCtx.adminAuthToken);
+		t.ctx.user2Auth = await soap.getUserAuthToken(t.ctx.user2.email, t.ctx.user2.password);
+		const lmtp = new LmtpClient();
+		const filePath = path.join(__dirname, './data/mime/emails/single-file-attachment.txt');
+		await lmtp.send(t.ctx.user.email, filePath);
+		await t.maximizeWindow();
+		await actions.loginEmailPage(t.ctx.user.email, t.ctx.user.password);
+		await t.expect(sidebar.checkSidebarItemExists('Inbox')).ok({ timeout: 15000 }); 
+	});
+
+	test('L2 | Hyperlink > Insert Link | C826805 | Fixed:PREAPPS-274', async t => {
+		let emailBodyText = 'test';
+		let linkUrl = 'http://www.google.ca';
+		await compose.openNewMessage();
+		await compose.clickReplyButton();
+		await t.click(elements.richtextareaTextContentSelector);
+		await compose.selectComposeToolbarPopmenu('Link', 'Insert Link');
+		await t.wait(500);
+		await compose.insertDisplayText(emailBodyText);
+		await compose.insertTextLink(linkUrl);
+		await t
+			.expect(elements.richtextareaTextContentSelector.find('a').withText(emailBodyText).exists).ok({ timeout: 5000 })
+			.expect(await elements.richtextareaTextContentSelector.find('a').withText(emailBodyText).getAttribute('href')).eql(linkUrl)
+			.expect(await elements.richtextareaTextContentSelector.find('tbody').find('h2').innerText).eql('Google')
+			.expect((await elements.richtextareaTextContentSelector.innerText).split(emailBodyText).length - 1).eql(1);
+	})
+	.before( async t => {
+		t.ctx.user = await soap.createAccount(t.fixtureCtx.adminAuthToken);
+		t.ctx.userAuth = await soap.getUserAuthToken(t.ctx.user.email, t.ctx.user.password);
+		const lmtp = new LmtpClient();
+		const filePath = path.join(__dirname, './data/mime/emails/empty.txt');
+		await lmtp.send(t.ctx.user.email, filePath);
+		await t.maximizeWindow();
+		await actions.loginEmailPage(t.ctx.user.email, t.ctx.user.password);
+		await t.expect(sidebar.checkSidebarItemExists('Inbox')).ok({ timeout: 15000 });
+	});
+	
 /****************************/
 /*** Compose, Functional  ***/
 
@@ -932,82 +1144,82 @@ fixture `Compose: Attachement upload Files`
 		await soap.deleteAccount(t.ctx.user.id, t.fixtureCtx.adminAuthToken);
 	});
 
-test('L2 | Compose, Send: File Attachment, No Message Body | C581643 | ##TODO: C548614 L1: Add Attachments ', async t => {
-	let emailSubject = '[No subject]';
-	let emailTo = t.ctx.user.email;
-	const filePath = path.join(__dirname, './data/files/JPEG_Image.jpg');
-	await t.expect(elements.componentsToolbarMiddleSelector.exists).ok({ timeout: 10000 });
-	await compose.selectComposeToolbarPopmenu('Attachments', 'Attach From My Computer');
-	await t.setFilesToUpload(Selector('input').withAttribute('type', 'file'), filePath);
-	await t
-		.expect(elements.attachmentNameSelector.exists).ok({ timeout: 5000 })
-		.expect(elements.attachmentNameSelector.innerText).contains('JPEG_Image');
-	await compose.enterTextToFieldElement(emailTo, compose.addressFieldTextField('To'));
-	await compose.sendEmail();
-	await t.wait(1000);
-	await sidebar.clickSidebarContent('Inbox');
-	await t.eval(() => location.reload(true));
-	await t.expect(elements.mailListItemUnread.exists).ok({ timeout: 15000 });
-	await compose.openNewMessage();
-	await t.expect(elements.inboxReadPane().exists).ok({ timeout: 10000 });
-	await t.expect(await elements.inboxReadPane().innerText).contains('No subject');
-	await t.expect(elements.mailListSubjectSelector.withText(emailSubject).exists).ok({ timeout: 5000 });
-	await t
-		.expect(elements.attachmentNameSelector.exists).ok({ timeout: 5000 })
-		.expect(elements.attachmentNameSelector.innerText).contains('JPEG_Image');
-});
+	test('L2 | Compose, Send: File Attachment, No Message Body | C581643 | ##TODO: C548614 L1: Add Attachments ', async t => {
+		let emailSubject = '[No subject]';
+		let emailTo = t.ctx.user.email;
+		const filePath = path.join(__dirname, './data/files/JPEG_Image.jpg');
+		await t.expect(elements.componentsToolbarMiddleSelector.exists).ok({ timeout: 10000 });
+		await compose.selectComposeToolbarPopmenu('Attachments', 'Attach From My Computer');
+		await t.setFilesToUpload(Selector('input').withAttribute('type', 'file'), filePath);
+		await t
+			.expect(elements.attachmentNameSelector.exists).ok({ timeout: 5000 })
+			.expect(elements.attachmentNameSelector.innerText).contains('JPEG_Image');
+		await compose.enterTextToFieldElement(emailTo, compose.addressFieldTextField('To'));
+		await compose.sendEmail();
+		await t.wait(1000);
+		await sidebar.clickSidebarContent('Inbox');
+		await t.eval(() => location.reload(true));
+		await t.expect(elements.mailListItemUnread.exists).ok({ timeout: 15000 });
+		await compose.openNewMessage();
+		await t.expect(elements.inboxReadPane().exists).ok({ timeout: 10000 });
+		await t.expect(await elements.inboxReadPane().innerText).contains('No subject');
+		await t.expect(elements.mailListSubjectSelector.withText(emailSubject).exists).ok({ timeout: 5000 });
+		await t
+			.expect(elements.attachmentNameSelector.exists).ok({ timeout: 5000 })
+			.expect(elements.attachmentNameSelector.innerText).contains('JPEG_Image');
+	});
 
-test('L2 | Compose, Send: File Attachment, Message Body | C581642', async t => {
-	let emailContent = 'email text';
-	let emailTo = t.ctx.user.email;
-	const filePath = path.join(__dirname, './data/files/JPEG_Image.jpg');
-	await t.expect(elements.componentsToolbarMiddleSelector.exists).ok({ timeout: 10000 });
-	await compose.selectComposeToolbarPopmenu('Attachments', 'Attach From My Computer');
-	await t.setFilesToUpload(Selector('input').withAttribute('type', 'file'), filePath);
-	await t
-		.expect(elements.attachmentNameSelector.exists).ok({ timeout: 5000 })
-		.expect(elements.attachmentNameSelector.innerText).contains('JPEG_Image');
-	await compose.enterTextToFieldElement(emailTo, compose.addressFieldTextField('To'));
-	await compose.enterTextToFieldElement(emailContent, elements.composerSubject);
-	await compose.enterBodyText(emailContent);
-	const actualText = await compose.getRichtextareaText();
-	await t.expect(actualText).eql(emailContent);
-	await compose.sendEmail();
-	await t.wait(1000);
-	await sidebar.clickSidebarContent('Inbox');
-	await t.eval(() => location.reload(true));
-	await t.expect(elements.mailListItemUnread.exists).ok({ timeout: 15000 });
-	await compose.openNewMessage();
-	await t.expect(elements.inboxReadPane().exists).ok({ timeout: 10000 });
-	await t.expect(await elements.inboxReadPane().innerText).contains(emailContent);
-	await t.expect(elements.mailListSubjectSelector.withText(emailContent).exists).ok({ timeout: 5000 });
-	await t
-		.expect(elements.attachmentNameSelector.exists).ok({ timeout: 5000 })
-		.expect(elements.attachmentNameSelector.innerText).contains('JPEG_Image');
-});
+	test('L2 | Compose, Send: File Attachment, Message Body | C581642', async t => {
+		let emailContent = 'email text';
+		let emailTo = t.ctx.user.email;
+		const filePath = path.join(__dirname, './data/files/JPEG_Image.jpg');
+		await t.expect(elements.componentsToolbarMiddleSelector.exists).ok({ timeout: 10000 });
+		await compose.selectComposeToolbarPopmenu('Attachments', 'Attach From My Computer');
+		await t.setFilesToUpload(Selector('input').withAttribute('type', 'file'), filePath);
+		await t
+			.expect(elements.attachmentNameSelector.exists).ok({ timeout: 5000 })
+			.expect(elements.attachmentNameSelector.innerText).contains('JPEG_Image');
+		await compose.enterTextToFieldElement(emailTo, compose.addressFieldTextField('To'));
+		await compose.enterTextToFieldElement(emailContent, elements.composerSubject);
+		await compose.enterBodyText(emailContent);
+		const actualText = await compose.getRichtextareaText();
+		await t.expect(actualText).eql(emailContent);
+		await compose.sendEmail();
+		await t.wait(1000);
+		await sidebar.clickSidebarContent('Inbox');
+		await t.eval(() => location.reload(true));
+		await t.expect(elements.mailListItemUnread.exists).ok({ timeout: 15000 });
+		await compose.openNewMessage();
+		await t.expect(elements.inboxReadPane().exists).ok({ timeout: 10000 });
+		await t.expect(await elements.inboxReadPane().innerText).contains(emailContent);
+		await t.expect(elements.mailListSubjectSelector.withText(emailContent).exists).ok({ timeout: 5000 });
+		await t
+			.expect(elements.attachmentNameSelector.exists).ok({ timeout: 5000 })
+			.expect(elements.attachmentNameSelector.innerText).contains('JPEG_Image');
+	});
 
-test('L2 | Compose, Send, File Attachment, File Type Support | C813888', async t => {
-	let fs = require('fs');
-	let emailTo = t.ctx.user.email;
-	const folderPath = path.join(__dirname, './data/files/');
-	let fileList = fs.readdirSync(folderPath);
-	for (let i = 0; i < fileList.length; i ++) {
-		fileList[i] = folderPath + fileList[i];
-	}
-	await t.expect(elements.componentsToolbarMiddleSelector.exists).ok({ timeout: 10000 });
-	await compose.enterTextToFieldElement(emailTo, compose.addressFieldTextField('To'));
-	await compose.selectComposeToolbarPopmenu('Attachments', 'Attach From My Computer');
-	await t.setFilesToUpload(Selector('input').withAttribute('type', 'file'), fileList);
-	await t.expect(elements.attachmentNameSelector.exists).ok({ timeout: 20000 });
-	await compose.sendEmail();
-	await t.wait(2000);
-	await sidebar.clickSidebarContent('Inbox');
-	await t.eval(() => location.reload(true));
-	await t.expect(elements.mailListItemUnread.exists).ok({ timeout: 15000 });
-	await compose.openNewMessage();
-	await t.expect(elements.inboxReadPane().exists).ok({ timeout: 10000 });
-	await t.expect(elements.attachmentNameSelector.exists).ok({ timeout: 10000 });
-	for (let i = 0; i < await elements.attachmentNameSelector.count; i ++) {
-		await t.expect(fileList[i]).contains(await elements.attachmentNameSelector.nth(i).innerText);
-	}
-});
+	test('L2 | Compose, Send, File Attachment, File Type Support | C813888', async t => {
+		let fs = require('fs');
+		let emailTo = t.ctx.user.email;
+		const folderPath = path.join(__dirname, './data/files/');
+		let fileList = fs.readdirSync(folderPath);
+		for (let i = 0; i < fileList.length; i ++) {
+			fileList[i] = folderPath + fileList[i];
+		}
+		await t.expect(elements.componentsToolbarMiddleSelector.exists).ok({ timeout: 10000 });
+		await compose.enterTextToFieldElement(emailTo, compose.addressFieldTextField('To'));
+		await compose.selectComposeToolbarPopmenu('Attachments', 'Attach From My Computer');
+		await t.setFilesToUpload(Selector('input').withAttribute('type', 'file'), fileList);
+		await t.expect(elements.attachmentNameSelector.exists).ok({ timeout: 20000 });
+		await compose.sendEmail();
+		await t.wait(2000);
+		await sidebar.clickSidebarContent('Inbox');
+		await t.eval(() => location.reload(true));
+		await t.expect(elements.mailListItemUnread.exists).ok({ timeout: 15000 });
+		await compose.openNewMessage();
+		await t.expect(elements.inboxReadPane().exists).ok({ timeout: 10000 });
+		await t.expect(elements.attachmentNameSelector.exists).ok({ timeout: 10000 });
+		for (let i = 0; i < await elements.attachmentNameSelector.count; i ++) {
+			await t.expect(fileList[i]).contains(await elements.attachmentNameSelector.nth(i).innerText);
+		}
+	});

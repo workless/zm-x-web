@@ -308,7 +308,7 @@ class Calendar {
 		},
 
 		async selectActionMenuoption(option){
-			await t.click(calendar.actionMenuSelector);
+			await t.click(calendar.actionMenuSelector.withText('Actions'));
 			await t.click(calendar.actionListSelector.find('span').withText(option).parent());
 		},
 
@@ -330,19 +330,19 @@ class Calendar {
 		async clickonPlusbutton(folderName){
 			await t
 				.hover(calendar.listGroupSelector.withText(folderName))
-				.click(calendar.listGroupSelector.withText(folderName).sibling().find('span'));
+				.click(calendar.listGroupSelector.withText(folderName).nextSibling().find('span'));
 
 		},
 
 		async isNewCalendarAdded(parentCalendarname, newcalendarName){
 			await t.wait(4000);
 			await calendar.sidepanel.expandCalendarGroup(parentCalendarname);
-			let newCal = calendar.listGroupSelector.withText(parentCalendarname).parent().sibling('ul').find('label').withText(newcalendarName);
+			let newCal = calendar.listGroupSelector.withText(parentCalendarname).parent().nextSibling('ul').find('label').withText(newcalendarName);
 			return await newCal.exists;
 		},
 
 		async expandCalendarGroup(parentCalendarname) {
-			let expandSelector = calendar.listGroupSelector.withText(parentCalendarname).parent().prevSibling().find('span');
+			let expandSelector = calendar.listGroupSelector.withText(parentCalendarname).prevSibling().find('span');
 			let isListalreadyExpand = await expandSelector().hasClass('fa-angle-down');
 			
 			if (!isListalreadyExpand)
@@ -391,7 +391,7 @@ class Calendar {
 
 	async createNewEvent(aptObj) {
 		
-		await calendar.clickSidebarPrimaryButton('New Event');
+		await calendar.clickSidebarPrimaryButton('NEW EVENT');
 		if (aptObj.eventName !== null ) await calendar.enterNewEventText(aptObj.eventName);
 		if (aptObj.notes !== null ) await calendar.dialog.enterNotes(aptObj.notes);
 		if (aptObj.startDate !==null) await calendar.dialog.enterStartDate(aptObj.startDate);
