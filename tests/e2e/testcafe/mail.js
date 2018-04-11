@@ -53,6 +53,19 @@ test('L0 | Reply, No Attachments Present in Original | C881168', async t => {
 	await t.expect(await elements.conversationSectionSelector.innerText).contains(emailBodyText);
 });
 
+test('L1 | Conversation header should display the number of conversation | C727484', async t => {
+	await t.expect(elements.mailViewerTitleCountText.exists).ok({ timeout: 5000 });
+	await t.expect(await elements.mailViewerTitleCountText.innerText).contains('2');
+});
+
+test('L1 | Read a Message within a Conversation | C798471', async t => {
+	await t.expect(await mail.getConversationHeaderSubject()).eql(await mail.getMessageSubject(0));
+	await t.expect(await mail.getMessageLabelCount()).eql(await mail.getConverstationSectionCount() - 1);
+	await mail.openCondensedMessage(0);
+	await t.expect(elements.mailViewerBodySelector).ok();
+	await t.expect(elements.mailListItemUnread.exists).notOk();
+});
+
 test('L0 | Forward, No Attachments Present in Original | C881172', async t => {
 	let emailTo = t.ctx.user.email;
 	let emailBodyText = 'email body text';
@@ -68,6 +81,14 @@ test('L0 | Forward, No Attachments Present in Original | C881172', async t => {
 	await t.expect(elements.inboxReadPane().exists).ok({ timeout: 10000 });
 	await t.expect(await elements.conversationSectionSelector.innerText).contains(emailBodyText);
 });
+
+test('L1 | Read Message, Refresh Inbox | C581729', async t => {
+	await t.expect(elements.conversationSectionSelector.exists).ok({ timeout: 5000 });
+	await t.hover(elements.sidebarContentSelector.find('*').withAttribute('title', 'Inbox'));
+	await t.click(elements.sidebarRefreshButton);
+	await t.expect(elements.mailViewPlaceholderView.exists).ok({ timeout: 5000 });
+});
+
 
 test.skip('L2 | Archive a Conversation | C798475 | PREAPPS-262', async t => {
 	let messageSubject = await mail.getMessageSubject(0);
@@ -124,6 +145,11 @@ fixture `Mail: Folders fixture`
 		await soap.deleteAccount(t.ctx.user.id, t.fixtureCtx.adminAuthToken);
 	});
 
+test('L0 | Read a Message | C778022', async t => {
+	await compose.openNewMessage();
+	await t.expect(elements.conversationSectionSelector.exists).ok({ timeout: 2000});
+});
+
 test('L1 | Move message to folder by drag-drop | C726318', async t => {
 	await sidebar.clickFolder(/^Folders/);
 	//##todo: drag all emails from testFolder to inbox
@@ -135,6 +161,15 @@ test('L1 | Move message to folder by drag-drop | C726318', async t => {
 	let messageCountAfter = await mail.getMailCount();
 	await t.expect(messageCountBefore - messageCountAfter).eql(1);
 });
+
+test('L1 | Move message to draft folder by drag-drop | C726319', async t => {
+	await t.dragToElement(mail.selectMail(0), sidebar.sidebarContentItemWithText('Drafts'));
+	await t.expect(elements.mailListFooterSelector.exists).ok({ timeout: 5000 });
+	await t.expect(await elements.mailListFooterSelector.innerText).contains('folder is empty');
+	await t.click(sidebar.sidebarContentItemWithText('Drafts'));
+	await t.expect(mail.selectMail(0).exists).ok({ timeout: 5000 });
+});
+
 
 test('L1 | Create folder from context menu | C726324', async t => {
 	let newFolderName = 'newFolderName';
@@ -249,6 +284,12 @@ test.skip('L1 | Responsive Composer Toolbar | C612378 | PREAPPS-206', async t =>
 		.wait(2000);
 	await t
 		.expect(await elements.componentsToolbarMiddleSelector.child().count).eql(toolbarItemCount);
+});
+
+test('L2 | Attachments > Attach Web Link | C769874', async t => {
+	await t.expect(elements.componentsToolbarMiddleSelector.exists).ok({ timeout: 10000 });
+	await compose.selectComposeToolbarPopmenu('Attachments', 'Attach Web Link');
+	await t.expect(elements.buttonWithText('shopping').exists).ok({ timeout: 10000 });
 });
 
 test.skip('L2 | Font > Type | C769875 | PREAPPS-250', async t => {
