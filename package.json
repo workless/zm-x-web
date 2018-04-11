@@ -89,7 +89,7 @@
   },
   "dependencies": {
     "@zimbra/api-client": "^0.1.2",
-    "@zimbra/x-ui": "^1.0.0",
+    "@zimbra/x-ui": "^1.0.1",
     "apollo-client": "^2.2.8",
     "choose-files": "^1.0.1",
     "classnames": "^2.2.5",
