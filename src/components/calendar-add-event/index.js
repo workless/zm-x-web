@@ -5,11 +5,11 @@ import moment from 'moment';
 import get from 'lodash/get';
 import isString from 'lodash/isString';
 import { Button, Icon } from '@zimbra/blocks';
+import cx from 'classnames';
 
 import { newAlarm, hasEmailAlarm, hasDisplayAlarm } from '../../utils/event';
 import { getPrimaryAccountAddress } from '../../utils/account';
 
-import ModalDialog from '../modal-dialog';
 import FormGroup from '../form-group';
 import TextInput from '../text-input';
 import Textarea from '../textarea';
@@ -26,6 +26,10 @@ import wire from 'wiretie';
 
 import s from './style.less';
 import { ATTENDEE_ROLE } from '../../constants/calendars';
+import withMediaQuery from '../../enhancers/with-media-query';
+import { minWidth, screenXsMax } from '../../constants/breakpoints';
+import ActionButton from '../action-button';
+import Toolbar from '../toolbar';
 
 const REMIND_OPTIONS = [
 	'never',
@@ -69,13 +73,14 @@ function remindValueFor(relativeTrigger) {
 			`${relativeTrigger.minutes}m`)
 	);
 }
+@withMediaQuery(minWidth(screenXsMax))
 @wire('zimbra', {}, zimbra => ({
 	attach: zimbra.appointments.attach
 }))
 @withText({
 	errorMsg: 'calendar.editModal.FILE_SIZE_EXCEEDED'
 })
-export default class EditEventModal extends Component {
+export default class CalendarAddEvent extends Component {
 	static defaultProps = {
 		title: 'calendar.editModal.title'
 	};
@@ -171,6 +176,7 @@ export default class EditEventModal extends Component {
 		const promiseArray = this.getAttachPromises(attachments);
 		Promise.all(promiseArray)
 			.then(res => {
+				debugger;
 				const aidArr = res;
 				this.props.onAction({
 					...event,
@@ -289,7 +295,7 @@ export default class EditEventModal extends Component {
 	}
 
 	render(
-		{ title, errorMsg },
+		{ title, errorMsg, inline, class: cls },
 		{
 			allDay,
 			isPrivate,
@@ -314,21 +320,19 @@ export default class EditEventModal extends Component {
 			!availabilityVisible && attendees.some(a => !isString(a));
 		const error = isErrored ? errorMsg : '';
 		return (
-			<ModalDialog
-				class={s.dialog}
-				contentClass={s.dialogContent}
-				title={title}
-				actionLabel="buttons.ok"
-				onAction={this.handleSubmit}
-				onClose={this.onClose}
-				disablePrimary={invalidDateRange || attachPending}
-				error={error}
-				disableOutsideClick
-			>
-				<AlignedForm>
+			<div className={cx(cls, s.wrapper, inline && s.inlineWrapper)}>
+				<div class={s.header}>
+					<h2><Text id={title} /></h2>
+					<Button
+						styleType="floating"
+						class={s.actionButton}
+						onClick={this.onClose}
+					/>
+				</div>
+				<AlignedForm class={s.formWrapper}>
 					<FormGroup>
 						<TextInput
-							placeholder="New Event"
+							placeholderId={title}
 							value={event.name}
 							onInput={linkstate(this, 'event.name')}
 							wide
@@ -417,7 +421,7 @@ export default class EditEventModal extends Component {
 						/>
 					</FormGroup>
 					<FormGroup
-						class={availabilityVisible && s.availabilityIndicatorGroup}
+						class={(availabilityVisible || showAvailabilityButtonVisible ) && s.availabilityIndicatorGroup}
 					>
 						{availabilityVisible ? (
 							<AvailabilityIndicator
@@ -430,7 +434,7 @@ export default class EditEventModal extends Component {
 						) : (
 							showAvailabilityButtonVisible && (
 								<Button
-									class={s.fieldOffset}
+									class={cx(s.fieldOffset, s.availabilityButton)}
 									onClick={this.handleToggleAvailabilty}
 								>
 									Show Availability
@@ -515,7 +519,11 @@ export default class EditEventModal extends Component {
 						</Select>
 					</FormGroup>
 				</AlignedForm>
-			</ModalDialog>
+				<div class={s.footer}>
+					<Button styleType="primary" brand="primary" onClick={this.handleSubmit} >Save</Button>
+					<Button onClick={this.onClose}>Cancel</Button>
+				</div>
+			</div>
 		);
 	}
 }

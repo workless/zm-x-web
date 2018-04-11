@@ -41,7 +41,7 @@ import ExportCalendarModal from './export-calendar-modal';
 import { CalendarEvent, CalendarEventWrapper, getEventProps } from './event';
 import YearView from './year-view';
 import QuickAddEventPopover from './quick-add-event-popover';
-import EditEventModal from '../edit-event-modal';
+import CalendarAddEvent from '../calendar-add-event';
 import SkeletonWithSidebar from '../skeletons/with-sidebar';
 
 import CalendarsAndAppointmentsQuery from '../../graphql/queries/calendar/calendars-and-appointments.graphql';
@@ -350,7 +350,8 @@ export default class Calendar extends Component {
 		newEvent: null,
 		quickAddBounds: null,
 		showEditModal: false,
-		activeModal: ''
+		activeModal: '',
+		showAddEventView: false
 	};
 
 	getSlotProps = time => {
@@ -402,7 +403,12 @@ export default class Calendar extends Component {
 			start: start.toDate(),
 			end: start.add(30, 'minutes').toDate()
 		});
-		this.openModal('editEvent');
+		this.setState( { showAddEventView: true } );
+	};
+
+	handleCloseAddEvent = () => {
+		this.setState( { showAddEventView: false } );
+		this.clearNewEvent();
 	};
 
 	clearNewEvent = () => {
@@ -444,7 +450,7 @@ export default class Calendar extends Component {
 			name: '(No title)',
 			...appointment
 		});
-		this.clearNewEvent();
+		this.handleCloseAddEvent();
 	};
 
 	handleCancelAdd = () => {
@@ -511,16 +517,6 @@ export default class Calendar extends Component {
 						)[1]
 				})
 			},
-			editEvent: {
-				Component: EditEventModal,
-				props: () => ({
-					event: this.state.newEvent,
-					onAction: this.handleCreateAppointment,
-					onClose: this.handleCancelAdd,
-					preferencesData: this.props.preferencesData,
-					accountInfoData: this.props.accountInfoData
-				})
-			},
 			importCalendarModal: {
 				Component: ImportCalendarModal,
 				props: () => ({
@@ -536,7 +532,7 @@ export default class Calendar extends Component {
 
 	render(
 		{ date, calendarsData, preferencesData, pending, matchesScreenMd },
-		{ newEvent, quickAddBounds, activeModal, activeModalProps }
+		{ newEvent, quickAddBounds, activeModal, activeModalProps, showAddEventView }
 	) {
 		const view = getView(preferencesData);
 		if (!view) {
@@ -610,34 +606,46 @@ export default class Calendar extends Component {
 					openModal={this.openModal}
 					matchesScreenMd={matchesScreenMd}
 				/>
-				<BigCalendar
-					className={style.calendarInner}
-					formats={FORMATS}
-					components={this.BIG_CALENDAR_COMPONENTS}
-					views={VIEWS}
-					elementProps={{ className: style.calendarInner }}
-					eventPropGetter={getEventProps}
-					slotPropGetter={this.getSlotProps}
-					view={view}
-					date={date}
-					events={events.filter(isParticipatingInEvent)}
-					titleAccessor="name"
-					allDayAccessor="allDay"
-					// @TODO: scrollToTime happens on any re-render of Big Calendar,
-					// which causes various issues with manipulation and is disabled
-					// until a fix is available.
-					// scrollToTime={isToday(date) ? new Date() : null}
-					popup={false}
-					selectable
-					onNavigate={this.handleNavigate}
-					onView={this.handleSetView}
-					onSelectSlot={this.selectSlot}
-					onSelectEvent={this.selectEvent}
-				/>
-				<CalendarRightbar class={style.rightbar} />
-				{newEvent &&
-					quickAddBounds &&
-					activeModal !== 'editEvent' && (
+				{ showAddEventView ? (
+					<CalendarAddEvent
+						className={style.calendarInner}
+						event={newEvent}
+						onAction={this.handleCreateAppointment}
+						onClose={this.handleCloseAddEvent}
+						preferencesData={this.props.preferencesData}
+						accountInfoData={this.props.accountInfoData}
+						{...activeModalProps}
+					/>
+				) : (<div className={style.calendarWrapper}>
+					<BigCalendar
+						className={style.calendarInner}
+						formats={FORMATS}
+						components={this.BIG_CALENDAR_COMPONENTS}
+						views={VIEWS}
+						elementProps={{ className: style.calendarInner }}
+						eventPropGetter={getEventProps}
+						slotPropGetter={this.getSlotProps}
+						view={view}
+						date={date}
+						events={events.filter(isParticipatingInEvent)}
+						titleAccessor="name"
+						allDayAccessor="allDay"
+						// @TODO: scrollToTime happens on any re-render of Big Calendar
+						// which causes various issues with manipulation and is disabled
+						// until a fix is available.
+						// scrollToTime={isToday(date) ? new Date() : null}
+						popup={false}
+						selectable
+						onNavigate={this.handleNavigate}
+						onView={this.handleSetView}
+						onSelectSlot={this.selectSlot}
+						onSelectEvent={this.selectEvent}
+					/>
+					<CalendarRightbar class={style.rightbar} />
+				</div>)
+				}
+
+				{newEvent && quickAddBounds && !showAddEventView && (
 					<QuickAddEventPopover
 						event={newEvent}
 						onSubmit={this.handleCreateAppointment}
