@@ -182,7 +182,7 @@ export default compose(
 		})
 	}),
 	graphql(SearchQuery, {
-		skip: props => !props.email,
+		skip: props => !props.email || props.error,
 		options: ({ email }) => ({
 			variables: {
 				types: 'message',
@@ -196,18 +196,23 @@ export default compose(
 		})
 	}),
 	graphql(GetContactFrequencyQuery, {
-		skip: props => !props.email,
+		skip: props => !props.email || ContactFrequencyCard.contactFrequencyError === true,
 		options: ({ email }) => ({
 			variables: {
 				email,
 				by: 'dwm'
 			}
 		}),
-		props: ({ data: { getContactFrequency } }) => ({
-			contactFrequencyData: get(getContactFrequency, 'data')
-		})
+		props: ({ data: { getContactFrequency, error } }) => {
+			if (error) {
+				ContactFrequencyCard.contactFrequencyError = true;
+			}
+			return {
+				contactFrequencyData: get(getContactFrequency, 'data')
+			};
+		}
 	}),
-	branch(({ loading, contact }) => loading || !contact, renderNothing),
+	branch(({ loading, error, contact }) => loading || error || !contact, renderNothing),
 	withStateHandlers(
 		{ selectedRange: '6m' },
 		{ onChangeRange: () => selectedRange => ({ selectedRange }) }
