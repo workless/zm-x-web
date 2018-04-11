@@ -182,7 +182,7 @@ export default compose(
 		})
 	}),
 	graphql(SearchQuery, {
-		skip: props => !props.email || props.error,
+		skip: props => !props.email,
 		options: ({ email }) => ({
 			variables: {
 				types: 'message',
