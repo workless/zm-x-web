@@ -196,7 +196,7 @@ export default compose(
 		})
 	}),
 	graphql(GetContactFrequencyQuery, {
-		skip: props => !props.email || ContactFrequencyCard.contactFrequencyError === true,
+		skip: props => !props.email || ContactFrequencyCard.contactFrequencyError,
 		options: ({ email }) => ({
 			variables: {
 				email,
