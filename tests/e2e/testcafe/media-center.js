@@ -1,3 +1,12 @@
+import { profile } from './profile/profile';
+import { actions, utilFunc } from './page-model/common';
+import { mail } from './page-model/mail';
+import { compose } from './page-model/compose';
+import { sidebar } from './page-model/sidebar';
+import { elements } from './page-model/elements';
+import { soap } from './utils/soap-client';
+import Inject from './utils/Inject-msg';
+const path = require('path');
 
 /************************************/
 /*** Mail: Compose scroll fixture ***/

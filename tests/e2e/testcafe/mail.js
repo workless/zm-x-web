@@ -8,7 +8,6 @@ import { sidebar } from './page-model/sidebar';
 import { dialog } from './page-model/dialog';
 import { elements } from './page-model/elements';
 import { soap } from './utils/soap-client';
-import LmtpClient from './utils/lmtp-client';
 import Inject from './utils/Inject-msg';
 const path = require('path');
 
