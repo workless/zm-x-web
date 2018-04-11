@@ -1,5 +1,5 @@
 /*eslint new-cap: ["error", { "capIsNew": false }]*/
-
+import { Selector } from 'testcafe';
 import { profile } from './profile/profile';
 import { actions, utilFunc } from './page-model/common';
 import { mail } from './page-model/mail';
@@ -45,7 +45,6 @@ test('L0 | Reply, No Attachments Present in Original | C881168', async t => {
 	await compose.clickReplyButton();
 	await compose.enterBodyText(emailBodyText);
 	await compose.sendEmail();
-	await t.wait(2000);
 	await sidebar.clickSidebarContent('Inbox');
 	await t.eval(() => location.reload(true));
 	await compose.openNewMessage();
@@ -124,7 +123,7 @@ fixture `Mail: Folders fixture`
 		await soap.deleteAccount(t.ctx.user.id, t.fixtureCtx.adminAuthToken);
 	});
 
-test('L1 | Dragging a mail into a folder | C945625', async t => {
+test('L1 | Move message to folder by drag-drop | C726318', async t => {
 	await sidebar.clickFolder(/^Folders/);
 	//##todo: drag all emails from testFolder to inbox
 	await t.dragToElement(mail.selectMail(0), sidebar.sidebarContentItemWithText('testFolder'));
@@ -302,7 +301,6 @@ test.skip('L2 | Web link tab, Endless Scroll | C565547 | PREAPPS-305', async t =
 	const endRectTop = await elements.plusSignMenuSearchesItemButton(0).getBoundingClientRectProperty('top');
 	await t.expect(startRectTop > endRectTop);
 });
-
 
 /******************************/
 /*** Mail: Rich Text Editor ***/
@@ -521,7 +519,7 @@ test.skip('L2 | Font > Alignment | C826709 | PREAPPS-250', async t => {
 	await t.expect(await elements.richtextareaTextContentSelector.find('div').getStyleProperty('text-align')).eql('right');
 });
 
-test('L2 | Hyperlink > Insert Link | C826805 | (Bug:PREAPPS-274)', async t => {
+test('L1 | Verify the insert link with respect to the cursor position | C871114 | (Bug:PREAPPS-274)', async t => {
 	let emailBodyText = 'test';
 	let linkUrl = 'http://www.google.ca';
 	await t.wait(500);
@@ -551,6 +549,59 @@ test.skip('L2 | Hyperlink > Search for Web Link | C828576 | PREAPPS-305 ', async
 });
 
 test.skip('L1 | Emoticon button | C828577 | PREAPPS-250', async t => {
+	const expectedEmojiData = await compose.insertEmoji(0);
+	const actualEmojiData = await elements.richtextareaTextContentSelector.find('img').getAttribute('src');
+	await t.expect(expectedEmojiData).eql(actualEmojiData);
+});
+
+/*******************************************/
+/*** Mail: Forward functions single user ***/
+/*******************************************/
+
+fixture `Mail: Forward functions single user`
+	.page(profile.hostURL)
+	.before( async ctx => {
+		ctx.adminAuthToken = await soap.getAdminAuthToken();
+	})
+	.beforeEach( async t => {
+		t.ctx.user = await soap.createAccount(t.fixtureCtx.adminAuthToken);
+		t.ctx.userAuth = await soap.getUserAuthToken(t.ctx.user.email, t.ctx.user.password);
+		const lmtp = new LmtpClient();
+		const filePath = path.join(__dirname, './data/mime/emails/empty.txt');
+		await lmtp.send(t.ctx.user.email, filePath);
+		await t.maximizeWindow();
+		await actions.loginEmailPage(t.ctx.user.email, t.ctx.user.password);
+		await t.expect(sidebar.checkSidebarItemExists('Inbox')).ok({ timeout: 15000 });
+		await compose.openNewMessage();
+		await compose.clickForwardButton();
+	})
+	.afterEach( async t  => {
+		await soap.deleteAccount(t.ctx.user.id, t.fixtureCtx.adminAuthToken);
+	});
+
+test('L1 | Forward email Add Attachments | C906307', async t => {
+	const filePath = path.join(__dirname, './data/files/JPEG_Image.jpg');
+	let emailBodyText = 'forward email';
+	let fwdEmailSubject = 'Fwd: empty';
+	await t.expect(elements.componentsToolbarMiddleSelector.exists).ok({ timeout: 10000 });
+	await compose.selectComposeToolbarPopmenu('Attachments', 'Attach From My Computer');
+	await t.setFilesToUpload(Selector('input').withAttribute('type', 'file'), filePath);
+	await t
+		.expect(elements.attachmentNameSelector.exists).ok({ timeout: 5000 })
+		.expect(elements.attachmentNameSelector.innerText).contains('JPEG_Image');
+});
+
+test('L1 | Responsive Composer Toolbar | C979092', async t => {
+	await t.expect(compose.toolbarButtonsSelector('Switch to Plain Text').exists).ok({ timeout: 5000 });
+	await t
+		.resizeWindow(1020,600)
+		.wait(2000);
+	await t.expect(elements.richtextToolbarContainer.find('button').withText('Send').exists).notOk({ timeout: 5000 });
+	await t.maximizeWindow();
+	await t.expect(compose.toolbarButtonsSelector('Switch to Plain Text').exists).ok({ timeout: 5000 });
+});
+
+test('L1 | Emoticon button | C979109', async t => {
 	const expectedEmojiData = await compose.insertEmoji(0);
 	const actualEmojiData = await elements.richtextareaTextContentSelector.find('img').getAttribute('src');
 	await t.expect(expectedEmojiData).eql(actualEmojiData);
