@@ -196,7 +196,7 @@ export default compose(
 		})
 	}),
 	graphql(GetContactFrequencyQuery, {
-		skip: props => !props.email || ContactFrequencyCard.contactFrequencyError,
+		skip: props => !props.email || GetContactFrequencyQuery.isUnsupported,
 		options: ({ email }) => ({
 			variables: {
 				email,
@@ -205,14 +205,14 @@ export default compose(
 		}),
 		props: ({ data: { getContactFrequency, error } }) => {
 			if (error) {
-				ContactFrequencyCard.contactFrequencyError = true;
+				GetContactFrequencyQuery.isUnsupported = true;
 			}
 			return {
 				contactFrequencyData: get(getContactFrequency, 'data')
 			};
 		}
 	}),
-	branch(({ loading, error, contact }) => loading || error || !contact, renderNothing),
+	branch(({ contactFrequencyData, contact }) => !contactFrequencyData || !contact, renderNothing),
 	withStateHandlers(
 		{ selectedRange: '6m' },
 		{ onChangeRange: () => selectedRange => ({ selectedRange }) }
