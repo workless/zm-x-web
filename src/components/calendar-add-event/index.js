@@ -28,8 +28,6 @@ import s from './style.less';
 import { ATTENDEE_ROLE } from '../../constants/calendars';
 import withMediaQuery from '../../enhancers/with-media-query';
 import { minWidth, screenXsMax } from '../../constants/breakpoints';
-import ActionButton from '../action-button';
-import Toolbar from '../toolbar';
 
 const REMIND_OPTIONS = [
 	'never',
@@ -176,7 +174,6 @@ export default class CalendarAddEvent extends Component {
 		const promiseArray = this.getAttachPromises(attachments);
 		Promise.all(promiseArray)
 			.then(res => {
-				debugger;
 				const aidArr = res;
 				this.props.onAction({
 					...event,
@@ -295,7 +292,7 @@ export default class CalendarAddEvent extends Component {
 	}
 
 	render(
-		{ title, errorMsg, inline, class: cls },
+		{ title, inline, class: cls },
 		{
 			allDay,
 			isPrivate,
@@ -308,9 +305,7 @@ export default class CalendarAddEvent extends Component {
 			repeatValue,
 			showAsValue,
 			availabilityVisible,
-			attachments,
-			attachPending,
-			isErrored
+			attachments
 		}
 	) {
 		const start = moment(event.start);
@@ -318,7 +313,7 @@ export default class CalendarAddEvent extends Component {
 		const invalidDateRange = !allDay && start.diff(event.end) > 0;
 		const showAvailabilityButtonVisible =
 			!availabilityVisible && attendees.some(a => !isString(a));
-		const error = isErrored ? errorMsg : '';
+		//const error = isErrored ? errorMsg : '';
 		return (
 			<div className={cx(cls, s.wrapper, inline && s.inlineWrapper)}>
 				<div class={s.header}>
