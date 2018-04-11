@@ -27,6 +27,7 @@ fragment calendarWithAppointmentFields on Folder {
 			alarm
 			allDay
 			class
+			isRecurring
 			isOrganizer
 			organizer {
 				address
@@ -34,6 +35,7 @@ fragment calendarWithAppointmentFields on Folder {
 			location
 			instances {
 				start
+				isRecurring
 			}
 		}
 	}

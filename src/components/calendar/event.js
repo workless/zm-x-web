@@ -1,8 +1,10 @@
 import { h, Component } from 'preact';
 import format from 'date-fns/format';
 import { STATUS_BUSY, STATUS_FREE, VIEW_MONTH } from './constants';
-import CalendarEventTooltip from './event-tooltip';
+import { CalendarEventDetailsTooltip } from './event-details';
 import cx from 'classnames';
+import withMediaQuery from '../../enhancers/with-media-query';
+import { minWidth, screenSmMax } from '../../constants/breakpoints';
 import { hexToRgb } from '../../lib/util';
 
 import style from './style';
@@ -73,6 +75,7 @@ export function CalendarEventWrapper(props) {
 	return child;
 }
 
+@withMediaQuery(minWidth(screenSmMax))
 class SavedCalendarEvent extends Component {
 	state = {
 		hoverOrigin: false
@@ -104,10 +107,10 @@ class SavedCalendarEvent extends Component {
 		document.removeEventListener('mousemove', this.handleMouseMove);
 	}
 
-	render({ view, title, event }, { hoverOrigin }) {
+	render({ view, title, event, matchesMediaQuery }, { hoverOrigin }) {
 		const start = event.date;
 		return (
-			<div class={style.eventInner} onMouseEnter={this.handleMouseEnter}>
+			<div class={style.eventInner} onMouseEnter={matchesMediaQuery && this.handleMouseEnter}>
 				{view === VIEW_MONTH && !event.allDay && (
 					<time title={start}>
 						{format(start, 'h:mm A').replace(':00', '')}
@@ -116,7 +119,7 @@ class SavedCalendarEvent extends Component {
 				{title}
 
 				{hoverOrigin && (
-					<CalendarEventTooltip origin={hoverOrigin} event={event} />
+					<CalendarEventDetailsTooltip origin={hoverOrigin} event={event} />
 				)}
 			</div>
 		);

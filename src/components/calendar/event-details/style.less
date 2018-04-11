@@ -1,0 +1,67 @@
+@import '~@zimbra/x-ui/refs.less';
+
+.close {
+	position: absolute;
+	right: 16px;
+	top: 16px;
+	background: transparent;
+	border: none;
+}
+
+// ./event-details-tooltip.js
+.eventTooltip {
+	padding: 26px 24px;
+	background-color: white;
+	border-radius: 3px;
+	box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.36);
+}
+
+.eventDetails {
+	span[role="img"] {
+		vertical-align: baseline;
+	}
+
+	> h2 {
+		font-size: 16px;
+		font-weight: normal;
+		margin: 0 0 11px 0;
+		padding-right: 40px;
+	}
+
+	.location {
+		font-weight: normal;
+		margin-bottom: 8px;
+	}
+
+	.organizer {
+		margin-top: 8px;
+	}
+
+	> hr {
+		margin: 12px 0 12px 0;
+	}
+
+	.parentCalendar, .flags {
+		margin: 0 0 8px 0;
+		padding: 0;
+
+		li {
+			display: inline-block;
+
+			&:not(:first-child) {
+				margin-left: 10px;
+			}
+		}
+	}
+
+	.parentCalendar > li > span {
+		display: inline-block;
+		width: @icon-size-xs;
+		height: @icon-size-xs;
+		border-radius: 50%;
+	}
+
+	> p {
+		margin: 0 0 20px 0;
+	}
+}

@@ -1,14 +1,13 @@
 import { h } from 'preact';
 import { Icon, Button } from '@zimbra/blocks';
 import { Localizer, Text } from 'preact-i18n';
-import MouseTooltip from '../mouse-tooltip';
 import format from 'date-fns/format';
 import style from './style';
 import cx from 'classnames';
 
-export default function CalendarEventTooltip({ event, onPrint, onDelete, onEdit, onClose, ...props }) {
+export default function CalendarEventDetails({ event, onPrint, onDelete, onEdit, onClose, ...props }) {
 	return (
-		<MouseTooltip {...props} class={cx(style.eventTooltip, props.class)}>
+		<div {...props} class={cx(style.eventDetails, props.class)}>
 			<Localizer>
 				<button
 					class={style.close}
@@ -44,10 +43,12 @@ export default function CalendarEventTooltip({ event, onPrint, onDelete, onEdit,
 			</ul>
 
 			<ul class={style.flags}>
-				<li>
-					<Icon size="sm" name="fa:refresh" />
-					{'{{Repeats?}}'}
-				</li>
+				{event.isRecurring && (
+					<li>
+						<Icon size="sm" name="fa:refresh" />
+						Recurring
+					</li>
+				)}
 				{event.class === 'PRI' && (
 					<li>
 						<Icon size="sm" name="fa:lock" />
@@ -65,6 +66,6 @@ export default function CalendarEventTooltip({ event, onPrint, onDelete, onEdit,
 				<Button onClick={onPrint}>Print</Button>
 				<Button onClick={onDelete}>Delete</Button>
 			</div>
-		</MouseTooltip>
+		</div>
 	);
 }
