@@ -45,13 +45,11 @@ export default compose(
 		options: ({ email }) => ({
 			variables: { email }
 		}),
-		props: ({ data: { loading, error, relatedContacts } }) => {
+		props: ({ data: { error, relatedContacts } }) => {
 			if (error) {
 				RelatedContactsQuery.isUnsupported = true;
 			}
 			return {
-				error,
-				loading,
 				contacts: get(relatedContacts, 'relatedContacts')
 			};
 		}
