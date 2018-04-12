@@ -499,18 +499,20 @@ export default class SettingsModal extends Component {
 									/>
 								)}
 							</div>
-							<div class={cx(style.footer, style.hideSmDown)}>
-								<Button
-									onClick={this.handleSave}
-									styleType="primary"
-									brand="primary"
-								>
-									<Text id="settings.modal.saveLabel">Save</Text>
-								</Button>
-								<Button onClick={this.onToggle}>
-									<Text id="settings.modal.cancelLabel">Cancel</Text>
-								</Button>
-							</div>
+							{settings && (
+								<div class={cx(style.footer, style.hideSmDown)}>
+									<Button
+										onClick={this.handleSave}
+										styleType="primary"
+										brand="primary"
+									>
+										<Text id="settings.modal.saveLabel">Save</Text>
+									</Button>
+									<Button onClick={this.onToggle}>
+										<Text id="settings.modal.cancelLabel">Cancel</Text>
+									</Button>
+								</div>
+							)}
 						</div>
 					</ClickOutsideDetector>
 				)}
