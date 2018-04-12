@@ -212,7 +212,7 @@ export default compose(
 			};
 		}
 	}),
-	branch(({ contactFrequencyData, contact }) => !contactFrequencyData || !contact, renderNothing),
+	branch(({ contact }) => !contact, renderNothing),
 	withStateHandlers(
 		{ selectedRange: '6m' },
 		{ onChangeRange: () => selectedRange => ({ selectedRange }) }
