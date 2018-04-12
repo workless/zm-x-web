@@ -195,7 +195,8 @@
 		"title": "Calendar",
 		"today": "Today",
 		"eventFields": {
-			"organizer": "Organizer"
+			"organizer": "Organizer",
+			"recurring": "Recurring"
 		},
 		"search": {
 			"refineHeader": "Refine by",
