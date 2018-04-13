@@ -30,7 +30,7 @@ export default class ModalDrawer extends Component {
 								<Icon name="fa:arrow-left" />
 							</button>
 						</Localizer>
-					</ToolbarContainer>,
+					</ToolbarContainer>
 					{children}
 				</div>
 			</ModalDialog>
