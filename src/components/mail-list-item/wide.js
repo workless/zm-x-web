@@ -2,7 +2,7 @@ import { h } from 'preact';
 import { Text } from 'preact-i18n';
 import cx from 'classnames';
 import prettyBytes from 'pretty-bytes';
-
+import get from 'lodash/get';
 import { Icon } from '@zimbra/blocks';
 import UnreadControl from '../unread-control';
 import MailInlineActionControl from '../mail-inline-action-control';
@@ -36,7 +36,15 @@ const WideListItem = ({
 }) => {
 
 
-	let messageOrConvSize = showSize && <span class={s.size}>{prettyBytes(+item.sortField)}</span>;
+	let messageOrConvSize;
+	if (showSize) {
+		let size = +item.sortField || +item.size;
+		if (!size) {
+			size = (get(item, 'messages') || []).reduce((max, { size: sz }) => Math.max(max,+sz), 0);
+		}
+		messageOrConvSize = <span class={s.size}>{prettyBytes(size)}</span>;
+	}
+
 
 	return (
 		<div class={s.wideListItem}>
