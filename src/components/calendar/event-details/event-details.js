@@ -60,7 +60,9 @@ export default class CalendarEventDetails extends Component {
 					)}
 				</ul>
 
-				{excerpt.loading ? <Spinner block /> : excerpt && (
+				{appointmentData.loading ? (
+					<Spinner class={style.spinner} block />
+				) : excerpt && (
 					<p>
 						{excerpt}
 					</p>
