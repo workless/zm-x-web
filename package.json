@@ -89,8 +89,8 @@
     "xml2js": "^0.4.19"
   },
   "dependencies": {
-    "@zimbra/api-client": "^1.0.0",
-    "@zimbra/x-ui": "^1.0.1",
+    "@zimbra/api-client": "^1.0.1",
+    "@zimbra/x-ui": "^1.0.2",
     "apollo-client": "^2.2.8",
     "choose-files": "^1.0.1",
     "classnames": "^2.2.5",
