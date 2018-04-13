@@ -1,5 +1,6 @@
 import { h, Component } from 'preact';
 import format from 'date-fns/format';
+import throttle from 'lodash/throttle';
 import { STATUS_BUSY, STATUS_FREE, VIEW_MONTH } from './constants';
 import { CalendarEventDetailsTooltip } from './event-details';
 import cx from 'classnames';
@@ -8,6 +9,8 @@ import { minWidth, screenMd } from '../../constants/breakpoints';
 import { hexToRgb } from '../../lib/util';
 
 import style from './style';
+
+const SHOW_EVENT_DETAILS_AFTER_HOVER_DELAY = 2000;
 
 function styledGradientBackground(color, freeBusy) {
 	if (!(freeBusy === 'T' || freeBusy === 'F')) { return {}; }
@@ -82,22 +85,32 @@ class SavedCalendarEvent extends Component {
 	}
 
 	handleMouseEnter = ({ clientX, clientY }) => {
-		this.setState({
-			hoverOrigin: {
-				x: clientX,
-				y: clientY
-			}
-		});
+		if (!this.state.hoverOrigin || !this.timer) {
+			this.timer = setTimeout(() => {
+				this.setState({
+					hoverOrigin: {
+						x: clientX,
+						y: clientY
+					}
+				});
+			}, SHOW_EVENT_DETAILS_AFTER_HOVER_DELAY);
+		}
 	}
 
-	handleMouseMove = ({ clientX, clientY }) => {
-		if (!this.state.hoverOrigin || !this.base) { return; }
+	handleMouseMove = throttle(({ clientX, clientY }) => {
+		if (!this.base) { return; }
 
 		const hoveredElement = document.elementFromPoint(clientX, clientY);
 		if (!this.base.contains(hoveredElement)) {
-			this.setState({ hoverOrigin: false });
+			if (this.timer) {
+				clearTimeout(this.timer);
+				this.timer = undefined;
+			}
+			else {
+				this.setState({ hoverOrigin: false });
+			}
 		}
-	}
+	}, 100)
 
 	componentWillMount() {
 		document.addEventListener('mousemove', this.handleMouseMove);
