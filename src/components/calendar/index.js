@@ -63,6 +63,7 @@ import { minWidth, screenMd } from '../../constants/breakpoints';
 
 import style from './style';
 import { switchTimeFormat } from '../../lib/util';
+import { shallowEqual } from '../../lib/pure-component';
 
 BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment));
 
@@ -416,7 +417,10 @@ export default class Calendar extends Component {
 	};
 
 	closeActiveModal = () => {
-		this.setState({ activeModal: '' });
+		this.setState({
+			activeModal: '',
+			activeModalProps: {}
+		});
 	};
 
 	openModal = (modalType, extraProps) => {
@@ -432,11 +436,16 @@ export default class Calendar extends Component {
 
 		const { matchesScreenMd } = this.props;
 		if (!matchesScreenMd) {
-			this.setState({ activeModal: 'eventDetails', selectedEvent: event });
+			this.openModal('eventDetails', { event });
 		}
 	};
 
 	handleQuickAddRender = ({ bounds }) => {
+		// Called on render of the QuickAddPopover, avoid infinite loops
+		if (this.state.quickAddBounds && shallowEqual(this.state.quickAddBounds, bounds)) {
+			return;
+		}
+
 		this.setState({
 			quickAddBounds: bounds
 		});
@@ -473,6 +482,10 @@ export default class Calendar extends Component {
 			activeModal: 'editEvent'
 		});
 	};
+
+	handleBeginSelectEvent = () => {
+		this.clearNewEvent();
+	}
 
 	constructor(props) {
 		super(props);
@@ -528,11 +541,7 @@ export default class Calendar extends Component {
 				})
 			},
 			eventDetails: {
-				Component: CalendarEventDetailsModal,
-				props: () => ({
-					event: this.state.selectedEvent,
-					onClose: () => { this.setState({ selectedEvent: null }); }
-				})
+				Component: CalendarEventDetailsModal
 			},
 			importCalendarModal: {
 				Component: ImportCalendarModal,
@@ -599,7 +608,7 @@ export default class Calendar extends Component {
 
 		const modal = cloneDeep(find(this.MODALS, (_, key) => key === activeModal));
 		if (modal) {
-			const modalProps = modal.props();
+			const modalProps = modal.props ? modal.props() : {};
 			// Enable modals to set custom onClose, onSubmit handlers, but
 			// pipe into our modal visibility state handler.
 			modalProps.onAction = modalProps.onAction
@@ -648,6 +657,7 @@ export default class Calendar extends Component {
 					// scrollToTime={isToday(date) ? new Date() : null}
 					popup={false}
 					selectable
+					onSelecting={this.handleBeginSelectEvent}
 					onNavigate={this.handleNavigate}
 					onView={this.handleSetView}
 					onSelectSlot={this.selectSlot}
