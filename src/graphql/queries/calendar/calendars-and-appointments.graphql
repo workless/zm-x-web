@@ -29,7 +29,6 @@ fragment calendarWithAppointmentFields on Folder {
 			class
 			isRecurring
 			isOrganizer
-			recurrenceId
 			organizer {
 				address
 			}

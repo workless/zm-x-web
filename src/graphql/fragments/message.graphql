@@ -89,7 +89,7 @@ fragment messageFields on MessageInfo {
 			}
 			percentComplete
 			priority
-			recurrenceId
+			utcRecurrenceId
 			rsvp
 			sequence
 			start {
