@@ -2,6 +2,7 @@
 import { Selector } from 'testcafe';
 import { profile } from './profile/profile';
 import { actions, utilFunc } from './page-model/common';
+import { settings } from './page-model/settings';
 import { mail } from './page-model/mail';
 import { compose } from './page-model/compose';
 import { sidebar } from './page-model/sidebar';
@@ -9,6 +10,7 @@ import { dialog } from './page-model/dialog';
 import { elements } from './page-model/elements';
 import { soap } from './utils/soap-client';
 import Inject from './utils/Inject-msg';
+import { constructor } from 'chalk';
 const path = require('path');
 
 /***************************/
@@ -123,6 +125,28 @@ test.skip('L1 | Mark as star from more options | C727488 | PREAPPS-388', async t
 	await mail.clickPopoverMenuItem('Clear Star');
 });
 
+test('L1 | Read Message, Inline Attachment | C581719', async t => {
+	const emailBodyText = 'test text';
+	await compose.openNewMessage();
+	await t.expect(elements.clientHtmlViewerInner.find('img').nth(0).exists).ok({ timeout: 5000 });
+	await t.expect(await elements.clientHtmlViewerInner.innerText).contains(emailBodyText);
+	const startRectTop = await elements.clientHtmlViewerInner.find('img').nth(0).getBoundingClientRectProperty('top');
+	await utilFunc.scrollElement.with({ dependencies: { scrollPosition: 'down' } })(elements.inboxReadPane);
+	await t.wait(1000);
+	const endRectTop = await elements.clientHtmlViewerInner.find('img').nth(0).getBoundingClientRectProperty('top');
+	await t.expect(startRectTop > endRectTop);
+})
+.before( async t => {
+	t.ctx.user = await soap.createAccount(t.fixtureCtx.adminAuthToken);
+	t.ctx.userAuth = await soap.getUserAuthToken(t.ctx.user.email, t.ctx.user.password);
+	const inject = new Inject();
+	const filePath = path.join(__dirname, './data/mime/emails/multi-inline-attachment.txt');
+	inject.send(t.ctx.userAuth, filePath);
+	await t.maximizeWindow();
+	await actions.loginEmailPage(t.ctx.user.email, t.ctx.user.password);
+	await t.expect(sidebar.checkSidebarItemExists('Inbox')).ok({ timeout: 15000 });
+});
+
 /*****************************/
 /*** Mail: Folders fixture ***/
 /*****************************/
@@ -169,6 +193,17 @@ test('L1 | Move message to draft folder by drag-drop | C726319', async t => {
 	await t.expect(mail.selectMail(0).exists).ok({ timeout: 5000 });
 });
 
+test('L1 | Move message from draft folder by drag-drop | C726320', async t => {
+	await t.dragToElement(mail.selectMail(0), sidebar.sidebarContentItemWithText('Drafts'));
+	await t.expect(elements.mailListFooterSelector.exists).ok({ timeout: 5000 });
+	await t.click(sidebar.sidebarContentItemWithText('Drafts'));
+	await t.expect(mail.selectMail(0).exists).ok({ timeout: 5000 });
+	await t.dragToElement(mail.selectMail(0), sidebar.sidebarContentItemWithText('Junk'));
+	await t.expect(elements.mailListFooterSelector.exists).ok({ timeout: 5000 });
+	await t.expect(await elements.mailListFooterSelector.innerText).contains('folder is empty');
+	await t.click(sidebar.sidebarContentItemWithText('Junk'));
+	await t.expect(mail.selectMail(0).exists).ok({ timeout: 5000 });
+});
 
 test('L1 | Create folder from context menu | C726324', async t => {
 	let newFolderName = 'newFolderName';
@@ -229,6 +264,62 @@ test('L1 | Move user created folder from context menu into/out from another fold
 	await actions.loginEmailPage(t.ctx.user.email, t.ctx.user.password);
 });
 
+/*************************************************/
+/*** Mail: Settings Folder settings multi-user ***/
+/*************************************************/
+
+fixture `Mail: Settings Folder settings multi-user`
+	.page(profile.hostURL)
+	.before( async ctx => {
+		ctx.adminAuthToken = await soap.getAdminAuthToken();
+	})
+	.beforeEach( async t => {
+		t.ctx.user = await soap.createAccount(t.fixtureCtx.adminAuthToken);
+		t.ctx.userAuth = await soap.getUserAuthToken(t.ctx.user.email, t.ctx.user.password);
+		t.ctx.user2 = await soap.createAccount(t.fixtureCtx.adminAuthToken);
+		t.ctx.user2Auth = await soap.getUserAuthToken(t.ctx.user2.email, t.ctx.user2.password);
+		await soap.mailCreateFolder(t.ctx.userAuth, '1', 'testFolder');
+		await soap.sendMessage(t.ctx.userAuth,t.ctx.user.email);
+		await actions.loginEmailPage(t.ctx.user.email, t.ctx.user.password);
+		await t.expect(sidebar.checkSidebarFolderExists('Folders')).ok({ timeout: 15000 });
+	})
+	.afterEach( async t  => {
+		await soap.deleteAccount(t.ctx.user.id, t.fixtureCtx.adminAuthToken);
+		await soap.deleteAccount(t.ctx.user2.id, t.fixtureCtx.adminAuthToken);
+	});
+
+test('L1 | Verify the filter with respect to custom folder | C830220', async t => {
+	const filterName = 'testFilter'
+	const ruleFolder = 'testFolder';
+	//setup filter rule for user2
+	await settings.clickSettings();
+	await settings.clickSettingSidebarItem('Filter');
+	await settings.clickSubsectionBodyButton('Add');
+	await settings.enterEditFilterText('Filter Name', filterName);
+	await settings.selectFilterSelectByLabel('Then move the messages to this folder', ruleFolder)
+	await settings.enterEditFilterText('From', t.ctx.user2.email);
+	await settings.clickModalDialogFooterButton('Save');
+	await t
+		.expect(elements.settingsFiltersListEntrySelector.exists).ok({ timeout: 5000})
+		.expect(await elements.settingsSubsectionBodySelector.innerText).contains(filterName)
+		.expect(await elements.settingsSubsectionBodySelector.innerText).contains(ruleFolder);
+	await settings.clickDialogButton('Save');
+	await actions.logoutEmailPage(t.ctx.user.email);
+	//login user2 send email
+	await actions.loginEmailPage(t.ctx.user2.email, t.ctx.user2.password);
+	await compose.clickCompose();
+	await compose.enterTextToFieldElement(t.ctx.user.email, compose.addressFieldTextField('To'));
+	await compose.enterTextToFieldElement(filterName, elements.composerSubject);
+	await compose.enterBodyText(ruleFolder);
+	await compose.sendEmail();
+	await actions.logoutEmailPage(t.ctx.user2.email);
+	//login user verify folder
+	await actions.loginEmailPage(t.ctx.user.email, t.ctx.user.password);
+	await sidebar.clickFolder(/^Folders/);
+	await t.click(sidebar.sidebarContentItemWithText(ruleFolder));
+	await compose.openMessageWithSubject(filterName);
+	await t.expect(await elements.clientHtmlViewerInner.innerText).contains(ruleFolder);
+});
 
 /******************************/
 /*** Mail: Rich Text Editor ***/
@@ -283,12 +374,6 @@ test.skip('L1 | Responsive Composer Toolbar | C612378 | PREAPPS-206', async t =>
 		.wait(2000);
 	await t
 		.expect(await elements.componentsToolbarMiddleSelector.child().count).eql(toolbarItemCount);
-});
-
-test('L2 | Attachments > Attach Web Link | C769874', async t => {
-	await t.expect(elements.componentsToolbarMiddleSelector.exists).ok({ timeout: 10000 });
-	await compose.selectComposeToolbarPopmenu('Attachments', 'Attach Web Link');
-	await t.expect(elements.buttonWithText('shopping').exists).ok({ timeout: 10000 });
 });
 
 test.skip('L2 | Font > Type | C769875 | PREAPPS-250', async t => {
@@ -427,6 +512,44 @@ test.skip('L1 | Emoticon button | C828577 | PREAPPS-250', async t => {
 	const actualEmojiData = await elements.richtextareaTextContentSelector.find('img').getAttribute('src');
 	await t.expect(expectedEmojiData).eql(actualEmojiData);
 });
+
+fixture `Mail: Forward functions multi-user`
+	.page(profile.hostURL)
+	.before( async ctx => {
+		ctx.adminAuthToken = await soap.getAdminAuthToken();
+	})
+	.beforeEach( async t => {
+		t.ctx.user = await soap.createAccount(t.fixtureCtx.adminAuthToken);
+		t.ctx.userAuth = await soap.getUserAuthToken(t.ctx.user.email, t.ctx.user.password);
+		t.ctx.user2 = await soap.createAccount(t.fixtureCtx.adminAuthToken);
+		t.ctx.user2Auth = await soap.getUserAuthToken(t.ctx.user2.email, t.ctx.user2.password);
+		const inject = new Inject();
+		const filePath = path.join(__dirname, './data/mime/emails/empty.txt');
+		inject.send(t.ctx.userAuth, filePath);
+		await t.maximizeWindow();
+		await actions.loginEmailPage(t.ctx.user.email, t.ctx.user.password);
+		await t.expect(sidebar.checkSidebarItemExists('Inbox')).ok({ timeout: 15000 });
+	})
+	.afterEach( async t  => {
+		await soap.deleteAccount(t.ctx.user.id, t.fixtureCtx.adminAuthToken);
+		await soap.deleteAccount(t.ctx.user2.id, t.fixtureCtx.adminAuthToken);
+	});
+
+test('L1 | Immediately refresh conversation view once a forward is sent | C727483', async t => {
+	let emailBodyText = 'forward email';
+	let fwdEmailSubject = 'Fwd: empty';
+	let userEmail = t.ctx.user2.email;
+	await compose.openNewMessage();
+	await compose.clickForwardButton();
+	await compose.enterTextToFieldElement(userEmail, compose.addressFieldTextField('To'));
+	await compose.enterBodyText(emailBodyText);
+	await compose.sendEmail();
+	await sidebar.clickSidebarContent('Sent');
+	await t.eval(() => location.reload(true));
+	await compose.openMessageWithSubject(fwdEmailSubject);
+	await mail.openCondensedMessage(0);
+	await t.expect(await elements.clientHtmlViewerInner.nth(1).innerText).contains(emailBodyText);
+})
 
 /*******************************************/
 /*** Mail: Forward functions single user ***/
