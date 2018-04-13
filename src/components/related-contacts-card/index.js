@@ -41,20 +41,21 @@ const RelatedContactsCard = ({ contacts, showAll, toggleShowAll }) => (
 
 export default compose(
 	graphql(RelatedContactsQuery, {
-		skip: props => !props.email,
+		skip: props => !props.email || RelatedContactsQuery.isUnsupported,
 		options: ({ email }) => ({
 			variables: { email }
 		}),
-		props: ({ data: { loading, error, relatedContacts } }) => ({
-			error,
-			loading,
-			contacts: get(relatedContacts, 'relatedContacts')
-		})
+		props: ({ data: { error, relatedContacts } }) => {
+			if (error) {
+				RelatedContactsQuery.isUnsupported = true;
+			}
+			return {
+				contacts: get(relatedContacts, 'relatedContacts')
+			};
+		}
 	}),
 	branch(
-		({ loading, error, contacts }) => loading || error || !contacts,
-		renderNothing
-	),
+		({ contacts }) => !contacts, renderNothing ),
 	withStateHandlers(
 		{ showAll: false },
 		{ toggleShowAll: ({ showAll }) => () => ({ showAll: !showAll }) }
