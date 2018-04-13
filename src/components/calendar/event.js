@@ -107,10 +107,12 @@ class SavedCalendarEvent extends Component {
 				this.timer = undefined;
 			}
 			else {
-				this.setState({ hoverOrigin: false });
+				this.hideHoverTooltip();
 			}
 		}
 	}, 100)
+
+	hideHoverTooltip = () => this.setState({ hoverOrigin: false })
 
 	componentWillMount() {
 		document.addEventListener('mousemove', this.handleMouseMove);
@@ -132,7 +134,7 @@ class SavedCalendarEvent extends Component {
 				{title}
 
 				{hoverOrigin && (
-					<CalendarEventDetailsTooltip origin={hoverOrigin} event={event} />
+					<CalendarEventDetailsTooltip origin={hoverOrigin} event={event} onClose={this.hideHoverTooltip} />
 				)}
 			</div>
 		);
