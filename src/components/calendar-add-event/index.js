@@ -416,7 +416,7 @@ export default class CalendarAddEvent extends Component {
 						/>
 					</FormGroup>
 					<FormGroup
-						class={(availabilityVisible || showAvailabilityButtonVisible ) && s.availabilityIndicatorGroup}
+						class={(availabilityVisible || showAvailabilityButtonVisible) && s.availabilityIndicatorGroup}
 					>
 						{availabilityVisible ? (
 							<AvailabilityIndicator
@@ -432,7 +432,7 @@ export default class CalendarAddEvent extends Component {
 									class={cx(s.fieldOffset, s.availabilityButton)}
 									onClick={this.handleToggleAvailabilty}
 								>
-									Show Availability
+										Show Availability
 								</Button>
 							)
 						)}
@@ -515,8 +515,8 @@ export default class CalendarAddEvent extends Component {
 					</FormGroup>
 				</AlignedForm>
 				<div class={s.footer}>
-					<Button styleType="primary" brand="primary" onClick={this.handleSubmit} >Save</Button>
-					<Button onClick={this.onClose}>Cancel</Button>
+					<Button styleType="primary" brand="primary" onClick={this.handleSubmit} ><Text id="buttons.save" /></Button>
+					<Button onClick={this.onClose}><Text id="buttons.cancel" /></Button>
 				</div>
 			</div>
 		);
