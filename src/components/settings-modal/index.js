@@ -440,7 +440,7 @@ export default class SettingsModal extends Component {
 	onToggle = e => {
 		// dirty fix for nesting ClickOutsideDetectors.
 		// Should be changed in the future to be more robust.
-		if (e && e.path && e.path[0].className.indexOf('settings-modal') === -1) {
+		if (e && e.path && e.path[0].className.indexOf('settings-modal') === -1 && e.path[0].className.indexOf('cancel-modal') === -1) {
 			return;
 		}
 		this.props.dispatch(toggle());
@@ -510,6 +510,7 @@ export default class SettingsModal extends Component {
 									<Text id="settings.modal.saveLabel">Save</Text>
 								</Button>
 								<Button
+									class="cancel-modal"
 									onClick={this.onToggle}
 									disabled={!settings}
 								>
