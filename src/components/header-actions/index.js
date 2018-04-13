@@ -41,10 +41,6 @@ export default class HeaderActions extends Component {
 	render({ name, ...props }) {
 		return (
 			<div class={s.headerActions}>
-				<Link href="/" class={s.headerAction}>
-					<Icon class={s.headerActionIcon} name="home" />
-					<span class={s.headerActionTitle}>Home</span>
-				</Link>
 				<ActionMenu
 					actionButtonClass={s.headerActionButton}
 					anchor="end"

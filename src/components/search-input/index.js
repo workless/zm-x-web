@@ -281,6 +281,12 @@ export default class SearchInput extends Component {
 							</button>
 						</Localizer>
 					)}
+					<button
+						className={s.searchButton}
+						type="submit"
+					>
+						<Icon name="search" />
+					</button>
 				</form>
 
 				{!disableContactSuggestions &&
