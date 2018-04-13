@@ -472,9 +472,9 @@ export default class Calendar extends Component {
 
 	handleQuickAddMoreDetails = event => {
 		this.setState({
-			newEvent: event,
-			activeModal: 'editEvent'
+			newEvent: event
 		});
+		this.setState( { showAddEventView: true } );
 	};
 
 	constructor() {
