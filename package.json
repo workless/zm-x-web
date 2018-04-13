@@ -82,6 +82,7 @@
     "testcafe-live": "^0.1.3",
     "testcafe-reporter-html-testrail": "^2.0.0",
     "typescript": "^2.7.1",
+    "ua-parser-js": "^0.7.17",
     "vhtml": "^2.1.0",
     "webpack": "^3.10.0",
     "webpack-dev-server": "^2.11.0",
