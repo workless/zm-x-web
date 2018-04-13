@@ -68,10 +68,16 @@ export default class CalendarEventDetails extends Component {
 					</p>
 				)}
 
-				<div>
-					<Button onClick={onEdit}>Edit</Button>
-					<Button onClick={onPrint}>Print</Button>
-					<Button onClick={onDelete}>Delete</Button>
+				<div style={'display: none' /* Buttons are unimplemented */}>
+					<Button onClick={onEdit}>
+						<Text id="buttons.edit" />
+					</Button>
+					<Button onClick={onPrint}>
+						<Text id="buttons.print" />
+					</Button>
+					<Button onClick={onDelete}>
+						<Text id="buttons.delete" />
+					</Button>
 				</div>
 			</div>
 		);
