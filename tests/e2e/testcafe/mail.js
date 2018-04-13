@@ -10,7 +10,6 @@ import { dialog } from './page-model/dialog';
 import { elements } from './page-model/elements';
 import { soap } from './utils/soap-client';
 import Inject from './utils/Inject-msg';
-import { constructor } from 'chalk';
 const path = require('path');
 
 /***************************/
