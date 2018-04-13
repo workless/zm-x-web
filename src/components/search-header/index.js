@@ -20,7 +20,6 @@ import ActionMenuSearchFolder from '../action-menu-search-folder';
 import getMailFolders from '../../graphql-decorators/get-mail-folders';
 
 import s from './style.less';
-import { Icon } from '@zimbra/blocks';
 
 const PrimaryLogo = () => (
 	<Link className={s.primaryLogo} href="/">
