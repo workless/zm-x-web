@@ -6,6 +6,7 @@ import get from 'lodash/get';
 import style from './style';
 import cx from 'classnames';
 import { graphql } from 'react-apollo';
+import Recurrence from '../../recurrence';
 import MessageQuery from '../../../graphql/queries/message.graphql';
 
 @graphql(MessageQuery, {
@@ -16,6 +17,7 @@ export default class CalendarEventDetails extends Component {
 	render({ event, appointmentData, onPrint, onDelete, onEdit, ...props }) {
 		const inviteComponent = get(appointmentData, 'message.invitations.0.components.0');
 		const excerpt = get(inviteComponent, 'excerpt');
+		const recurrence = get(inviteComponent, 'recurrence.0');
 		return (
 			<div {...props} class={cx(style.eventDetails, props.class)}>
 				<h2>{event.name}</h2>
@@ -49,7 +51,9 @@ export default class CalendarEventDetails extends Component {
 					{event.isRecurring && (
 						<li>
 							<Icon size="sm" name="fa:refresh" />
-							<Text id="calendar.eventFields.recurring" />
+							<Text id="calendar.repeats" />
+							&nbsp;
+							<Recurrence recurrence={recurrence} />
 						</li>
 					)}
 					{event.class === 'PRI' && (

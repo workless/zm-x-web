@@ -199,6 +199,7 @@
 	"calendar": {
 		"title": "Calendar",
 		"today": "Today",
+		"repeats": "Repeats",
 		"eventFields": {
 			"organizer": "Organizer",
 			"recurring": "Recurring"

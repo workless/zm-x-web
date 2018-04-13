@@ -91,6 +91,21 @@ fragment messageFields on MessageInfo {
 			priority
 			utcRecurrenceId
 			rsvp
+			recurrence {
+				add {
+					rule {
+						frequency
+						interval {
+							intervalCount
+						}
+						byday {
+							wkday {
+								day
+							}
+						}
+					}
+				}
+			}
 			sequence
 			start {
 				date
