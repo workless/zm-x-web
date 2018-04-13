@@ -456,7 +456,6 @@ export default function(env) {
 				}));
 			},
 			historyApiFallback: {
-				disableDotRule: true,
 				rewrites: [
 					{
 						from: /(?:^|\/)[^/?]+\.([^.]+)(?:\?.*)?$/,
