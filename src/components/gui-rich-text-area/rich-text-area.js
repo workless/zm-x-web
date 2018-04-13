@@ -141,7 +141,11 @@ export default class RichTextArea extends Component {
 		try {
 			return document[type](...args);
 		}
-		catch (err) {}
+		catch (err) {
+			if (process.env.NODE_ENV !== 'production') {
+				console.error(`document.${type}(${args.join(', ')}) ERR:`, err);
+			}
+		}
 	};
 
 	execCommand = this.createCommandProxy('execCommand');

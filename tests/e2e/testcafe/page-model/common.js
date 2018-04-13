@@ -2,6 +2,7 @@
 /*eslint new-cap: ["error", { "capIsNew": false }]*/
 import { t, ClientFunction, Selector } from 'testcafe';
 import { elements } from './elements';
+import uaParser from 'ua-parser-js';
 
 class PageActions {
 
@@ -139,6 +140,12 @@ export class UtilFunc {
 		return  yyyy+mm+dd+'T'+hours+minute +'00';
 	}
 
+	// Get browser name
+	async browserAlias() {
+		const ua = await this.getUA();
+		return uaParser(ua).browser.name;
+	}
+
 	/************************************/
 	/**** Helper ClientFunctions  *******/
 
@@ -230,6 +237,9 @@ export class UtilFunc {
 		let clickEvent = new window.Event('change'); // Create the event.
 		el.dispatchEvent( clickEvent );    // Dispatch the event.
 	});
+
+	//Returns a user-agent header sent by the browser
+	getUA = ClientFunction(() => navigator.userAgent);
 
 }
 

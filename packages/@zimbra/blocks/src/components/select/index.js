@@ -285,7 +285,7 @@ export class Option extends Component {
 			>
 				<div
 					ref={linkref(this, 'text')}
-					class={cx(style.itemTitle, props.class)}
+					class={cx(style.itemTitle)}
 					title={tooltip || showTooltip && title}
 				>
 					{title}
