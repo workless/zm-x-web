@@ -1,7 +1,7 @@
 #import "../fragments/message.graphql"
 
-query getMessage($id: ID!, $recurrenceId: String) {
-	message: getMessage(id: $id, ridZ: $recurrenceId) {
+query getMessage($id: ID!) {
+	message: getMessage(id: $id) {
 		...messageFields
 	}
 }
