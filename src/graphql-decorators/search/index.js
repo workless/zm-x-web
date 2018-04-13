@@ -1,4 +1,5 @@
 import { graphql } from 'react-apollo';
+import { capitalizeFirstLetter } from '../../lib/util';
 import last from 'lodash/last';
 import get from 'lodash/get';
 
@@ -18,10 +19,6 @@ function mergeResults(prev, next, type) {
 	return next.search[type]
 		? [...prev.search[type], ...next.search[type]]
 		: prev.search[type];
-}
-
-function capitalizeFirstLetter(string) {
-	return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 export default function withSearch(_config = {}) {
