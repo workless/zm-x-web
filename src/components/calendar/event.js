@@ -1,6 +1,5 @@
 import { h, Component } from 'preact';
 import format from 'date-fns/format';
-import throttle from 'lodash/throttle';
 import { STATUS_BUSY, STATUS_FREE, VIEW_MONTH } from './constants';
 import { CalendarEventDetailsTooltip } from './event-details';
 import cx from 'classnames';
@@ -92,20 +91,14 @@ class SavedCalendarEvent extends Component {
 		}
 	}
 
-	handleMouseMove = throttle(({ clientX, clientY }) => {
-		if (!this.base) { return; }
-
-		const hoveredElement = document.elementFromPoint(clientX, clientY);
-		if (!this.base.contains(hoveredElement)) {
-			if (this.timer) {
-				clearTimeout(this.timer);
-				this.timer = undefined;
-			}
-			else {
-				this.hideHoverTooltip();
-			}
+	handleMouseLeave = () => {
+		if (this.timer) {
+			clearTimeout(this.timer);
+			this.timer = undefined;
 		}
-	}, 100)
+
+		this.hideHoverTooltip();
+	}
 
 	showEventDetails = ({ clientX, clientY }) => {
 		this.setState({
@@ -116,14 +109,8 @@ class SavedCalendarEvent extends Component {
 		});
 	}
 
-	hideHoverTooltip = () => this.setState({ hoverOrigin: false })
-
-	componentWillMount() {
-		document.addEventListener('mousemove', this.handleMouseMove);
-	}
-
-	componentWillUnmount() {
-		document.removeEventListener('mousemove', this.handleMouseMove);
+	hideHoverTooltip = () => {
+		this.setState({ hoverOrigin: false });
 	}
 
 	render({ view, title, event, matchesScreenMd }, { hoverOrigin }) {
@@ -132,6 +119,7 @@ class SavedCalendarEvent extends Component {
 			<div
 				class={style.eventInner}
 				onMouseEnter={matchesScreenMd && this.handleMouseEnter}
+				onMouseLeave={matchesScreenMd && this.handleMouseLeave}
 				onClick={matchesScreenMd && this.showEventDetails}
 			>
 				{view === VIEW_MONTH && !event.allDay && (
