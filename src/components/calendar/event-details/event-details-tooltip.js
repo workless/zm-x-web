@@ -1,7 +1,7 @@
 import { h, Component } from 'preact';
 import CloseButton from '../../close-button';
 import CalendarEventDetails from './event-details';
-import MouseTooltip from '../../mouse-tooltip';
+import FixedTooltip from '../../fixed-tooltip';
 import style from './style';
 import cx from 'classnames';
 
@@ -13,11 +13,11 @@ export default class CalendarEventDetailsTooltip extends Component {
 
 	render({ origin, onClose, ...props }) {
 		return (
-			<MouseTooltip origin={origin} class={cx(style.eventTooltip, props.class)}>
+			<FixedTooltip origin={origin} class={cx(style.eventTooltip, props.class)}>
 				<CloseButton class={style.close} onClick={this.handleClickClose} />
 
 				<CalendarEventDetails {...props} />
-			</MouseTooltip>
+			</FixedTooltip>
 		);
 	}
 }
