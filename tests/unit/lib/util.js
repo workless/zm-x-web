@@ -1,4 +1,4 @@
-import { getEmailDomain, isAddressTrusted }  from 'src/lib/util';
+import { getEmailDomain, isAddressTrusted, capitalizeFirstLetter }  from 'src/lib/util';
 
 describe('util', () => {
 
@@ -38,6 +38,16 @@ describe('util', () => {
 		});
 		it('should not trust "foo@bar.com" against undefined check list', () => {
 			expect(isAddressTrusted('foo@bar.com', undefined)).to.be.false;
+		});
+	});
+
+	describe('capitalizeFirstLetter', () => {
+		it('should capitalize the first letter of a sentence', () => {
+			[ 'one', 'two', 'Three', 'Four', 'five' ].map(capitalizeFirstLetter).forEach((word, index, arr) => {
+				const uncapitalizedWord = arr[index];
+				expect(word[0]).to.equal(uncapitalizedWord[0].toUpperCase());
+				expect(word.slice(0, -1)).to.equal(uncapitalizedWord.slice(0, -1));
+			});
 		});
 	});
 });
