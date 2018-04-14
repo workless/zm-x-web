@@ -29,7 +29,12 @@ export default class CalendarEventDetails extends Component {
 				<h2>{event.name}</h2>
 
 				{event.location && (
-					<div class={style.location}>at {event.location}</div>
+
+					<div class={style.location}>
+						<Text id="prepositions.at" />
+						&nbsp;
+						{event.location}
+					</div>
 				)}
 
 				<div class={style.time}>
