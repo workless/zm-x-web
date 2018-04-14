@@ -1,9 +1,19 @@
 import { h } from 'preact';
+import { Icon } from '@zimbra/blocks';
+import { Text, Localizer } from 'preact-i18n';
 import cx from 'classnames';
-import s from './style.less';
+import style from './style.less';
 
-const CloseButton = (props) => (
-	<button aria-label="Close" {...props} class={cx(s.closeButton, props.class)} />
-);
-
-export default CloseButton;
+export default function CloseButton(props) {
+	return (
+		<Localizer>
+			<button
+				aria-label={<Text id="buttons.close" />}
+				{...props}
+				class={cx(style.close, props.class)}
+			>
+				<Icon name="close" />
+			</button>
+		</Localizer>
+	);
+}
