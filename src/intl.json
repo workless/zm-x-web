@@ -1,6 +1,7 @@
 {
 	"app": {
-		"loading": "Loading…"
+		"loading": "Loading…",
+		"generalError": "The application has encountered an error"
 	},
 	"buttons": {
 		"add": "Add",

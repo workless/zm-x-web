@@ -1,4 +1,5 @@
 import { h } from 'preact';
+import { Text } from 'preact-i18n';
 import s from './style.less';
 import Fill from '../fill';
 
@@ -13,7 +14,7 @@ export default function SkeletonWithSidebar({ accountInfoData, preferencesData, 
 
 			{errors.length && (
 				<div class={s.main}>
-					<h2>The application has encountered an error</h2>
+					<h2><Text id="app.generalError" /></h2>
 					{errors.map((error) => <p>{error.message}</p>)}
 				</div>
 			)}
