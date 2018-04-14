@@ -22,6 +22,7 @@ class Elements {
     mainHeaderActions = Selector(clientName + '_header-actions_headerActions');
 
     // Main Page Elements - Navbar, Sidebar, Folder, Context Menu, Progress indicator
+    overlayView = Selector('.blocks_dialog_overlay');
 	navButtonList = Selector(clientName + '_app-navigation_nav');
     sidebarContentSelector = Selector(clientName + '_sidebar_content');
     progressIndicatorSelector = Selector(clientName + '_progress-indicator_progress');
@@ -47,14 +48,21 @@ class Elements {
     messageLabel = clientName + '_mail-list-item_label';
     mailSubject = clientName + '_mail-list-item_subject';
     sidebarRefreshButton = Selector(clientName + '_folder-list_refresh');
+    mailListHeader = Selector(clientName + '_mail-list-header_mailListHeader');
     // Mail Elements - Right Pane
     condensedMessage = clientName + '_condensed-message_message';
+    previewPDFviewContainer = clientName + '_pdfjs-viewer_container';
     conversationSectionSelector = Selector(clientName + '_conversation-viewer_section');
     conversationSubjectSelector = Selector(clientName + '_viewer-title_subject');
     mailViewerBodySelector = Selector(clientName + '_viewer_body');
     clientHtmlViewerInner = Selector(clientName + '_html-viewer_inner');
     mailViewerTitleCountText = Selector(clientName + '_viewer-title_countText');
     mailViewPlaceholderView = Selector(clientName + '_viewer-placeholder_placeholder');
+    mailViewAttachmentPrevewButton = Selector(clientName + '_attachment_button');
+    mailViewAttachmentViewer = Selector(clientName + '_attachment-viewer_showing');
+    previewToolbarDownloadButton = this.mailViewAttachmentViewer.find('button').withAttribute('title', 'Download');
+    previewToolbarCloseButton = this.mailViewAttachmentViewer.find('button').withAttribute('title', 'Close');
+    previewToolbarFullScreenButton = this.mailViewAttachmentViewer.find('button').withAttribute('title', 'Full Screen');
     // Mail Elements - Toolbar
     actionButton = clientName + '_action-button_button';
     actionMenuGroup = clientName + '_action-menu-group_group';

@@ -66,6 +66,16 @@ class Mail {
     	return await elements.mailListPaneSelector.find(elements.messageItem).nth(index).find(elements.mailSubject).innerText;
 	}
 	
+	//close attachment preview full screen
+	async closePreviewFullScreen() {
+		await t.click(elements.overlayView.find('button').withAttribute('title', 'Close'));
+	}
+
+	//select all the mails from mail list toolbar
+	async selectAllMail() {
+		await t.click(elements.mailListHeader.find('input').withAttribute('type', 'checkbox'));
+	}
+	
 	selectMail = (index) => elements.mailListItemMessageSelector.nth(index);
 	getMailCount = () => elements.mailListItemMessageSelector.count;
 	checkMailExists = (text) => elements.mailListItemMessageSelector.withText(text).exists;

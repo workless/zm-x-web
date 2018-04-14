@@ -6,7 +6,7 @@ let fs = require('fs');
 
 export default class Inject {
 
-	async send(userAuth, filename) {
+	async send(userAuth, filename, folder='Inbox') {
 		let cookie = request.cookie(`ZM_AUTH_TOKEN=${userAuth}`);
 		// Set the headers for the request
 		let headers = {
@@ -26,7 +26,7 @@ export default class Inject {
 			if (!error && response.statusCode === 200) {
 				// Print out the response body
 				attachmentID = body.substr(body.indexOf('null')+7,body.lastIndexOf(');') - (body.indexOf('null')+8));
-				soap.addMessage(userAuth,attachmentID);
+				soap.addMessage(userAuth,attachmentID,folder);
 			}
 			else {
 				throw new Error('Error occured in uploading the file' + error);

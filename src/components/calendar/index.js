@@ -15,6 +15,7 @@ import addMilliseconds from 'date-fns/add_milliseconds';
 import { connect } from 'preact-redux';
 import * as calendarActionCreators from '../../store/calendar/actions';
 import { graphql } from 'react-apollo';
+import get from 'lodash/get';
 import flatMap from 'lodash/flatMap';
 import invert from 'lodash/invert';
 import find from 'lodash/find';
@@ -176,7 +177,15 @@ function getDOW({ preferences }) {
 	view: getView(preferencesData)
 }))
 @graphql(CalendarsAndAppointmentsQuery, {
-	name: 'calendarsData',
+	props: ({ data: { getFolder = {}, ...data } }) => ({
+		calendarsData: {
+			...data,
+			calendars: [
+				...(get(getFolder, 'folders.0.folders') || []),
+				...(get(getFolder, 'folders.0.linkedFolders') || [])
+			]
+		}
+	}),
 	options: ({ date, preferencesData, view }) => {
 		if (!preferencesData.preferences) {
 			return { skip: true };
