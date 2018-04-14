@@ -3,6 +3,7 @@ import { Icon, Spinner, Button } from '@zimbra/blocks';
 import { Text } from 'preact-i18n';
 import format from 'date-fns/format';
 import get from 'lodash/get';
+import isSameDay from 'date-fns/is_same_day';
 import style from './style';
 import cx from 'classnames';
 import { graphql } from 'react-apollo';
@@ -18,6 +19,11 @@ export default class CalendarEventDetails extends Component {
 		const inviteComponent = get(appointmentData, 'message.invitations.0.components.0');
 		const excerpt = get(inviteComponent, 'excerpt');
 		const recurrence = get(inviteComponent, 'recurrence.0');
+		const startDate = new Date(event.start);
+		const endDate = new Date(event.end);
+		const dateFormatLeftHandSide = format(startDate, 'ddd, MMM DD, hh:mm A');
+		const dateFormatRightHandSide = format(endDate, `${isSameDay(startDate, endDate) ? '' : 'ddd, MMM DD, '}hh:mm A`);
+
 		return (
 			<div {...props} class={cx(style.eventDetails, props.class)}>
 				<h2>{event.name}</h2>
@@ -27,7 +33,9 @@ export default class CalendarEventDetails extends Component {
 				)}
 
 				<div class={style.time}>
-					<time>{`${format(new Date(event.start), 'ddd, MMM DD, hh:mm A')} - ${format(new Date(event.end), 'hh:mm A')}`}</time>
+					<time>
+						{`${dateFormatLeftHandSide} - ${dateFormatRightHandSide}`}
+					</time>
 					{<Icon size="xs" name={`fa:bell${event.alarm ? '' : '-slash'}`} />}
 				</div>
 
