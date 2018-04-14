@@ -129,7 +129,11 @@ class SavedCalendarEvent extends Component {
 	render({ view, title, event, matchesScreenMd }, { hoverOrigin }) {
 		const start = event.date;
 		return (
-			<div class={style.eventInner} onMouseEnter={matchesScreenMd && this.handleMouseEnter} onClick={this.showEventDetails}>
+			<div
+				class={style.eventInner}
+				onMouseEnter={matchesScreenMd && this.handleMouseEnter}
+				onClick={matchesScreenMd && this.showEventDetails}
+			>
 				{view === VIEW_MONTH && !event.allDay && (
 					<time title={start}>
 						{format(start, 'h:mm A').replace(':00', '')}
