@@ -1,4 +1,5 @@
 import { h } from 'preact';
+import { callWith } from '../../lib/util';
 import { Tooltip, ClickOutsideDetector, Icon } from '@zimbra/blocks';
 import style from './style.less';
 
@@ -9,16 +10,15 @@ export default function HelpTooltip({
 	dismiss,
 	children
 }) {
-	/* eslint-disable react/jsx-no-bind */
+	const visible = tooltipsVisibility[name];
 	return (
-		<ClickOutsideDetector onClickOutside={this.dismiss}>
-			<div class={style.tooltipContainer} onClick={() => toggleTooltip(name)}>
-				<Tooltip class={style.tooltip} visible={tooltipsVisibility[name]}>
+		<ClickOutsideDetector onClickOutside={visible && dismiss}>
+			<div class={style.tooltipContainer} onClick={callWith(toggleTooltip, name)}>
+				<Tooltip class={style.tooltip} visible={visible}>
 					{children}
-					<Icon name="close" class={style.close} onClick={e => dismiss(e)} />
+					<Icon name="close" class={style.close} onClick={dismiss} />
 				</Tooltip>
 			</div>
 		</ClickOutsideDetector>
 	);
-	/* eslint-enable react/jsx-no-bind */
 }
