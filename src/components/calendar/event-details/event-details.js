@@ -26,7 +26,7 @@ export default class CalendarEventDetails extends Component {
 					<div class={style.location}>at {event.location}</div>
 				)}
 
-				<div>
+				<div class={style.time}>
 					<time>{`${format(new Date(event.start), 'ddd, MMM DD, hh:mm A')} - ${format(new Date(event.end), 'hh:mm A')}`}</time>
 					{<Icon size="xs" name={`fa:bell${event.alarm ? '' : '-slash'}`} />}
 				</div>

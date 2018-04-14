@@ -84,15 +84,10 @@ class SavedCalendarEvent extends Component {
 		hoverOrigin: false
 	}
 
-	handleMouseEnter = ({ clientX, clientY }) => {
+	handleMouseEnter = (e) => {
 		if (!this.state.hoverOrigin || !this.timer) {
 			this.timer = setTimeout(() => {
-				this.setState({
-					hoverOrigin: {
-						x: clientX,
-						y: clientY
-					}
-				});
+				this.showEventDetails(e);
 			}, SHOW_EVENT_DETAILS_AFTER_HOVER_DELAY);
 		}
 	}
@@ -112,6 +107,15 @@ class SavedCalendarEvent extends Component {
 		}
 	}, 100)
 
+	showEventDetails = ({ clientX, clientY }) => {
+		this.setState({
+			hoverOrigin: {
+				x: clientX,
+				y: clientY
+			}
+		});
+	}
+
 	hideHoverTooltip = () => this.setState({ hoverOrigin: false })
 
 	componentWillMount() {
@@ -125,7 +129,7 @@ class SavedCalendarEvent extends Component {
 	render({ view, title, event, matchesScreenMd }, { hoverOrigin }) {
 		const start = event.date;
 		return (
-			<div class={style.eventInner} onMouseEnter={matchesScreenMd && this.handleMouseEnter}>
+			<div class={style.eventInner} onMouseEnter={matchesScreenMd && this.handleMouseEnter} onClick={this.showEventDetails}>
 				{view === VIEW_MONTH && !event.allDay && (
 					<time title={start}>
 						{format(start, 'h:mm A').replace(':00', '')}

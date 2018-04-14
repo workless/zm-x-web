@@ -20,6 +20,7 @@
 }
 
 // ./event-details.js
+@line-spacing: 8px;
 .eventDetails {
 	max-width: 450px;
 
@@ -37,19 +38,25 @@
 
 	.location {
 		font-weight: normal;
-		margin-bottom: 8px;
+		margin-bottom: @line-spacing;
+	}
+
+	.time {
+		span[role="img"] {
+			margin: 0 0 0 8px;
+		}
 	}
 
 	.organizer {
-		margin-top: 8px;
+		margin-top: @line-spacing;
 	}
 
 	> hr {
-		margin: 12px 0 12px 0;
+		margin: calc(@line-spacing * 1.5) 0;
 	}
 
 	.parentCalendar, .flags {
-		margin: 0 0 8px 0;
+		margin: 0 0 @line-spacing 0;
 		padding: 0;
 
 		li {
@@ -76,6 +83,7 @@
 		margin: 0 0 20px 0;
 		max-width: 100%;
 		white-space: normal;
+		line-height: 1.3;
 	}
 }
 
