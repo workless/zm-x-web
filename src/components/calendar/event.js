@@ -10,7 +10,7 @@ import { hexToRgb } from '../../lib/util';
 
 import style from './style';
 
-const SHOW_EVENT_DETAILS_AFTER_HOVER_DELAY = 2000;
+const SHOW_EVENT_DETAILS_AFTER_HOVER_DELAY = 1000;
 
 function styledGradientBackground(color, freeBusy) {
 	if (!(freeBusy === 'T' || freeBusy === 'F')) { return {}; }
