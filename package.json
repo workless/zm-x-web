@@ -5,8 +5,6 @@
   "main": "build/bundle.js",
   "module": "src/index.js",
   "scripts": {
-    "apollo-codegen:watch": "nodemon -e graphql -x \"npm run apollo-codegen\"",
-    "apollo-codegen": "./scripts/apollo-codegen.js",
     "build": "webpack -p && npm run build:netlify",
     "build:dev": "webpack",
     "build:netlify": "node packages/static-app-to-netlify",
@@ -35,7 +33,6 @@
   ],
   "license": "GPL-3.0",
   "devDependencies": {
-    "apollo-codegen": "^0.19.0",
     "axe-testcafe": "^1.1.0",
     "babel-eslint": "=8.2.1",
     "chalk": "^2.0.1",
