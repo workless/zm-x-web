@@ -68,6 +68,8 @@ export default class RichTextArea extends Component {
 	}
 
 	updatePlaceholderSync = () => {
+		if (!this.mounted) { return; }
+
 		if (!this.base.textContent && !HIDE_PLACEHOLDER_REGEX.test(this.base.innerHTML)) {
 			this.base.setAttribute('data-empty', '');
 		}
@@ -165,6 +167,7 @@ export default class RichTextArea extends Component {
 	}
 
 	componentDidMount() {
+		this.mounted = true;
 		if (this.props.value || this.props.stylesheet) {
 			this.setContent(this.getResolvedValue(this.props));
 		}
@@ -183,11 +186,7 @@ export default class RichTextArea extends Component {
 	}
 
 	componentWillUnmount() {
-		let child;
-		while ((child = this.base.lastChild)) {
-			this.base.removeChild(child);
-		}
-
+		this.mounted = false;
 		document.removeEventListener('selectionchange', this.handleSelectionChange);
 	}
 
