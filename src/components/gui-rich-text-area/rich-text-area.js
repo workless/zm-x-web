@@ -136,22 +136,6 @@ export default class RichTextArea extends Component {
 		}
 	};
 
-	// Creates a safe wrapper around a document command
-	createCommandProxy = type => (...args) => {
-		try {
-			return document[type](...args);
-		}
-		catch (err) {
-			if (process.env.NODE_ENV !== 'production') {
-				console.error(`document.${type}(${args.join(', ')}) ERR:`, err);
-			}
-		}
-	};
-
-	execCommand = this.createCommandProxy('execCommand');
-	queryCommandState = this.createCommandProxy('queryCommandState');
-	queryCommandValue = this.createCommandProxy('queryCommandValue');
-
 	getDocument() {
 		let { base } = this;
 		if (base.body==null) {

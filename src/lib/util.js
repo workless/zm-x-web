@@ -212,6 +212,34 @@ export function hasCommonSubstr(keywords, target, caseSensitive) {
 	return false;
 }
 
+function decimalToHex(decimal) {
+	let BGRString = decimal.toString(16); //this is in brg format instead of rgb
+	if (BGRString.length < 6) {
+		BGRString = `${Array(6 - BGRString.length + 1).join('0')}` + BGRString;
+	}
+
+	let colorParts = BGRString.match(/.{1,2}/g);
+	return '#' + colorParts.reverse().join('');
+}
+
+// color => Decimal in IE, rgb()/rgba() in modern browsers
+export function colorCodeToHex(color) {
+	if (!isNaN(color)) return decimalToHex(color);
+
+	let rgb = color.toString().match(/\d+/g);
+	if (rgb && rgb.length === 4 && parseInt(rgb[3], 10) === 0) {
+		return 'transparent';
+	}
+
+	return rgb && rgb.length > 2
+		? '#' +
+			('0' + parseInt(rgb[0], 10).toString(16)).slice(-2) +
+			('0' + parseInt(rgb[1], 10).toString(16)).slice(-2) +
+			('0' + parseInt(rgb[2], 10).toString(16)).slice(-2)
+		: 'transparent';
+}
+
+
 export function hexToRgb(hex) {
 	// Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
 	let shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;

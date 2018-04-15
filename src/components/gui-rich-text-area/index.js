@@ -19,10 +19,11 @@ import { KeyCodes, AffixBottom } from '@zimbra/blocks';
 import RichTextArea from './rich-text-area';
 import style from './style';
 import cx from 'classnames';
+import * as documentCommands from '../../utils/rich-text-area';
+import { MAX_RANGE_REUSES, WATCH_COMMAND_STATE_PROPERTIES } from '../../constants/rich-text-area';
 import { findAnchorTagInSelection, replaceWordBeforeCursor } from '../../lib/html-email';
 import { LinkEditorDialog } from './components/link-editor-dialog';
 
-const MAX_RANGE_REUSES = 3;
 
 @connect(({ dragdrop }) => ({
 	draggingData: dragdrop.data,
@@ -30,37 +31,21 @@ const MAX_RANGE_REUSES = 3;
 }), { clearDragData, setDragging }, undefined, { withRef: true })
 export default class GuiRichTextArea extends PureComponent {
 	currLinkId = 0;
-	state = {
-		commandState: {
-			bold: false,
-			italic: false,
-			underline: false
-		}
-	}
+
 	exec = (command, ...args) => {
-		const { rte } = this.refs;
-		let commandName = args[0] || '';
-		let isTextCommand = [ 'bold', 'italic', 'underline', 'fontSize', 'fontName' ].indexOf(commandName) !== -1;
-		this.focus();
-		if (rte) {
-			let execResult = rte[command](...args);
-			// For IE as it doesn't trigger onInput
-			if (isTextCommand) this.setCommandState();
+		if (this.refs.rte) {
+			let commandName = args[0] || '';
+			this.focus();
+
+			let execResult = documentCommands[command](...args);
+			if (WATCH_COMMAND_STATE_PROPERTIES.indexOf(commandName) !== -1) this.setCommandState();
 			return execResult;
 		}
 	};
 
 	setCommandState = debounce(() => {
-		const { queryCommandState, queryCommandValue } = this.refs.rte;
-
 		this.setState({
-			commandState: {
-				fontSize: queryCommandValue('fontSize'),
-				fontName: queryCommandValue('fontName'),
-				bold: queryCommandState('bold'),
-				italic: queryCommandState('italic'),
-				underline: queryCommandState('underline')
-			}
+			commandState: documentCommands.getCommandState()
 		});
 	}, 100)
 

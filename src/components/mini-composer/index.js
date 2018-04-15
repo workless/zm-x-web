@@ -5,10 +5,10 @@ import debounce from '@zimbra/util/src/debounce';
 import composerStyle from '../composer/style';
 import styles from './style';
 import SimpleToolbar from '../gui-rich-text-area/components/toolbar/simple-toolbar';
+import * as documentCommands from '../../utils/rich-text-area';
+import { MAX_RANGE_REUSES, WATCH_COMMAND_STATE_PROPERTIES } from '../../constants/rich-text-area';
 import RichTextArea from '../gui-rich-text-area/rich-text-area';
 import { getId } from '../../lib/util';
-
-const MAX_RANGE_REUSES = 3;
 
 export default class MiniComposer extends Component {
 	state = {
@@ -22,14 +22,12 @@ export default class MiniComposer extends Component {
 	};
 
 	exec = (command, ...args) => {
-		const { rte } = this.refs;
-		let commandName = args[0];
-		let isTextCommand = [ 'bold', 'italic', 'underline', 'fontSize', 'fontName' ].indexOf(commandName) !== -1;
-		this.focus();
-		if (rte) {
-			let execResult = rte[command](...args);
-			// For IE as it doesn't trigger onInput
-			if (isTextCommand) this.setCommandState();
+		if (this.refs.rte) {
+			let commandName = args[0];
+			this.focus();
+
+			let execResult = documentCommands[command](...args);
+			if (WATCH_COMMAND_STATE_PROPERTIES.indexOf(commandName) !== -1) this.setCommandState();
 			return execResult;
 		}
 	};
@@ -118,16 +116,8 @@ export default class MiniComposer extends Component {
 	};
 
 	setCommandState = debounce(() => {
-		const { queryCommandState, queryCommandValue } = this.refs.rte;
-
 		this.setState({
-			commandState: {
-				fontSize: queryCommandValue('fontSize'),
-				fontName: queryCommandValue('fontName'),
-				bold: queryCommandState('bold'),
-				italic: queryCommandState('italic'),
-				underline: queryCommandState('underline')
-			}
+			commandState: documentCommands.getCommandState()
 		});
 	}, 100)
 
