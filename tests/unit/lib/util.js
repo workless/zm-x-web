@@ -43,10 +43,11 @@ describe('util', () => {
 
 	describe('capitalizeFirstLetter', () => {
 		it('should capitalize the first letter of a sentence', () => {
-			[ 'one', 'two', 'Three', 'Four', 'five' ].map(capitalizeFirstLetter).forEach((word, index, arr) => {
-				const uncapitalizedWord = arr[index];
-				expect(word[0]).to.equal(uncapitalizedWord[0].toUpperCase());
-				expect(word.slice(0, -1)).to.equal(uncapitalizedWord.slice(0, -1));
+			const expected = [ 'One', 'Two', 'Three DIFFERENT words', 'Four Words', 'Five words' ];
+			const actual = [ 'one', 'two', 'Three DIFFERENT words', 'Four Words', 'five words' ].map(capitalizeFirstLetter);
+
+			actual.forEach((actualWord, index) => {
+				expect(actualWord).to.equal(expected[index]);
 			});
 		});
 	});
