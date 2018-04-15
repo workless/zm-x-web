@@ -1,8 +1,6 @@
 import { h, Component } from 'preact';
-import { Icon } from '@zimbra/blocks';
 import { Text, Localizer } from 'preact-i18n';
-import cx from 'classnames';
-import styles from './style';
+import ToolbarButton from './toolbar-button';
 
 export class CommandButton extends Component {
 	handleClick = e => {
@@ -27,15 +25,15 @@ export class CommandButton extends Component {
 	render({ label, command, commandState = {}, icon, style, title, ...props }) {
 		return (
 			<Localizer>
-				<button
-					class={cx(styles.toolbarButton, props.class, commandState[command] && styles.active, props.class)}
-					onClick={this.handleClick}
-					style={style}
+				<ToolbarButton
+					{...props}
 					title={<Text id={`compose.toolbar.${title || command}`} />}
+					active={commandState[command]}
+					onClick={this.handleClick}
+					icon={icon}
 				>
-					{icon && <Icon name={icon} />}
 					{label}
-				</button>
+				</ToolbarButton >
 			</Localizer>
 		);
 	}

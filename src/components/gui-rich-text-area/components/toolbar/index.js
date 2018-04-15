@@ -1,9 +1,11 @@
 import { h } from 'preact';
+import { Text } from 'preact-i18n';
 import { MediaMenuButton } from '../../../media-menu';
 import { ContainerSize } from '@zimbra/blocks';
 import PureComponent from '../../../../lib/pure-component';
 import { TEXT_MODE } from '../../../../constants/composer';
 import { TABS as MEDIA_MENU_TABS, WEB_LINKS } from '../../../../store/media-menu/constants';
+import ZimletSlot from '../../../zimlet-slot';
 
 import get from 'lodash-es/get';
 import cx from 'classnames';
@@ -228,18 +230,24 @@ export default class Toolbar extends PureComponent {
 						<div class={styles.left}>
 							<SendButton onClick={onSend} disabled={isSendInProgress} />
 							<div class={styles.middle} ref={linkref(this, 'middle')}>
-								{ isPlainText ? (
-									this.renderCommand(this.commands[0])
-								) : collapsed ? ([
-									...this.commands.slice(0, collapseRange[0]).map(this.renderCommand),
-									<CollapsedSubmenu
-										commands={this.commands.slice(collapseRange[0], collapseRange[1])}
-										renderCommand={this.renderCommand}
-									/>,
-									...this.commands.slice(collapseRange[1]).map(this.renderCommand)
-								]) : (
-									this.commands.map(this.renderCommand)
-								)}
+								<ZimletSlot name="richtextarea-toolbar">
+									{(zimletResponses) => (
+										<span>
+											{zimletResponses}
+											{isPlainText ? (
+												this.renderCommand(this.commands[0])
+											) : collapsed ? ([
+												...this.commands.slice(0, collapseRange[0]).map(this.renderCommand),
+												<CollapsedSubmenu text="A̲" tooltip={<Text id={`compose.toolbar.collapsedTitle`} />}>
+													{this.commands.slice(collapseRange[0], collapseRange[1]).map(this.renderCommand)}
+												</CollapsedSubmenu>,
+												...this.commands.slice(collapseRange[1]).map(this.renderCommand)
+											]) : (
+												this.commands.map(this.renderCommand)
+											)}
+										</span>
+									)}
+								</ZimletSlot>
 								{ !isPlainText && <EmojiMenu onEmojiSelect={onEmojiSelect} />}
 								<ToggleTextModeButton isPlainText={isPlainText} onClick={onToggleTextMode} />
 								<TrashButton onClick={onDelete} />

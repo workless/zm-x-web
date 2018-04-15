@@ -28,6 +28,10 @@ import DraggableCard from '../../components/draggable-card';
 import ContextMenu from '../../components/context-menu';
 import ActionMenu, { DropDownWrapper } from '../../components/action-menu';
 
+// For rich text area toolbar
+import ToolbarButton from '../../components/gui-rich-text-area/components/toolbar/toolbar-button';
+import CollapsedSubmenu from '../../components/gui-rich-text-area/components/toolbar/collapsed-submenu';
+
 let components = {
 	...allBlocks,
 	MenuItem,
@@ -46,7 +50,9 @@ let components = {
 	ActionMenuItem,
 	ActionMenuGroup,
 	DraggableCard,
-	ContextMenu
+	ContextMenu,
+	ToolbarButton,
+	CollapsedSubmenu
 };
 
 const SHOW_ZIMLETS_URL_FLAG= /[?&#]zimletSlots=show(?:&|$)/;
