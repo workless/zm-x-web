@@ -6,7 +6,7 @@ import composerStyle from '../composer/style';
 import styles from './style';
 import SimpleToolbar from '../gui-rich-text-area/components/toolbar/simple-toolbar';
 import * as documentCommands from '../../utils/rich-text-area';
-import { MAX_RANGE_REUSES, WATCH_COMMAND_STATE_PROPERTIES } from '../../constants/rich-text-area';
+import { WATCH_COMMAND_STATE_PROPERTIES } from '../../constants/rich-text-area';
 import RichTextArea from '../gui-rich-text-area/rich-text-area';
 import { getId } from '../../lib/util';
 
@@ -17,7 +17,7 @@ export default class MiniComposer extends Component {
 
 	focus = () => {
 		if (this.refs && this.refs.rte) {
-			this.restoreRange();
+			this.refs.rte.focus();
 		}
 	};
 
@@ -71,25 +71,6 @@ export default class MiniComposer extends Component {
 		this.props.onClick && this.props.onClick(e);
 	};
 
-	saveRange = () => {
-		let selection = window.getSelection();
-		if (selection.getRangeAt && selection.rangeCount) {
-			this.range = selection.getRangeAt(0);
-			this.rangeUses = 0;
-		}
-	};
-
-	restoreRange = () => {
-		this.refs.rte.focus();
-		// As a failsafe, only reuse the same saved range up to 3 times.
-		if (this.range && this.rangeUses < MAX_RANGE_REUSES) {
-			let selection = window.getSelection();
-			selection.removeAllRanges();
-			selection.addRange(this.range);
-			this.rangeUses++;
-		}
-	};
-
 	/** Set up the editor based on incoming props
 	 *	@param {Message} props.message
 	 */
@@ -110,10 +91,6 @@ export default class MiniComposer extends Component {
 			});
 		}
 	}
-
-	handleBlur = () => {
-		this.saveRange();
-	};
 
 	setCommandState = debounce(() => {
 		this.setState({
@@ -140,12 +117,9 @@ export default class MiniComposer extends Component {
 						<RichTextArea
 							ref={linkref(this, 'rte')}
 							class={composerStyle.editor}
-							onBlur={this.handleBlur}
 							onClick={this.handleClick}
 							onInput={this.handleInput}
 							onChange={this.handleChange}
-							onBeforeDeactivate={this.saveRange}
-							onActivate={this.restoreRange}
 							value={body}
 						/>
 					</div>

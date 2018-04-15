@@ -1,5 +1,6 @@
 import { h, Component } from 'preact';
 import { moveSelectionOutOfNonEditableArea } from '../../lib/html-email';
+import { MAX_RANGE_REUSES } from '../../constants/rich-text-area';
 import sanitize, { doSanitize } from '../../lib/html-viewer/sanitize';
 import { ensureCssReset } from '../../lib/html-viewer';
 
@@ -22,30 +23,45 @@ export default class RichTextArea extends Component {
 
 	focus = () => {
 		this.base.focus();
-
-		let selection = getSelection(),
-			range = selection.rangeCount && selection.getRangeAt(0),
-			parent = range ? range.commonAncestorContainer : selection.anchorNode;
-		if (parent==null || (parent!==this.base && !this.base.contains(parent))) {
-			selection.removeAllRanges();
-			range = document.createRange();
-			range.setStartAfter(this.base.lastChild);
-			range.collapse(true);
-			selection.addRange(range);
-			this.base.focus();
-		}
+		this.restoreRange();
 	};
 
 	blur = () => {
+		this.saveRange();
 		this.base.blur();
 	};
 
-	handleSelectionChange = () => {
+	restoreRange = () => {
+		this.base.focus();
+		// As a failsafe, only reuse the same saved range up to 3 times.
+		if (this.range && this.rangeUses < MAX_RANGE_REUSES) {
+			let selection = window.getSelection();
+			selection.removeAllRanges();
+			selection.addRange(this.range);
+			this.rangeUses++;
+		}
+	};
+
+	saveRange = () => {
+		let selection = window.getSelection();
+		if (selection.getRangeAt && selection.rangeCount) {
+			this.range = selection.getRangeAt(0);
+			this.rangeUses = 0;
+		}
+	};
+
+	handleSelectionChange = (e) => {
 		moveSelectionOutOfNonEditableArea(this.base);
+
+		if (e.target.activeElement === this.base) {
+			// Always save the range after selection changes inside base
+			this.saveRange();
+		}
 	}
 
-	handleFocus = (e) => {
-		moveSelectionOutOfNonEditableArea(this.base);
+	handleFocusIn = (e) => {
+		// moveSelectionOutOfNonEditableArea(this.base);
+		this.restoreRange();
 		this.handleEvent(e);
 	}
 
@@ -198,7 +214,7 @@ export default class RichTextArea extends Component {
 				{...props}
 				contentEditable
 				data-css-reset={resetId}
-				onFocus={this.handleFocus}
+				onFocusIn={this.handleFocusIn}
 				onInput={this.handleEvent}
 				onKeyDown={this.handleEvent}
 				onKeyUp={this.handleEvent}

@@ -20,7 +20,7 @@ import RichTextArea from './rich-text-area';
 import style from './style';
 import cx from 'classnames';
 import * as documentCommands from '../../utils/rich-text-area';
-import { MAX_RANGE_REUSES, WATCH_COMMAND_STATE_PROPERTIES } from '../../constants/rich-text-area';
+import { WATCH_COMMAND_STATE_PROPERTIES } from '../../constants/rich-text-area';
 import { findAnchorTagInSelection, replaceWordBeforeCursor } from '../../lib/html-email';
 import { LinkEditorDialog } from './components/link-editor-dialog';
 
@@ -52,47 +52,13 @@ export default class GuiRichTextArea extends PureComponent {
 	getBase = () => this.base
 	getEditorBase = () => this.refs.rte.getBase();
 
-	saveRange = () => {
-		let selection = window.getSelection();
-		if (selection.getRangeAt && selection.rangeCount) {
-			this.range = selection.getRangeAt(0);
-			this.rangeUses = 0;
-		}
-	}
-
-	restoreRange = () => {
-		this.refs.rte.focus();
-		// As a failsafe, only reuse the same saved range up to 3 times.
-		if (this.range && this.rangeUses<MAX_RANGE_REUSES) {
-			let selection = window.getSelection();
-			selection.removeAllRanges();
-			selection.addRange(this.range);
-			this.rangeUses++;
-		}
-	}
-
 	getDocument() {
 		return this.refs.rte.getDocument();
 	}
 
-	handleFocus = (e) => {
-		this.restoreRange();
-		if (this.props.onFocus) {
-			this.props.onFocus(e);
-		}
-	};
-
-	handleSelectionChange = (e) => {
-		// TODO: Range handling should most likely be moving into the core RichTextEditor
-		if (e.target.activeElement === this.refs.rte.getBase()) {
-			// Always save the range after it changes inside the RichTextEditor
-			this.saveRange();
-		}
-	}
-
 	focus = () => {
 		if (this.refs && this.refs.rte) {
-			this.restoreRange();
+			this.refs.rte.focus();
 		}
 	};
 
@@ -298,7 +264,7 @@ export default class GuiRichTextArea extends PureComponent {
 	// LINK TAG FUNCTIONALITY
 	addOrUpdateLink = ({ url, text }) => {
 		let { editedLink } = this.state;
-		this.restoreRange();
+		this.focus();
 
 		if (editedLink) {
 			this.updateLink(editedLink, { url, text });
@@ -361,7 +327,7 @@ export default class GuiRichTextArea extends PureComponent {
 
 	// LINK EDITOR DIALOG
 	showLinkEditorDialog = ({ url, text, editedLink } = {}) => {
-		this.restoreRange();
+		this.focus();
 		if (!text) text = this.getSelectedText();
 		if (!url) {
 			let selection = window.getSelection();
@@ -415,18 +381,10 @@ export default class GuiRichTextArea extends PureComponent {
 	//i.e. don't replace it twice
 	linkReplacePredicate = (url) => (!isValidURL(url) || findAnchorTagInSelection(window)) ? false : { url }
 
-	componentWillMount() {
-		document.addEventListener('selectionchange', this.handleSelectionChange);
-	}
-
 	componentWillReceiveProps({ draggingData }) {
 		if (this.props.draggingData !== draggingData) {
 			this.props.setDragging && this.props.setDragging(typeof draggingData !== 'undefined');
 		}
-	}
-
-	componentWillUnmount() {
-		document.removeEventListener('selectionchange', this.handleSelectionChange);
 	}
 
 	render(
@@ -462,7 +420,6 @@ export default class GuiRichTextArea extends PureComponent {
 					<RichTextArea
 						{...props}
 						ref={linkref(this, 'rte')}
-						onFocus={this.handleFocus}
 						onClick={this.handleClick}
 						onMouseUp={this.setCommandState}
 						onKeyUp={this.handleKeyUp}
