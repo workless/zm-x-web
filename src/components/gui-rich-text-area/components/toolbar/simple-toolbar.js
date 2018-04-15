@@ -1,7 +1,5 @@
 import { h } from 'preact';
 import { ContainerSize } from '@zimbra/blocks';
-import { Text } from 'preact-i18n';
-import format from 'date-fns/format';
 import PureComponent from '../../../../lib/pure-component';
 import {
 	TABS as MEDIA_MENU_TABS,
@@ -14,6 +12,9 @@ import styles from './style';
 
 import { MY_COMPUTER } from './attachment-menu-options';
 import { INSERT_LINK, generateInsertLinkMenu } from './link-menu-options';
+import { TrashButton } from './buttons';
+import { SavedAt } from './labels';
+import { generateCommand } from './utils';
 
 import { generateFontMenu } from './font-menu-options';
 import { generateColorMenu } from './color-menu-options';
@@ -22,87 +23,71 @@ import linkref from 'linkref';
 import { SplitPaneMenu } from './split-pane-menu';
 import { SelectMenu } from './select-menu';
 import { CommandButton } from './command-button';
-
-export const COMMAND_TYPE = {
-	MENU: 'menu',
-	COLOR: 'color',
-	NORMAL: 'normal',
-	TOGGLE: 'toggle',
-	LINK: 'link',
-	ATTACHMENT: 'attachment'
-};
-
-let cmd = (icon, command, type, extra = {}) => ({
-	name,
-	icon,
-	command,
-	type,
-	...extra
-});
+import { COMMAND_TYPE } from './constants';
 
 export default class SimpleToolbar extends PureComponent {
 	commands = [
-		generateFontMenu(cmd, this.props),
-		cmd('bold', 'bold', COMMAND_TYPE.TOGGLE, {
+		generateFontMenu(),
+		generateCommand('bold', 'bold', COMMAND_TYPE.TOGGLE, {
 			watch: true,
 			title: 'titleBold'
 		}),
-		cmd('italic', 'italic', COMMAND_TYPE.TOGGLE, {
+		generateCommand('italic', 'italic', COMMAND_TYPE.TOGGLE, {
 			watch: true,
 			title: 'titleItalic'
 		}),
-		cmd('underline', 'underline', COMMAND_TYPE.TOGGLE, {
+		generateCommand('underline', 'underline', COMMAND_TYPE.TOGGLE, {
 			watch: true,
 			title: 'titleUnderline'
 		}),
-		generateColorMenu(cmd, this.props),
-		cmd('list-ul', null, COMMAND_TYPE.MENU, {
+		generateColorMenu(),
+		generateCommand('list-ul', null, COMMAND_TYPE.MENU, {
 			title: 'listsTitle',
 			submenu: [
 				{
 					iconMenu: true,
 					menuItems: [
-						cmd(null, 'insertunorderedlist', COMMAND_TYPE.TOGGLE, {
+						generateCommand(null, 'insertunorderedlist', COMMAND_TYPE.TOGGLE, {
 							icon: 'list-ul'
 						}),
-						cmd(null, 'insertorderedlist', COMMAND_TYPE.TOGGLE, {
+						generateCommand(null, 'insertorderedlist', COMMAND_TYPE.TOGGLE, {
 							icon: 'list-ol'
 						})
 					]
 				}
 			]
 		}),
-		cmd('indent ', null, COMMAND_TYPE.MENU, {
+		generateCommand('indent ', null, COMMAND_TYPE.MENU, {
 			title: 'indentationTitle',
 			submenu: [
 				{
 					iconMenu: true,
 					menuItems: [
-						cmd(null, 'indent', COMMAND_TYPE.NORMAL, {
+						generateCommand(null, 'indent', COMMAND_TYPE.NORMAL, {
 							icon: 'indent'
 						}),
-						cmd(null, 'outdent', COMMAND_TYPE.NORMAL, {
+						generateCommand(null, 'outdent', COMMAND_TYPE.NORMAL, {
 							icon: 'outdent'
 						})
 					]
 				}
 			]
 		}),
-		cmd('align-left ', null, 'menu', {
+		generateCommand('align-left ', null, 'menu', {
 			title: 'alignmentTitle',
 			submenu: [
 				{
 					iconMenu: true,
 					menuItems: [
-						cmd(null, 'justifyLeft', COMMAND_TYPE.NORMAL, {
+						generateCommand(null, 'justifyLeft', COMMAND_TYPE.NORMAL, {
 							icon: 'align-left',
 							value: true
 						}),
-						cmd(null, 'justifyCenter', COMMAND_TYPE.NORMAL, {
+						generateCommand(null, 'justifyCenter', COMMAND_TYPE.NORMAL, {
 							icon: 'align-center',
 							value: true
 						}),
-						cmd(null, 'justifyRight', COMMAND_TYPE.NORMAL, {
+						generateCommand(null, 'justifyRight', COMMAND_TYPE.NORMAL, {
 							icon: 'align-right',
 							value: true
 						})
@@ -110,7 +95,7 @@ export default class SimpleToolbar extends PureComponent {
 				}
 			]
 		}),
-		generateInsertLinkMenu(cmd)
+		generateInsertLinkMenu()
 	];
 
 	// The number of buttons in the "middle" element
@@ -248,25 +233,4 @@ export default class SimpleToolbar extends PureComponent {
 			</div>
 		);
 	}
-}
-
-function SavedAt({ date }) {
-	return (
-		date && (
-			<span class={styles.saved}>
-				<Text id="composer.SAVED" fields={{ time: format(date, 'h:mm A') }} />
-			</span>
-		)
-	);
-}
-
-function TrashButton(props) {
-	return (
-		<CommandButton
-			{...props}
-			title="deleteDraft"
-			class={cx(styles.delete, props.class)}
-			icon="trash"
-		/>
-	);
 }

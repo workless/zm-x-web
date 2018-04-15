@@ -1,8 +1,6 @@
 import { h } from 'preact';
 import { MediaMenuButton } from '../../../media-menu';
-import { Button, Spinner, ContainerSize } from '@zimbra/blocks';
-import { Text } from 'preact-i18n';
-import format from 'date-fns/format';
+import { ContainerSize } from '@zimbra/blocks';
 import PureComponent from '../../../../lib/pure-component';
 import { TEXT_MODE } from '../../../../constants/composer';
 import { TABS as MEDIA_MENU_TABS, WEB_LINKS } from '../../../../store/media-menu/constants';
@@ -13,6 +11,9 @@ import styles from './style';
 
 import { MY_COMPUTER, generateAttachmentMenu } from './attachment-menu-options';
 import { INSERT_LINK, generateInsertLinkMenu } from './link-menu-options';
+import { ToggleTextModeButton, TrashButton, SendButton } from './buttons';
+import { SavedAt } from './labels';
+import { generateCommand } from './utils';
 
 import { generateFontMenu } from './font-menu-options';
 import { generateColorMenu } from './color-menu-options';
@@ -23,17 +24,7 @@ import { SplitPaneMenu } from './split-pane-menu';
 import { SelectMenu } from './select-menu';
 import { CommandButton } from './command-button';
 import { EmojiMenu } from './emoji';
-
-export const COMMAND_TYPE = {
-	MENU: 'menu',
-	COLOR: 'color',
-	NORMAL: 'normal',
-	TOGGLE: 'toggle',
-	LINK: 'link',
-	ATTACHMENT: 'attachment'
-};
-
-let cmd = (icon, command, type, extra={}) => ({ name, icon, command, type, ...extra });
+import { COMMAND_TYPE } from './constants';
 
 export default class Toolbar extends PureComponent {
 	static defaultProps = {
@@ -41,19 +32,19 @@ export default class Toolbar extends PureComponent {
 	}
 
 	commands = [
-		generateAttachmentMenu(cmd, this.props),
-		generateFontMenu(cmd, this.props),
-		cmd('bold', 'bold', COMMAND_TYPE.TOGGLE, { watch: true, title: 'titleBold' }),
-		cmd('italic', 'italic', COMMAND_TYPE.TOGGLE, { watch: true, title: 'titleItalic' }),
-		cmd('underline', 'underline', COMMAND_TYPE.TOGGLE, { watch: true, title: 'titleUnderline' }),
-		generateColorMenu(cmd, this.props),
-		cmd('list-ul', null, COMMAND_TYPE.MENU, {
+		generateAttachmentMenu(),
+		generateFontMenu(),
+		generateCommand('bold', 'bold', COMMAND_TYPE.TOGGLE, { watch: true, title: 'titleBold' }),
+		generateCommand('italic', 'italic', COMMAND_TYPE.TOGGLE, { watch: true, title: 'titleItalic' }),
+		generateCommand('underline', 'underline', COMMAND_TYPE.TOGGLE, { watch: true, title: 'titleUnderline' }),
+		generateColorMenu(),
+		generateCommand('list-ul', null, COMMAND_TYPE.MENU, {
 			title: 'listsTitle',
 			submenu: [
 				{
 					iconMenu: true,
 					menuItems: [
-						cmd(
+						generateCommand(
 							null,
 							'insertunorderedlist',
 							COMMAND_TYPE.TOGGLE,
@@ -61,7 +52,7 @@ export default class Toolbar extends PureComponent {
 								icon: 'list-ul'
 							}
 						),
-						cmd(
+						generateCommand(
 							null,
 							'insertorderedlist',
 							COMMAND_TYPE.TOGGLE,
@@ -73,18 +64,18 @@ export default class Toolbar extends PureComponent {
 				}
 			]
 		}),
-		cmd('indent ', null, COMMAND_TYPE.MENU, {
+		generateCommand('indent ', null, COMMAND_TYPE.MENU, {
 			title: 'indentationTitle',
 			submenu: [
 				{
 					iconMenu: true,
 					menuItems: [
-						cmd(null, 'indent', COMMAND_TYPE.NORMAL,
+						generateCommand(null, 'indent', COMMAND_TYPE.NORMAL,
 							{
 								icon: 'indent'
 							}
 						),
-						cmd(null, 'outdent', COMMAND_TYPE.NORMAL,
+						generateCommand(null, 'outdent', COMMAND_TYPE.NORMAL,
 							{
 								icon: 'outdent'
 							}
@@ -93,25 +84,25 @@ export default class Toolbar extends PureComponent {
 				}
 			]
 		}),
-		cmd('align-left ', null, 'menu', {
+		generateCommand('align-left ', null, 'menu', {
 			title: 'alignmentTitle',
 			submenu: [
 				{
 					iconMenu: true,
 					menuItems: [
-						cmd(null, 'justifyLeft', COMMAND_TYPE.NORMAL,
+						generateCommand(null, 'justifyLeft', COMMAND_TYPE.NORMAL,
 							{
 								icon: 'align-left',
 								value: true
 							}
 						),
-						cmd(null, 'justifyCenter', COMMAND_TYPE.NORMAL,
+						generateCommand(null, 'justifyCenter', COMMAND_TYPE.NORMAL,
 							{
 								icon: 'align-center',
 								value: true
 							}
 						),
-						cmd(null, 'justifyRight', COMMAND_TYPE.NORMAL,
+						generateCommand(null, 'justifyRight', COMMAND_TYPE.NORMAL,
 							{
 								icon: 'align-right',
 								value: true
@@ -121,7 +112,7 @@ export default class Toolbar extends PureComponent {
 				}
 			]
 		}),
-		generateInsertLinkMenu(cmd)
+		generateInsertLinkMenu()
 	]
 
 	// The number of buttons in the "middle" element
@@ -268,42 +259,3 @@ export default class Toolbar extends PureComponent {
 	}
 }
 
-function SavedAt({ date }) {
-	return date && (
-		<span class={styles.saved}>
-			<Text id="composer.SAVED" fields={{ time: format(date, 'h:mm A') }} />
-		</span>
-	);
-}
-
-function ToggleTextModeButton({ isPlainText, ...props }) {
-	return (
-		<CommandButton
-			{...props}
-			title={`togglePlaintext.${String(Boolean(isPlainText))}`}
-			icon={`angle-double-${isPlainText ? 'right': 'left'}`}
-		/>
-	);
-}
-
-function TrashButton(props) {
-	return (
-		<CommandButton
-			{...props}
-			title="deleteDraft"
-			class={cx(styles.delete, props.class)}
-			icon="trash"
-		/>
-	);
-}
-
-function SendButton({ disabled, ...props }) {
-	return (
-		<Button {...props} class={cx(styles.send, props.class)} disabled={disabled}>
-			<Text id="buttons.send" />
-			<span>
-				{ disabled && <Spinner dark /> }
-			</span>
-		</Button>
-	);
-}

@@ -1,7 +1,7 @@
-import { COMMAND_TYPE } from './index';
+import { COMMAND_TYPE } from './constants';
+import { generateCommand } from './utils';
 import cx from 'classnames';
 import styles from './style';
-import { colorCodeToHex } from '../../../../lib/util';
 
 export const COLORS =  [
 	'#000000', '#888888', '#ffffff',
@@ -16,20 +16,16 @@ export const COLORS =  [
 
 const HILIGHT_SUPPORTED = document.queryCommandSupported('hilitecolor');
 
-export function generateColorMenu(cmd, { exec }) {
-	return cmd('adn', null, COMMAND_TYPE.MENU, {
+export function generateColorMenu() {
+	return generateCommand('adn', null, COMMAND_TYPE.MENU, {
 		watch: true,
 		title: 'colorTitle',
 		submenu: [
 			{
 				heading: 'headingText',
 				command: 'forecolor',
-				getCurrentValue: () => {
-					let currentColor = exec('queryCommandValue', 'forecolor') || 'rgb(0,0,0)';
-					return colorCodeToHex(currentColor);
-				},
 				class: styles.colorMenu,
-				menuItems: COLORS.map(color => cmd(
+				menuItems: COLORS.map(color => generateCommand(
 					null,
 					'forecolor',
 					COMMAND_TYPE.COLOR,
@@ -44,15 +40,7 @@ export function generateColorMenu(cmd, { exec }) {
 				heading: 'headingHighlight',
 				command: 'hilitecolor',
 				class: styles.colorMenu,
-				getCurrentValue: () => {
-					let currentColor = exec('queryCommandValue', 'hilitecolor') ||
-										exec('queryCommandValue', 'backColor');
-					// Default to transparent
-					if (currentColor == undefined) return 'transparent'; // eslint-disable-line eqeqeq
-					let colorCode = colorCodeToHex(currentColor);
-					return colorCode === '#ffffff' ? 'transparent' : colorCode;
-				},
-				menuItems: COLORS.map(color => cmd(
+				menuItems: COLORS.map(color => generateCommand(
 					null,
 					'hilitecolor',
 					COMMAND_TYPE.COLOR,

@@ -1,5 +1,6 @@
 import { PHOTOS, FILES, GIFS, WEB_LINKS } from '../../../../store/media-menu/constants';
-import { COMMAND_TYPE } from './index';
+import { generateCommand } from './utils';
+import { COMMAND_TYPE } from './constants';
 
 export const MY_COMPUTER = 'my_computer';
 export const ATTACHMENT_OPTIONS = [
@@ -21,12 +22,12 @@ export const ATTACHMENT_OPTIONS = [
 	}
 ];
 
-export function generateAttachmentMenu (cmd) {
-	return cmd('paperclip', null, COMMAND_TYPE.MENU, {
+export function generateAttachmentMenu() {
+	return generateCommand('paperclip', null, COMMAND_TYPE.MENU, {
 		title: 'attachmentsTitle',
 		submenu: [
 			{
-				menuItems: ATTACHMENT_OPTIONS.map(({ label, value }) => cmd(
+				menuItems: ATTACHMENT_OPTIONS.map(({ label, value }) => generateCommand(
 					null,
 					null,
 					COMMAND_TYPE.ATTACHMENT,
