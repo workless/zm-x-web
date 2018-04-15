@@ -23,11 +23,9 @@ export default class RichTextArea extends Component {
 
 	focus = () => {
 		this.base.focus();
-		this.restoreRange();
 	};
 
 	blur = () => {
-		this.saveRange();
 		this.base.blur();
 	};
 
@@ -60,7 +58,6 @@ export default class RichTextArea extends Component {
 	}
 
 	handleFocusIn = (e) => {
-		// moveSelectionOutOfNonEditableArea(this.base);
 		this.restoreRange();
 		this.handleEvent(e);
 	}
