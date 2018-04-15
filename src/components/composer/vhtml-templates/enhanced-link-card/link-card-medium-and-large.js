@@ -46,7 +46,7 @@ export default function EnhancedLinkCardMediumAndLarge({ url, title, domainStyle
 					<div enhanced-link-card embedded-link-card style="position: relative; width: 100%;background-color: #fff;">
 						<table style="width: 100%;border-collapse: collapse;">
 							<tbody>
-								${( backgroundImageUrl ? `
+								${!backgroundImageUrl ? '' : `
 									<tr>
 										<td background="${backgroundImageUrl}"
 											style="height: ${backgroundImageContainerHeight};
@@ -61,9 +61,8 @@ export default function EnhancedLinkCardMediumAndLarge({ url, title, domainStyle
 											padding: 0;
 											position: relative;"
 										></td>
-									</tr>`
-		: ''
-	)}
+									</tr>
+								`.trim()}
 								<tr>
 									<td>
 										<table
@@ -120,7 +119,6 @@ export default function EnhancedLinkCardMediumAndLarge({ url, title, domainStyle
 								&times;
 							</button>
 						</div>
-					</div>
 					</div>
 				</a>
 			</div>
