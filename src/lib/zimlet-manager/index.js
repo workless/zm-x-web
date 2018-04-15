@@ -31,6 +31,7 @@ import ActionMenu, { DropDownWrapper } from '../../components/action-menu';
 // For rich text area toolbar
 import ToolbarButton from '../../components/gui-rich-text-area/components/toolbar/toolbar-button';
 import CollapsedSubmenu from '../../components/gui-rich-text-area/components/toolbar/collapsed-submenu';
+import InfiniteScroll from '../../components/infinite-scroll';
 
 let components = {
 	...allBlocks,
@@ -52,7 +53,8 @@ let components = {
 	DraggableCard,
 	ContextMenu,
 	ToolbarButton,
-	CollapsedSubmenu
+	CollapsedSubmenu,
+	InfiniteScroll
 };
 
 const SHOW_ZIMLETS_URL_FLAG= /[?&#]zimletSlots=show(?:&|$)/;
