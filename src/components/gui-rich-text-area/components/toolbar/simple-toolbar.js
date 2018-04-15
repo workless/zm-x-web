@@ -178,6 +178,7 @@ export default class SimpleToolbar extends PureComponent {
 					onChange={this.execCommand}
 					menuIcon={icon}
 					submenu={submenu}
+					commandState={this.props.commandState}
 					title={title}
 				/>
 			) : (

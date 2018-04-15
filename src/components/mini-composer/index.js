@@ -6,7 +6,6 @@ import composerStyle from '../composer/style';
 import styles from './style';
 import SimpleToolbar from '../gui-rich-text-area/components/toolbar/simple-toolbar';
 import RichTextArea from '../gui-rich-text-area/rich-text-area';
-import { TEXT_MODE } from '../../constants/composer';
 import { getId } from '../../lib/util';
 
 const MAX_RANGE_REUSES = 3;
@@ -16,14 +15,17 @@ export default class MiniComposer extends Component {
 		body: ''
 	};
 
+	focus = () => {
+		if (this.refs && this.refs.rte) {
+			this.restoreRange();
+		}
+	};
+
 	exec = (command, ...args) => {
 		const { rte } = this.refs;
 		let commandName = args[0];
-		let isTextCommand =
-			commandName === 'bold' ||
-			commandName === 'italic' ||
-			commandName === 'underline';
-		// if (command !== 'queryCommandValue') this.focus();
+		let isTextCommand = [ 'bold', 'italic', 'underline', 'fontSize', 'fontName' ].indexOf(commandName) !== -1;
+		this.focus();
 		if (rte) {
 			let execResult = rte[command](...args);
 			// For IE as it doesn't trigger onInput
@@ -116,17 +118,18 @@ export default class MiniComposer extends Component {
 	};
 
 	setCommandState = debounce(() => {
-		const { rte } = this.refs;
-		let command = 'queryCommandState';
+		const { queryCommandState, queryCommandValue } = this.refs.rte;
 
 		this.setState({
 			commandState: {
-				bold: rte[command]('bold'),
-				italic: rte[command]('italic'),
-				underline: rte[command]('underline')
+				fontSize: queryCommandValue('fontSize'),
+				fontName: queryCommandValue('fontName'),
+				bold: queryCommandState('bold'),
+				italic: queryCommandState('italic'),
+				underline: queryCommandState('underline')
 			}
 		});
-	}, 100);
+	}, 100)
 
 	componentDidMount() {
 		this.applyIncomingMessage(this.props);
@@ -138,12 +141,12 @@ export default class MiniComposer extends Component {
 		}
 	}
 
-	render = ({}, { body }) => (
+	render = ({}, { body, commandState }) => (
 		<div class={cx(composerStyle.composer, styles.composer)}>
 			<div class={composerStyle.inner}>
 				<div class={composerStyle.fields}>
 					<div class={composerStyle.body}>
-						<SimpleToolbar mode={TEXT_MODE} exec={this.exec} />
+						<SimpleToolbar exec={this.exec} commandState={commandState} />
 						<RichTextArea
 							ref={linkref(this, 'rte')}
 							class={composerStyle.editor}

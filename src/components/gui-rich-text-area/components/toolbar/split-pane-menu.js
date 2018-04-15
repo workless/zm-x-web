@@ -30,7 +30,7 @@ export class SplitPaneMenu extends Component {
 				submenu.menuItems.map(option => (
 					<PopoverItem
 						item={option}
-						currentCommandValue={this.props.commandState[submenu.command]}
+						currentCommandValue={this.props.commandState && this.props.commandState[submenu.command]}
 						onClick={this.handleSelection}
 					/>
 				))
