@@ -735,7 +735,6 @@
 		}
 	},
 	"settings": {
-		"loading": "Loading Settings",
 		"modal": {
 			"title": "Settings",
 			"saveLabel": "Save",
