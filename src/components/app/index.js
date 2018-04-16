@@ -46,8 +46,7 @@ import accountInfo from '../../graphql-decorators/account-info';
 import {
 	createZimbraSchema,
 	LocalBatchLink,
-	ZimbraInMemoryCache,
-	ZimbraErrorLink
+	ZimbraInMemoryCache
 } from '@zimbra/api-client';
 
 import { IntlProvider, Text } from 'preact-i18n';
@@ -137,7 +136,7 @@ export default class Provide extends Component {
 		});
 		const apolloClient = new ApolloClient({
 			cache,
-			link: ZimbraErrorLink.concat(link)
+			link
 		});
 
 		return (

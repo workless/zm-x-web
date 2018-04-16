@@ -97,12 +97,7 @@ export default class Settings extends PureComponent {
 	) {
 		if (!value) {
 			return (
-				<div class={style.loading}>
-					<Spinner class={style.spinner} />
-					<div>
-						<Text id={'settings.loading'} />
-					</div>
-				</div>
+				<Spinner block />
 			);
 		}
 
