@@ -259,10 +259,10 @@ export default class SmartList extends Component {
 				{virtualized && items && items.length > 0 ? (
 					infinite ? (
 						<InfiniteScroll
-							height={rowHeight}
+							rowHeight={rowHeight}
 							overscanCount={250}
-							items={items}
-							render={this.renderItem}
+							data={items}
+							renderRow={this.renderItem}
 							hasMore={hasMore}
 							loadMore={loadMore}
 							isFetchingData={isFetchingData}

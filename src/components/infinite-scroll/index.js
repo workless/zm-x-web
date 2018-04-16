@@ -49,8 +49,7 @@ export default class InfiniteScroll extends Component {
 		}
 	}
 
-	// TODO: Rename these props to actually use the same name as VirtualList props
-	render({ items, height, render, isFetchingData, hasMore, ...props }) {
+	render({ data, rowHeight, renderRow, isFetchingData, hasMore, ...props }) {
 		return (
 			<div class={props.class}>
 				<VirtualList
@@ -58,9 +57,9 @@ export default class InfiniteScroll extends Component {
 					onScroll={this.handleScroll}
 					ref={linkref(this, 'list')}
 					class={cx(style.virtualList, isFetchingData && style.isLoading)}
-					data={items}
-					rowHeight={height}
-					renderRow={render}
+					data={data}
+					rowHeight={rowHeight}
+					renderRow={renderRow}
 				/>
 				{ isFetchingData && (
 					<div class={style.loading}>
