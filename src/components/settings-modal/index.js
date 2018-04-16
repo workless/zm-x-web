@@ -43,7 +43,7 @@ import {
 	loadFilterRules
 } from '../../store/email/actions';
 import Settings from '../settings';
-import { Button, Icon, ClickOutsideDetector } from '@zimbra/blocks';
+import { Button, Icon } from '@zimbra/blocks';
 import cx from 'classnames';
 import style from './style.less';
 import withCommandHandlers from '../../keyboard-shortcuts/with-command-handlers';
@@ -437,14 +437,7 @@ export default class SettingsModal extends Component {
 		);
 	};
 
-	onToggle = e => {
-		// dirty fix for nesting ClickOutsideDetectors.
-		// Should be changed in the future to be more robust.
-		if (e && e.path && e.path[0].className.indexOf('settings-modal') === -1 && e.path[0].className.indexOf('cancel-modal') === -1) {
-			return;
-		}
-		this.props.dispatch(toggle());
-	};
+	onToggle = () => this.props.dispatch(toggle());
 
 	componentDidMount() {
 		this.props.dispatch(loadMailboxMetadata());
@@ -469,55 +462,43 @@ export default class SettingsModal extends Component {
 		return (
 			<div class={cx(style.wrapper, props.visible && style.showing)}>
 				{props.visible && (
-					<ClickOutsideDetector
-						onClickOutside={
-							undefined /*
-						FIXME: prompt the user to save or discard if there are unsaved changes
-					*/
-						}
-					>
-						<div class={style.inner}>
-							<div class={cx(style.header, style.hideSmDown)}>
-								<Text id="settings.modal.title">Settings</Text>
-								<Icon
-									class={style.close}
-									name="close"
-									onClick={this.onToggle}
-								/>
-							</div>
-							<div class={style.contentWrapper}>
-								{props.visible && (
-									<Settings
-										value={settings}
-										updateAccountSettings={this.updateAccountSettings}
-										onChange={this.handleChange}
-										onSubmitNewAccount={this.handleCreateNewAccount}
-										accounts={accountsSettings}
-										accountInfoQuery={props.accountInfoQuery}
-										onSave={this.handleSave}
-										onCancel={this.onToggle}
-									/>
-								)}
-							</div>
-							<div class={cx(style.footer, style.hideSmDown)}>
-								<Button
-									onClick={this.handleSave}
-									styleType="primary"
-									brand="primary"
-									disabled={!settings}
-								>
-									<Text id="settings.modal.saveLabel">Save</Text>
-								</Button>
-								<Button
-									class="cancel-modal"
-									onClick={this.onToggle}
-									disabled={!settings}
-								>
-									<Text id="settings.modal.cancelLabel">Cancel</Text>
-								</Button>
-							</div>
+					<div class={style.inner}>
+						<div class={cx(style.header, style.hideSmDown)}>
+							<Text id="settings.modal.title">Settings</Text>
+							<Icon
+								class={style.close}
+								name="close"
+								onClick={this.onToggle}
+							/>
 						</div>
-					</ClickOutsideDetector>
+						<div class={style.contentWrapper}>
+							{props.visible && (
+								<Settings
+									value={settings}
+									updateAccountSettings={this.updateAccountSettings}
+									onChange={this.handleChange}
+									onSubmitNewAccount={this.handleCreateNewAccount}
+									accounts={accountsSettings}
+									accountInfoQuery={props.accountInfoQuery}
+									onSave={this.handleSave}
+									onCancel={this.onToggle}
+								/>
+							)}
+						</div>
+						<div class={cx(style.footer, style.hideSmDown)}>
+							<Button
+								onClick={this.handleSave}
+								styleType="primary"
+								brand="primary"
+								disabled={!settings}
+							>
+								<Text id="settings.modal.saveLabel">Save</Text>
+							</Button>
+							<Button onClick={this.onToggle} >
+								<Text id="settings.modal.cancelLabel">Cancel</Text>
+							</Button>
+						</div>
+					</div>
 				)}
 			</div>
 		);
