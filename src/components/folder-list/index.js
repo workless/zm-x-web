@@ -18,7 +18,6 @@ import ZimletSlot from '../zimlet-slot';
 import { connect } from 'preact-redux';
 import cx from 'classnames';
 import { defaultProps, withProps, branch, renderNothing } from 'recompose';
-import { configure } from '../../config';
 import style from './style';
 import { MAIL_VIEW } from '../../constants/views';
 import { closeCompose } from '../../store/email/actions';
@@ -37,7 +36,6 @@ import {
 	serializeFoldersExpanded
 } from '../../utils/prefs';
 
-@configure('specialFolders')
 @defaultProps({ view: MAIL_VIEW })
 @accountInfo()
 @getMailboxMetadata()
