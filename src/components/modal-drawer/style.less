@@ -1,0 +1,26 @@
+@import '~@zimbra/x-ui/refs.less';
+
+.modal {
+	height: 100%;
+	width: 100%;
+
+	.container {
+		background-color: white;
+		height: 100%;
+		transition: transform 250ms ease-in-out;
+		transform: none;
+		width: 100%;
+
+		&.slideRight {
+			transform: translateX(100%);
+		}
+	}
+
+	.close {
+		position: absolute;
+		left: 16px;
+		top: 16px;
+		background: transparent;
+		border: none;
+	}
+}

@@ -25,6 +25,10 @@
 	}
 
 	:global {
+		.rbc-row-content {
+			z-index: unset; // Remove stacking context created by RBC; ¿it does nothing?
+		}
+
 		.rbc-month-view,
 		.rbc-time-view {
 			border-left-width: 0;
@@ -119,7 +123,6 @@
 	}
 
 	.event {
-		z-index: 0;
 		padding: 2px 4px;
 		margin: 0;
 		color: inherit;
@@ -127,20 +130,6 @@
 		background: none;
 		border: none;
 		border-radius: 0;
-
-		time {
-			float: left;
-			padding: 0 5px 0 0;
-			font-weight: bold;
-		}
-
-		h4 {
-			display: inline;
-			margin: 0;
-			padding: 0;
-			font-weight: normal;
-			font-size: 100%;
-		}
 
 		.eventInner {
 			box-sizing: border-box;
@@ -150,6 +139,12 @@
 			color: #000;
 			white-space: nowrap;
 			overflow: hidden;
+
+			> time {
+				float: left;
+				padding: 0 5px 0 0;
+				font-weight: bold;
+			}
 		}
 
 		&.isBusy {
@@ -245,3 +240,4 @@
 		color: white;
 	}
 }
+

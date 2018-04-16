@@ -79,8 +79,7 @@ class Mail {
 	selectMail = (index) => elements.mailListItemMessageSelector.nth(index);
 	getMailCount = () => elements.mailListItemMessageSelector.count;
 	checkMailExists = (text) => elements.mailListItemMessageSelector.withText(text).exists;
-	checkStarEnabledInMailList = () => elements.mailListItemMessageSelector.nth(0).find(elements.star).withAttribute('value', 'true');
-
+	mailListStarIconButtonBySubject = (subject) => elements.mailListSubjectSelector.withText(subject).parent().find('span').nth(1);
 }
 
 export let mail = new Mail();

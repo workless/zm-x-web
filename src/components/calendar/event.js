@@ -1,11 +1,15 @@
 import { h, Component } from 'preact';
 import format from 'date-fns/format';
 import { STATUS_BUSY, STATUS_FREE, VIEW_MONTH } from './constants';
-import { connect } from 'preact-redux';
+import { CalendarEventDetailsTooltip } from './event-details';
 import cx from 'classnames';
+import withMediaQuery from '../../enhancers/with-media-query';
+import { minWidth, screenMd } from '../../constants/breakpoints';
 import { hexToRgb } from '../../lib/util';
 
 import style from './style';
+
+const SHOW_EVENT_DETAILS_AFTER_HOVER_DELAY = 1000;
 
 function styledGradientBackground(color, freeBusy) {
 	if (!(freeBusy === 'T' || freeBusy === 'F')) { return {}; }
@@ -73,20 +77,65 @@ export function CalendarEventWrapper(props) {
 	return child;
 }
 
-const SavedCalendarEvent = ({ view, title, event }) => {
-	const start = event.date;
-	return (
-		<div class={style.eventInner}>
-			{view === VIEW_MONTH &&
-				!event.allDay && (
-				<time title={start}>
-					{format(start, 'h:mm A').replace(':00', '')}
-				</time>
-			)}
-			{title}
-		</div>
-	);
-};
+@withMediaQuery(minWidth(screenMd), 'matchesScreenMd')
+class SavedCalendarEvent extends Component {
+	state = {
+		hoverOrigin: false
+	}
+
+	handleMouseEnter = (e) => {
+		if (!this.state.hoverOrigin || !this.timer) {
+			this.timer = setTimeout(() => {
+				this.showEventDetails(e);
+			}, SHOW_EVENT_DETAILS_AFTER_HOVER_DELAY);
+		}
+	}
+
+	handleMouseLeave = () => {
+		if (this.timer) {
+			clearTimeout(this.timer);
+			this.timer = undefined;
+		}
+
+		this.hideHoverTooltip();
+	}
+
+	showEventDetails = ({ clientX, clientY }) => {
+		this.setState({
+			hoverOrigin: {
+				x: clientX,
+				y: clientY
+			}
+		});
+	}
+
+	hideHoverTooltip = () => {
+		this.setState({ hoverOrigin: false });
+	}
+
+	render({ view, title, event, matchesScreenMd }, { hoverOrigin }) {
+		const start = event.date;
+		return (
+			<div
+				class={style.eventInner}
+				onMouseEnter={matchesScreenMd && this.handleMouseEnter}
+				onMouseLeave={matchesScreenMd && this.handleMouseLeave}
+				onClick={matchesScreenMd && this.showEventDetails}
+			>
+				{view === VIEW_MONTH && !event.allDay && (
+					<time title={start}>
+						{format(start, 'h:mm A').replace(':00', '')}
+					</time>
+				)}
+				{title}
+
+				{hoverOrigin && (
+					<CalendarEventDetailsTooltip origin={hoverOrigin} event={event} onClose={this.hideHoverTooltip} />
+				)}
+			</div>
+		);
+	}
+}
 
 export default class QuickAddEvent extends Component {
 	update = () => {
@@ -112,13 +161,10 @@ export default class QuickAddEvent extends Component {
 	}
 }
 
-export const CalendarEvent = connect(({ calendar }) => ({
-	view: calendar && calendar.view
-}))(
-	props =>
-		props.event.new ? (
-			<QuickAddEvent {...props} />
-		) : (
-			<SavedCalendarEvent {...props} />
-		)
-);
+export function CalendarEvent(props) {
+	return props.event.new ? (
+		<QuickAddEvent {...props} />
+	) : (
+		<SavedCalendarEvent {...props} />
+	);
+}
