@@ -24,7 +24,7 @@ import CalendarCheckMutation from '../../../graphql/queries/calendar/calendar-ch
 import { FolderActionMutation } from '../../../graphql/queries/folders/folders.graphql';
 import SendShareNotificationMutation from '../../../graphql/queries/shares/send-notification.graphql';
 import { notify } from '../../../store/notifications/actions';
-import { hasFlag } from '../../../utils/folders';
+import { toggleFlag, hasFlag } from '../../../utils/folders';
 import {
 	calendarType as getCalendarType
 } from '../../../utils/calendar';
@@ -236,6 +236,17 @@ export default compose(
 					variables: {
 						calendarId: id,
 						value: !hasFlag(find(calendars, { id }), 'checked')
+					},
+					optimisticResponse: {
+						__typename: 'Mutation',
+						checkCalendar: true
+					},
+					update: (cache) => {
+						const data = cache.readQuery({ query: CalendarsQuery });
+						let cal = find((get(data, 'getFolder.folders.0.folders') || [])
+							.concat(...(get(data, 'getFolder.folders.0.linkedFolders') || [])),  { id });
+						toggleFlag(cal, 'checked');
+						cache.writeQuery({ query: CalendarsQuery, data });
 					}
 				}).then(() => calendarsAndAppointmentsData.refetch())
 		})
