@@ -18,28 +18,26 @@ export class SplitPaneMenu extends Component {
 	handleTogglePopover = (active) => {
 		this.setState({ active });
 	}
-	renderSubMenuPane = submenu => {
-		let currentCommandValue = submenu.getCurrentValue();
 
-		return (
-			<div class={cx(styles.pane, submenu.class)}>
-				{ submenu.heading &&
-					<h3 class={styles.paneHeading}>
-						<Text id={`compose.toolbar.${submenu.heading}`} />
-					</h3>
-				}
-				{
-					submenu.menuItems.map(option => (
-						<PopoverItem
-							item={option}
-							currentCommandValue={currentCommandValue}
-							onClick={this.handleSelection}
-						/>
-					))
-				}
-			</div>
-		);
-	}
+	renderSubMenuPane = submenu => (
+		<div class={cx(styles.pane, submenu.class)}>
+			{ submenu.heading &&
+				<h3 class={styles.paneHeading}>
+					<Text id={`compose.toolbar.${submenu.heading}`} />
+				</h3>
+			}
+			{
+				submenu.menuItems.map(option => (
+					<PopoverItem
+						item={option}
+						currentCommandValue={this.props.commandState[submenu.command]}
+						onClick={this.handleSelection}
+					/>
+				))
+			}
+		</div>
+	);
+
 	render({ menuIcon, submenu, title }, { active }) {
 		return (
 			<Localizer>
@@ -47,13 +45,9 @@ export class SplitPaneMenu extends Component {
 					active={active}
 					onToggle={this.handleTogglePopover}
 					anchor="start"
-					useMouseDownEvents
 					class={styles.submenuWrapper}
 					toggleClass={cx(styles.toggle, styles.toolbarButton)}
-					popoverClass={cx(active && styles.active, styles.dropupMenu)}
-					text={
-						<Icon name={menuIcon} />
-					}
+					text={<Icon name={menuIcon} />}
 					tooltip={<Text id={`compose.toolbar.${title}`} />}
 				>
 					{ submenu.map(this.renderSubMenuPane) }
@@ -81,7 +75,7 @@ class PopoverItem extends Component {
 			style={item.style}
 			onMouseDown={this.handleTap}
 		>
-			{ (currentCommandValue && currentCommandValue === item.value) && <Icon class={styles.selectedItem} name="check" /> }
+			{ (currentCommandValue && currentCommandValue === String(item.value)) && <Icon class={styles.selectedItem} name="check" /> }
 			<Text id={`compose.toolbar.${item.label}`} />
 		</Item>
 	)
