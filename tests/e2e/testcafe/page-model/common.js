@@ -1,16 +1,24 @@
 /*eslint no-mixed-spaces-and-tabs: "off"*/
 /*eslint new-cap: ["error", { "capIsNew": false }]*/
-import { t, ClientFunction } from 'testcafe';
+import { t, ClientFunction, Selector } from 'testcafe';
 import { elements } from './elements';
+import uaParser from 'ua-parser-js';
 
 class PageActions {
 
 	//Login the email page
 	async loginEmailPage(name, password) {
+		const loginButton = await elements.loginButton();
     	await t
     		.typeText(elements.username, name)
     		.typeText(elements.password, password)
-    		.click(elements.login);
+    		.click(loginButton);
+	}
+
+	//
+	async logoutEmailPage(userEmail) {
+		await t.click(elements.mainHeaderActions.find('button').withText(userEmail.substring(0, userEmail.indexOf('@'))));
+		await t.click(Selector('a').withText('Logout'));
 	}
 
 	// Click nav bar menu item
@@ -48,7 +56,8 @@ export class UtilFunc {
 		let dd = today.getDate();
 		let mm = today.getMonth()+1; //January is 0!
 		let yyyy = today.getFullYear();
-		
+		dd = Number(dd) + Number(day);
+
 		if (dd<10) {
 			dd = '0'+dd;
 		}
@@ -56,7 +65,7 @@ export class UtilFunc {
 		if (mm<10) {
 			mm = '0'+mm;
 		}
-		return yyyy + '-' + mm + '-' + (Number(dd) + Number(day));
+		return yyyy + '-' + mm + '-' + dd ;
 	}
 
 	// Use this function when you want to enter date in Date Picker
@@ -129,6 +138,12 @@ export class UtilFunc {
 		let minute = D.getMinutes() < 10 ? '0' + D.getMinutes() : D.getMinutes();
 		
 		return  yyyy+mm+dd+'T'+hours+minute +'00';
+	}
+
+	// Get browser name
+	async browserAlias() {
+		const ua = await this.getUA();
+		return uaParser(ua).browser.name;
 	}
 
 	/************************************/
@@ -222,6 +237,9 @@ export class UtilFunc {
 		let clickEvent = new window.Event('change'); // Create the event.
 		el.dispatchEvent( clickEvent );    // Dispatch the event.
 	});
+
+	//Returns a user-agent header sent by the browser
+	getUA = ClientFunction(() => navigator.userAgent);
 
 }
 

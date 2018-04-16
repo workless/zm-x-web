@@ -48,7 +48,7 @@ export class EmojiMenu extends Component {
 					active={active}
 					class={style.submenuWrapper}
 					toggleClass={cx(style.toggle, style.toolbarButton)}
-					popoverClass={cx(style.dropupMenu, style.emojiMenu)}
+					popoverClass={style.emojiMenu}
 					text={
 						<Icon name="smile-o" />
 					}

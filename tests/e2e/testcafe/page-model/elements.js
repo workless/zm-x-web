@@ -10,10 +10,16 @@ const notepadName = profile.notepadName;
 class Elements {
 
     // Login Page Elements
-    username = 'input[type="text"]';
-    password = 'input[type="password"]';
-    login = clientName + '_login_buttons button';
+    username = Selector(clientName + '_login').find('#login-form_2-email');
+    password = Selector(clientName + '_login').find('#login-form_2-password');
+    loginButton = Selector(clientName + '_login').find('button').withText('Sign in');
     clientName = clientName;
+
+    // popover
+    blocksPopover = Selector('.blocks_popover_popper');
+
+    // Main page header
+    mainHeaderActions = Selector(clientName + '_header-actions_headerActions');
 
     // Main Page Elements - Navbar, Sidebar, Folder, Context Menu, Progress indicator
 	navButtonList = Selector(clientName + '_app-navigation_nav');
@@ -40,11 +46,15 @@ class Elements {
     messageItem = clientName + '_mail-list-item_message';
     messageLabel = clientName + '_mail-list-item_label';
     mailSubject = clientName + '_mail-list-item_subject';
+    sidebarRefreshButton = Selector(clientName + '_folder-list_refresh');
     // Mail Elements - Right Pane
     condensedMessage = clientName + '_condensed-message_message';
     conversationSectionSelector = Selector(clientName + '_conversation-viewer_section');
     conversationSubjectSelector = Selector(clientName + '_viewer-title_subject');
     mailViewerBodySelector = Selector(clientName + '_viewer_body');
+    clientHtmlViewerInner = Selector(clientName + '_html-viewer_inner');
+    mailViewerTitleCountText = Selector(clientName + '_viewer-title_countText');
+    mailViewPlaceholderView = Selector(clientName + '_viewer-placeholder_placeholder');
     // Mail Elements - Toolbar
     actionButton = clientName + '_action-button_button';
     actionMenuGroup = clientName + '_action-menu-group_group';
@@ -204,9 +214,9 @@ class Elements {
     labelSelector = Selector('label');
     settingsSendMeCopyButtonSelector = Selector('#settings.vacationResponse.sendMeCopy');
     settingsVacationResponseTextAreaSelector = Selector(clientName + '_settings_vacationResponseTextArea');
-
     toastMessageSelector = Selector(clientName + '_notifications');                    // Toast Message
-
+    settingsSubsectionBodySelector = Selector(clientName + '_settings_subsectionBody');
+    settingsFiltersListEntrySelector = Selector(clientName + '_settings_filtersListEntry');
 
     // Mobile/Tablet Elements
     toolBarActionButton = clientName + '_mail-toolbar_actionButton';

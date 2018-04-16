@@ -3,6 +3,9 @@ import AccountInfoQuery from '../../graphql/queries/preferences/account-info.gra
 
 export default function withAccountInfo(mapProps = () => ({})) {
 	return graphql(AccountInfoQuery, {
+		options: {
+			errorPolicy: 'all'
+		},
 		props: (result) => ({
 			account: result.data.accountInfo,
 			accountLoading: result.data.loading,
