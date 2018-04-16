@@ -1,6 +1,6 @@
 /* eslint no-unused-vars:1 */
 
-import { h, Component, cloneElement } from 'preact';
+import { h, Component, cloneElement, options as preactOptions } from 'preact';
 import { route, Link } from 'preact-router';
 import emitter from 'mitt';
 //import qs from 'query-string';
@@ -206,10 +206,13 @@ export default function zimletManager({ zimbra, store, zimbraOrigin, showZimletS
 			plugins: createPlugins(name),
 			resourceUrl: `/service/zimlet/${encodeURIComponent(name)}/`,
 			cache: createCache(name),
-			h,
-			createElement: h,
-			Component,
-			cloneElement,
+			preact: {
+				h,
+				createElement: h,
+				Component,
+				cloneElement,
+				options: preactOptions,
+			},
 			route, //need these so zimlets share same router instance and can route within the app
 			Link,
 			components: Object.assign({}, components),
