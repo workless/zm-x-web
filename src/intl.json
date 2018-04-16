@@ -993,5 +993,17 @@
 	},
 	"prepositions": {
 		"at": "at"
+	},
+	"mediaConcierge": {
+		"gifs": {
+			"toolbarItem": "Media Concierge",
+			"buttons": {
+				"popular": "Popular",
+				"recent": "Recent"
+			},
+			"search": {
+				"placeholder": "Search..."
+			}
+		}
 	}
 }

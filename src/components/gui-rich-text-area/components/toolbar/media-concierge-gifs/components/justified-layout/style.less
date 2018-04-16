@@ -1,0 +1,43 @@
+@height: 112px;
+
+.justified {
+
+	> div > div {
+		margin: 0;
+		max-width: ~"calc(100% - 10px)";
+
+		> div {
+			display: flex;
+			flex-wrap: wrap;
+			align-content: flex-start;
+
+			&:after {
+				content: '';
+				flex-grow: 99999999;
+				min-width: @height;
+				height: 0;
+			}
+
+			> div {
+				width: 100%;
+				display: flex;
+
+				> * {
+					position: relative;
+					display: block;
+					height: @height;
+					flex-grow: 1;
+
+					> img {
+						border: 1px solid var(--gray-lighter);
+						height: @height;
+						object-fit: cover;
+						max-width: 100%;
+						min-width: 100%;
+						vertical-align: bottom;
+					}
+				}
+			}
+		}
+	}
+}

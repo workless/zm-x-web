@@ -1,19 +1,33 @@
 import events from 'mitt';
-import apiRequest from '../../api-request';
-import { queryToString } from '../../util';
+import queryString from 'query-string';
 
-const API_KEY = 'b58857c39a604d2e98811978d53fe3a7'; // ¿Do not use in production?
+const DEFAULT_API_KEY = 'b58857c39a604d2e98811978d53fe3a7'; // ¿Do not use in production?
 
 // Visit {@link https://developers.giphy.com/docs/} for official documentation
 export default function createGiphyClient(config = {}) {
-	let api = events();
+	const apiKey = config.apiKey || DEFAULT_API_KEY;
+	const api = events();
 
-	function before(req) {
-		// Attach the API_KEY to every request
-		req.url += `&api_key=${API_KEY}`;
+	function queryToString(params = {}) {
+		if (typeof params === 'string') { return params; }
+
+		params['api_key'] = apiKey;
+		return queryString.stringify(params);
 	}
 
-	api.request = apiRequest(config.origin || 'https://api.giphy.com/v1', before, undefined, { credentials: 'omit' });
+	api.request = function request(endpoint, params) {
+		return fetch(`https://api.giphy.com/v1${endpoint}?${queryToString(params)}`)
+			.then((r) => {
+				if (!r.ok) {
+					return Promise.reject(Error('Bad Response: ' + r.status));
+				}
+
+				const isJson = r.headers.get('content-type') && r.headers.get('content-type').includes('application/json');
+				return isJson
+					? r.json()
+					: r.text();
+			});
+	};
 
 	/**
 	 * Search for Gifs - see {@link https://developers.giphy.com/docs/#operation--gifs-search-get}
@@ -27,7 +41,7 @@ export default function createGiphyClient(config = {}) {
 	 * @returns {Promise}                   Promise resolves with a {@link https://developers.giphy.com/docs/#gif-object}
    */
 	api.search = function search(params) {
-		return api.request(`/gifs/search?${queryToString(params)}`);
+		return api.request('/gifs/search', params);
 	};
 
 	/**
@@ -39,7 +53,7 @@ export default function createGiphyClient(config = {}) {
 	 * @returns {Promise}                 Promise resolves with a {@link https://developers.giphy.com/docs/#gif-object}
 	 */
 	api.translate = function translate(params) {
-		return api.request(`/gifs/translate?${queryToString(params)}`);
+		return api.request('/gifs/translate', params);
 	};
 
 	/**
@@ -53,7 +67,7 @@ export default function createGiphyClient(config = {}) {
 	 * @returns {Promise}                   Promise resolves with a {@link https://developers.giphy.com/docs/#gif-object}
 	 */
 	api.trending = function trending(params) {
-		return api.request(`/gifs/trending?${queryToString(params)}`);
+		return api.request('/gifs/trending', params);
 	};
 
 	/**
@@ -66,7 +80,7 @@ export default function createGiphyClient(config = {}) {
 	 * @returns {Promise}                   Promise resolves with a {@link https://developers.giphy.com/docs/#gif-object}
 	 */
 	api.random = function random(params) {
-		return api.request(`/gifs/random?${queryToString(params)}`);
+		return api.request('/gifs/random', params);
 	};
 
 	/**
@@ -76,7 +90,7 @@ export default function createGiphyClient(config = {}) {
 	 */
 	api.gif = function gif(ids) {
 		if (Array.isArray(ids)) { ids = ids.join(','); }
-		return api.request(`/gifs/${ids}?`);
+		return api.request(`/gifs/${ids}`);
 	};
 
 	return api;

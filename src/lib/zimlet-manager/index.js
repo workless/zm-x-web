@@ -26,6 +26,7 @@ import ActionMenuGroup from '../../components/action-menu-group';
 import ActionMenuItem from '../../components/action-menu-item';
 import DraggableCard from '../../components/draggable-card';
 import ContextMenu from '../../components/context-menu';
+import Thumbnail from '../../components/thumbnail';
 import ActionMenu, { DropDownWrapper } from '../../components/action-menu';
 
 // For rich text area toolbar
@@ -54,7 +55,8 @@ let components = {
 	ContextMenu,
 	ToolbarButton,
 	CollapsedSubmenu,
-	InfiniteScroll
+	InfiniteScroll,
+	Thumbnail
 };
 
 const SHOW_ZIMLETS_URL_FLAG= /[?&#]zimletSlots=show(?:&|$)/;
@@ -211,7 +213,7 @@ export default function zimletManager({ zimbra, store, zimbraOrigin, showZimletS
 				createElement: h,
 				Component,
 				cloneElement,
-				options: preactOptions,
+				options: preactOptions
 			},
 			route, //need these so zimlets share same router instance and can route within the app
 			Link,

@@ -19,7 +19,7 @@ import { generateCommand } from './utils';
 
 import { generateFontMenu } from './font-menu-options';
 import { generateColorMenu } from './color-menu-options';
-
+import MediaConciergeGifs from './media-concierge-gifs';
 import linkref from 'linkref';
 import CollapsedSubmenu from './collapsed-submenu';
 import { SplitPaneMenu } from './split-pane-menu';
@@ -248,7 +248,10 @@ export default class Toolbar extends PureComponent {
 										</span>
 									)}
 								</ZimletSlot>
-								{ !isPlainText && <EmojiMenu onEmojiSelect={onEmojiSelect} />}
+								{ !isPlainText && [
+									<MediaConciergeGifs />,
+									<EmojiMenu onEmojiSelect={onEmojiSelect} />
+								]}
 								<ToggleTextModeButton isPlainText={isPlainText} onClick={onToggleTextMode} />
 								<TrashButton onClick={onDelete} />
 							</div>
