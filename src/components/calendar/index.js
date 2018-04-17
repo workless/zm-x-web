@@ -172,8 +172,9 @@ function getDOW({ preferences }) {
 	name: 'preferencesData'
 })
 @graphql(CalendarsAndAppointmentsQuery, {
-	props: ({ data: { getFolder = [] } }) => ({
+	props: ({ data: { getFolder = [], refetch } }) => ({
 		calendarsData: {
+			refetch,
 			calendars: (get(getFolder, 'folders.0.folders') || [])
 				.concat(...(get(getFolder, 'folders.0.linkedFolders') || []))
 		}
