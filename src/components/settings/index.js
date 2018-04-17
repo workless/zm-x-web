@@ -1,4 +1,5 @@
 import { h } from 'preact';
+import { Spinner } from '@zimbra/blocks';
 import { Text } from 'preact-i18n';
 import values from 'lodash-es/values';
 import set from 'lodash-es/set';
@@ -95,7 +96,9 @@ export default class Settings extends PureComponent {
 		{ activeId }
 	) {
 		if (!value) {
-			return null;
+			return (
+				<Spinner block />
+			);
 		}
 
 		const settingsTab = pluck(values(settingsConfig), 'id', activeId);
