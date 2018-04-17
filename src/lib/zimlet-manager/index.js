@@ -309,16 +309,6 @@ export default function zimletManager({ zimbra, store, zimbraOrigin, config, sho
 		if (initializing===false && !exports.initialized) {
 			initializing = true;
 
-			// If compat zimlet loading is disabled, don't fetch and run the compile zimlets bundle from the server
-			if (config.disableCompatZimlets===true) {
-				initializing = false;
-				exports.initialized = true;
-				// zimletInterfaces = {};
-				oninit.resolve(exports);
-				exports.emit('init', exports);
-				return Promise.resolve();
-			}
-
 			return getCompiledZimlets()
 				.then( code => {
 					exports.emit('beforeinit', exports);
