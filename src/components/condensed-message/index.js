@@ -10,7 +10,6 @@ import wire from 'wiretie';
 import { message as messageType } from '../../constants/types';
 import { flagMailItem, readMailItem } from '../../store/mail/actions';
 import { getId, pluck, hasFlag } from '../../lib/util';
-import { configure } from '../../config';
 import style from './style';
 
 function getFrom(message) {
@@ -26,13 +25,11 @@ function isSelected(message, selectedMessage) {
 	);
 }
 
-@configure('inboxInlineConversations')
-@wire('zimbra', ({ inboxInlineConversations, message, selectedMessage }) => {
+@wire('zimbra', ({ message, selectedMessage }) => {
 	let map = {
 		conversationFull: null
 	};
 	if (
-		inboxInlineConversations !== false &&
 		selectedMessage &&
 		message &&
 		isSelected(message, selectedMessage) &&
@@ -99,7 +96,6 @@ export default class CondensedMessage extends Component {
 
 	render({
 		message,
-		inboxInlineConversations,
 		onClick,
 		conversation,
 		conversationFull,
@@ -152,21 +148,6 @@ export default class CondensedMessage extends Component {
 						{(showExcerpt !== false && message.excerpt) || ' '}
 					</div>
 				</div>
-				{isConversation &&
-					selected &&
-					inboxInlineConversations && (
-					<div class={style.messages} ref={this.messagesRef}>
-						{messages.map(child => (
-							<CondensedMessage
-								onClick={onClick}
-								message={child}
-								conversation={message}
-								selectedMessage={selectedMessage}
-								matchesScreenMd={matchesScreenMd}
-							/>
-						))}
-					</div>
-				)}
 				<div class={style.indicators}>
 					{hasFlag(message, 'attachment') && (
 						<Icon
