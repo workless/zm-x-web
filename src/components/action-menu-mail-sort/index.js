@@ -30,7 +30,9 @@ const SortActionMenuItem = ({ sort, sortBy, onSort, children }) => (
 	flagDescLabel: 'mail.sortLabels.flagDesc',
 	nameAscLabel: 'mail.sortLabels.nameAsc',
 	subjAscLabel: 'mail.sortLabels.subjAsc',
-	unreadLabel: 'mail.sortLabels.unread'
+	readDescLabel: 'mail.sortLabels.readDesc',
+	sizeAscLabel: 'mail.sortLabels.sizeAsc',
+	sizeDescLabel: 'mail.sortLabels.sizeDesc'
 })
 @connect(
 	state => ({
@@ -59,8 +61,14 @@ export default class ActionMenuMailSort extends Component {
 						<SortActionMenuItem {...props} sort={SORT_BY.dateAsc}>
 							<Text id="mail.sortMenu.dateAsc" />
 						</SortActionMenuItem>
-						<SortActionMenuItem {...props} sort={SORT_BY.unread}>
-							<Text id="mail.sortMenu.unread" />
+						<SortActionMenuItem {...props} sort={SORT_BY.readDesc}>
+							<Text id="mail.sortMenu.readDesc" />
+						</SortActionMenuItem>
+						<SortActionMenuItem {...props} sort={SORT_BY.sizeDesc}>
+							<Text id="mail.sortMenu.sizeDesc" />
+						</SortActionMenuItem>
+						<SortActionMenuItem {...props} sort={SORT_BY.sizeAsc}>
+							<Text id="mail.sortMenu.sizeAsc" />
 						</SortActionMenuItem>
 						<SortActionMenuItem {...props} sort={SORT_BY.attachDesc}>
 							<Text id="mail.sortMenu.attachDesc" />

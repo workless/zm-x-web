@@ -1,7 +1,8 @@
 import { h } from 'preact';
 import { Text } from 'preact-i18n';
 import cx from 'classnames';
-
+import prettyBytes from 'pretty-bytes';
+import get from 'lodash/get';
 import { Icon } from '@zimbra/blocks';
 import UnreadControl from '../unread-control';
 import MailInlineActionControl from '../mail-inline-action-control';
@@ -22,6 +23,7 @@ const WideListItem = ({
 	isSelected,
 	isUnread,
 	isUrgent,
+	showSize,
 	onCheckbox,
 	onInlineDelete,
 	onToggleFlagged,
@@ -31,73 +33,88 @@ const WideListItem = ({
 	showFolderName,
 	showSnippet,
 	disableInlineSearch
-}) => (
-	<div class={s.wideListItem}>
-		<input
-			aria-label="Select Email"
-			type="checkbox"
-			checked={isSelected}
-			onClick={onCheckbox}
-			onDblClick={stopPropagation}
-			class={s.wideCheckbox}
-		/>
-		<UnreadControl
-			class={s.unreadControl}
-			onChange={onToggleUnread}
-			value={isUnread}
-		/>
-		<div class={s.wideListItemSenderCol}>
-			<div class={s.wideListItemSender}>
-				{emailAddresses.join(', ')}
-				{isDraft && (
-					<span>
-						{emailAddresses.length > 0 ? ', ' : ''}
-						<span class={s.draft}>
-							<Text id="mail.DRAFT" />
+}) => {
+
+
+	let messageOrConvSize;
+	if (showSize) {
+		let size = +item.sortField || +item.size;
+		if (!size) {
+			size = (get(item, 'messages') || []).reduce((max, { size: sz }) => Math.max(max,+sz), 0);
+		}
+		messageOrConvSize = <span class={s.size}>{prettyBytes(size)}</span>;
+	}
+
+
+	return (
+		<div class={s.wideListItem}>
+			<input
+				aria-label="Select Email"
+				type="checkbox"
+				checked={isSelected}
+				onClick={onCheckbox}
+				onDblClick={stopPropagation}
+				class={s.wideCheckbox}
+			/>
+			<UnreadControl
+				class={s.unreadControl}
+				onChange={onToggleUnread}
+				value={isUnread}
+			/>
+			<div class={s.wideListItemSenderCol}>
+				<div class={s.wideListItemSender}>
+					{emailAddresses.join(', ')}
+					{isDraft && (
+						<span>
+							{emailAddresses.length > 0 ? ', ' : ''}
+							<span class={s.draft}>
+								<Text id="mail.DRAFT" />
+							</span>
 						</span>
-					</span>
-				)}
-			</div>
-			<div>
-				{!disableInlineSearch && (
+					)}
+				</div>
+				<div>
+					{!disableInlineSearch && (
+						<MailInlineActionControl
+							name="search"
+							className={s.inlineControl}
+							onChange={onInlineSearch}
+						/>
+					)}
 					<MailInlineActionControl
-						name="search"
+						name="trash"
 						className={s.inlineControl}
-						onChange={onInlineSearch}
+						onChange={onInlineDelete}
 					/>
-				)}
-				<MailInlineActionControl
-					name="trash"
-					className={s.inlineControl}
-					onChange={onInlineDelete}
-				/>
-				<MailInlineActionControl
-					name="star"
-					className={s.inlineControl}
-					activeClassName={s.starred}
-					value={isFlagged}
-					onChange={onToggleFlagged}
-				/>
+					<MailInlineActionControl
+						name="star"
+						className={s.inlineControl}
+						activeClassName={s.starred}
+						value={isFlagged}
+						onChange={onToggleFlagged}
+					/>
+				</div>
+			</div>
+			<div class={s.wideListItemSubject}>
+				<h4 class={cx(s.subject, s.wideSubject)} title={item.subject}>
+					{item.subject || <Text id="mail.noSubject" />}
+					{count && count > 1 ? <span> ({count})</span> : null}
+				</h4>
+			</div>
+			<div class={cx(s.excerpt, s.wideExcerpt)}>
+				{(showSnippet && item.excerpt) || ' '}
+			</div>
+
+			{showFolderName && item.folder && <div>{item.folder.name}</div>}
+
+			<div class={s.wideListItemTimeCol}>
+				{isUrgent && <span class={s.urgent}>🚩</span>}
+				{isAttachment && <Icon class={s.attachment} name="paperclip" />}
+				{messageOrConvSize}
+				<EmailTime time={item.date} />
 			</div>
 		</div>
-		<div class={s.wideListItemSubject}>
-			<h4 class={cx(s.subject, s.wideSubject)} title={item.subject}>
-				{item.subject || <Text id="mail.noSubject" />}
-				{count && count > 1 ? <span> ({count})</span> : null}
-			</h4>
-		</div>
-		<div class={cx(s.excerpt, s.wideExcerpt)}>
-			{(showSnippet && item.excerpt) || ' '}
-		</div>
-
-		{showFolderName && item.folder && <div>{item.folder.name}</div>}
-
-		<div class={s.wideListItemTimeCol}>
-			{isUrgent && <span class={s.urgent}>🚩</span>}
-			{isAttachment && <Icon class={s.attachment} name="paperclip" />}
-			<EmailTime time={item.date} />
-		</div>
-	</div>
-);
+	);
+};
 
 export default WideListItem;
