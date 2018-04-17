@@ -290,6 +290,10 @@
 				"title": "Availability for {{date}}",
 				"subtitle":
 					"Only calendars that are shared with you or that are public will be visible."
+			},
+			"notifications" : {
+				"problemInCreating" : "There was a problem creating the event.",
+				"tryAgain" : "Try again"
 			}
 		},
 		"sidebar": {

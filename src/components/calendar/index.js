@@ -4,6 +4,7 @@ import { branch, renderComponent, withProps } from 'recompose';
 import moment from 'moment';
 import BigCalendar from 'react-big-calendar';
 import 'react-big-calendar/lib/less/styles.less';
+import { Text } from 'preact-i18n';
 
 import startOfDay from 'date-fns/start_of_day';
 import startOfWeek from 'date-fns/start_of_week';
@@ -59,6 +60,7 @@ import plainTextInviteEmail from './emails/plain-text-invite-email';
 import { soapTimeToJson } from '../../utils/prefs';
 import withMediaQuery from '../../enhancers/with-media-query';
 import { minWidth, screenMd } from '../../constants/breakpoints';
+import { notify as notifyActionCreator } from '../../store/notifications/actions';
 
 import style from './style';
 import { switchTimeFormat } from '../../lib/util';
@@ -161,7 +163,8 @@ function getDOW({ preferences }) {
 		date: calendar.date
 	}),
 	{
-		setDate: calendarActionCreators.setDate
+		setDate: calendarActionCreators.setDate,
+		notify: notifyActionCreator
 	}
 )
 @graphql(AccountInfoQuery, {
@@ -446,10 +449,23 @@ export default class Calendar extends Component {
 	};
 
 	handleCreateAppointment = appointment => {
-		this.props.createAppointment({
-			name: '(No title)',
-			...appointment
-		});
+		try {
+			this.props.createAppointment({
+				name: '(No title)',
+				...appointment
+			});
+		}
+		catch (err) {
+			this.props.notify({
+				message: <Text id="calendar.editModal.notifications.problemInCreating" />,
+				action: {
+					label: <Text id="calendar.editModal.notifications.tryAgain" />,
+					fn: () => {
+						this.handleCreateNewEvent();
+					}
+				}
+			});
+		}
 		this.handleCloseAddEvent();
 	};
 
