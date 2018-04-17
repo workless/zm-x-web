@@ -41,6 +41,7 @@ export default function createGiphyClient(config = {}) {
 	 * @returns {Promise}                   Promise resolves with a {@link https://developers.giphy.com/docs/#gif-object}
    */
 	api.search = function search(params) {
+		params.rating = params.rating || 'pg-13'; // Default to rating of "pg-13" to exclude "r" rated gifs
 		return api.request('/gifs/search', params);
 	};
 
