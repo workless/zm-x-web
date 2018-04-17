@@ -224,7 +224,7 @@ class ActivePopper extends Component {
 			borderArrowProps = {
 				...arrowProps,
 				style: { ...(arrowProps.style),  margin: arrowMargins[1] }
-			 };
+			};
 
 		}
 
