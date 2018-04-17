@@ -15,7 +15,14 @@
 
 .loading {
 	position: absolute;
+	font-size: @icon-size-md;
 	left: 50%;
-	transform: translateX(-50%);
-	bottom: 0;
+	top: 50%;
+	transform: translate(-50%, -50%);
+
+	&.bottom {
+		top: auto;
+		bottom: 0;
+		transform: translateX(-50%);
+	}
 }

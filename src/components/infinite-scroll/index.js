@@ -61,11 +61,11 @@ export default class InfiniteScroll extends Component {
 					rowHeight={rowHeight}
 					renderRow={renderRow}
 				/>
-				{ isFetchingData && (
-					<div class={style.loading}>
+				{isFetchingData && (
+					<div class={cx(style.loading, data && data.length && style.bottom)}>
 						<Spinner class={style.spinner} />
 					</div>
-				) }
+				)}
 			</div>
 		);
 	}
