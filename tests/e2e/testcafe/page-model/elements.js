@@ -214,9 +214,9 @@ class Elements {
     labelSelector = Selector('label');
     settingsSendMeCopyButtonSelector = Selector('#settings.vacationResponse.sendMeCopy');
     settingsVacationResponseTextAreaSelector = Selector(clientName + '_settings_vacationResponseTextArea');
-
     toastMessageSelector = Selector(clientName + '_notifications');                    // Toast Message
-
+    settingsSubsectionBodySelector = Selector(clientName + '_settings_subsectionBody');
+    settingsFiltersListEntrySelector = Selector(clientName + '_settings_filtersListEntry');
 
     // Mobile/Tablet Elements
     toolBarActionButton = clientName + '_mail-toolbar_actionButton';

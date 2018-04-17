@@ -196,18 +196,23 @@ export default compose(
 		})
 	}),
 	graphql(GetContactFrequencyQuery, {
-		skip: props => !props.email,
+		skip: props => !props.email || GetContactFrequencyQuery.isUnsupported,
 		options: ({ email }) => ({
 			variables: {
 				email,
 				by: 'dwm'
 			}
 		}),
-		props: ({ data: { getContactFrequency } }) => ({
-			contactFrequencyData: get(getContactFrequency, 'data')
-		})
+		props: ({ data: { getContactFrequency, error } }) => {
+			if (error) {
+				GetContactFrequencyQuery.isUnsupported = true;
+			}
+			return {
+				contactFrequencyData: get(getContactFrequency, 'data')
+			};
+		}
 	}),
-	branch(({ loading, contact }) => loading || !contact, renderNothing),
+	branch(({ contact }) => !contact, renderNothing),
 	withStateHandlers(
 		{ selectedRange: '6m' },
 		{ onChangeRange: () => selectedRange => ({ selectedRange }) }
