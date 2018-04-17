@@ -51,7 +51,7 @@ let components = {
 
 const SHOW_ZIMLETS_URL_FLAG= /[?&#]zimletSlots=show(?:&|$)/;
 
-export default function zimletManager({ zimbra, store, zimbraOrigin, config, showZimletSlots, keyBindings, shortcutCommandHandler }) {
+export default function zimletManager({ zimbra, store, zimbraOrigin, showZimletSlots, keyBindings, shortcutCommandHandler }) {
 	let exports = emitter();
 	exports.initialized = false;
 	let oninit = deferred();

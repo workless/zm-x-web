@@ -96,7 +96,6 @@ export default class CondensedMessage extends Component {
 
 	render({
 		message,
-		onClick,
 		conversation,
 		conversationFull,
 		selectedMessage,
