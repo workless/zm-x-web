@@ -1,0 +1,11 @@
+{
+	"title": "EOSIO",
+	"clientName": "EOSIO",
+	"zimbraOrigin": "/@zimbra",
+	"zimbraProxyURL": "https://email.corp.synacor.com",
+	"devServer": {
+		"zimbraOrigin": "https://email.corp.synacor.com"
+	},
+
+	"nav": false
+}

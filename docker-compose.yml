@@ -1,0 +1,12 @@
+version: "3.3"
+
+services:
+  zm-x:
+    image: zimbra/zm-x-web:latest
+    container_name: zm-x-web
+    domainname: test
+    hostname: zm-x-web
+    entrypoint:
+      - /app/init
+    ports:
+      - "443:443"

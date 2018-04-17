@@ -1,0 +1,8 @@
+#!/bin/bash
+
+echo "running npm server"
+cd /app
+CLIENT=bc PORT=443 ZIMBRA_URL=https://18.188.106.173:8443 npm start
+echo "SETUP COMPLETE"
+/bin/sleep infinity
+
