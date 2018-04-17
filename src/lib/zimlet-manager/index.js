@@ -3,7 +3,7 @@
 import { h, Component, cloneElement } from 'preact';
 import { route, Link } from 'preact-router';
 import emitter from 'mitt';
-import qs from 'query-string';
+//import qs from 'query-string';
 import delve from 'lodash-es/get';
 import realm from './realm';
 import createCache from './cache';
@@ -170,7 +170,8 @@ export default function zimletManager({ zimbra, store, zimbraOrigin, showZimletS
 	}
 
 	// @TODO: move this into the model
-	function getCompiledZimlets() {
+	// use below code when we can get compiled zimlets from the server compatible with Zimbra X
+	/*function getCompiledZimlets() {
 		let { attrs, cos } = getAccount();
 		if (attrs==null) return Promise.reject(Error('No account'));
 		let url = '/service/zimlet/res/Zimlets-nodev_all.js.zgz?' + qs.stringify({
@@ -179,7 +180,7 @@ export default function zimletManager({ zimbra, store, zimbraOrigin, showZimletS
 			cosId: array(cos)[0].id
 		});
 		return zimbra.request(url, null, { responseType: 'text' });
-	}
+	}*/
 
 	function runZimlets(code, options={}) {
 		let zm = options.zimlet || options.config && options.config.zimlet || {};
@@ -307,8 +308,17 @@ export default function zimletManager({ zimbra, store, zimbraOrigin, showZimletS
 
 	exports.initialize = function initialize() {
 		if (initializing===false && !exports.initialized) {
-			initializing = true;
 
+			// Do this until we can get compiled zimlets compatible with Zimbra X from the server
+			initializing = false;
+			exports.initialized = true;
+			// zimletInterfaces = {};
+			oninit.resolve(exports);
+			exports.emit('init', exports);
+			return Promise.resolve();
+
+			// use below code when we can get compiled zimlets from the server compatible with Zimbra X
+			/*initializing = true;
 			return getCompiledZimlets()
 				.then( code => {
 					exports.emit('beforeinit', exports);
@@ -325,7 +335,7 @@ export default function zimletManager({ zimbra, store, zimbraOrigin, showZimletS
 					initializing = false;
 					exports.failedInitializations++;
 					exports.emit('init::failed', err);
-				});
+				});*/
 		}
 		return oninit;
 	};
@@ -374,7 +384,7 @@ export default function zimletManager({ zimbra, store, zimbraOrigin, showZimletS
 }
 
 
-const array = obj => Array.isArray(obj) ? obj : [].concat(obj);
+//const array = obj => Array.isArray(obj) ? obj : [].concat(obj);
 
 function deferred() {
 	let resolve, reject;
