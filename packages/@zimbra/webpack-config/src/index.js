@@ -346,6 +346,7 @@ export default function(env) {
 			}),
 
 			new LodashWebpackPlugin({
+				flattening: true,
 				collections: true,
 				paths: true,
 				shorthands: true,
