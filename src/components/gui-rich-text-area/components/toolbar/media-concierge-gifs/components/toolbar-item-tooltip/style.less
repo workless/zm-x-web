@@ -16,9 +16,32 @@
 
 		> span > button {
 			margin: 0;
+			color: var(--text-color);
+			border-color: var(--border-color-primary);
+			margin: 0;
 
-			&:last-child {
-				margin-left: 8px;
+			&:not(:last-child) {
+				border-top-right-radius: 0;
+				border-bottom-right-radius: 0;
+				border-right-width: .5px;
+			}
+
+			&:not(:first-child) {
+				border-top-left-radius: 0;
+				border-bottom-left-radius: 0;
+				border-left-width: .5px;
+			}
+
+			&:hover, &:focus {
+				&:not(:disabled) {
+					background: var(--gray-lighter);
+					color: var(--text-color);
+				}
+			}
+
+			&.active {
+				font-weight: bold;
+				background: var(--gray-lighter);
 			}
 		}
 	}

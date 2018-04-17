@@ -6,20 +6,24 @@ import SearchInput from '../search-input';
 import style from './style';
 import cx from 'classnames';
 
+// @enum activeView
+const POPULAR = 1;
+const RECENT = 2;
+
 export default class ToolbarItemTooltip extends Component {
 	handleSearch = (searchTerm) => {
-		this.setState({ tags: searchTerm });
+		this.setState({ activeView: undefined, tags: searchTerm });
 	}
 
 	handleClickPopular = () => {
-		this.setState({ tags: '' });
+		this.setState({ activeView: POPULAR, tags: '' });
 	}
 
 	handleClickRecent = () => {
-		this.setState({ tags: 'latest' });
+		this.setState({ activeView: RECENT, tags: 'latest' });
 	}
 
-	render({ onClickGif, ...props }, { tags }) {
+	render({ onClickGif, ...props }, { tags, activeView }) {
 		return (
 			<div {...props} class={cx(style.tooltip, props.class)}>
 				<div class={style.searchBar}>
@@ -30,10 +34,10 @@ export default class ToolbarItemTooltip extends Component {
 					/>
 
 					<span>
-						<Button onClick={this.handleClickPopular}>
+						<Button styleType="secondary" onClick={this.handleClickPopular} class={activeView === POPULAR && style.active}>
 							<Text id="mediaConcierge.gifs.buttons.popular" />
 						</Button>
-						<Button onClick={this.handleClickRecent} styleType="primary">
+						<Button styleType="secondary" onClick={this.handleClickRecent} class={activeView === RECENT && style.active}>
 							<Text id="mediaConcierge.gifs.buttons.recent" />
 						</Button>
 					</span>
