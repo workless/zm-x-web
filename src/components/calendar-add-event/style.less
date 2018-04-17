@@ -1,7 +1,7 @@
 @import '~@zimbra/x-ui/helpers.less';
 
 @label-width: 110px;
-@label-width-sm: 70px;
+@label-width-sm: 60px;
 
 .dialog {
 	width: 630px;
@@ -13,47 +13,6 @@
 	padding-bottom: 0px !important;
 	margin-bottom: 76px;
 	overflow-x: visible;
-}
-
-.alignedForm {
-	display: flex;
-	flex-direction: column;
-}
-
-.alignedLabel {
-	display: block;
-	width: @label-width;
-	min-width: @label-width;
-	padding-right: 8px;
-	@media (max-width: @screen-sm-max) {
-		min-width: @label-width-sm !important;
-		width: @label-width-sm !important;
-	}
-}
-
-.fieldOffset {
-	padding-left: @label-width;
-	@media (max-width: @screen-sm-max) {
-		padding-left: @label-width-sm;
-	}
-}
-
-.inlineField {
-	margin-right: 8px;
-	@media (max-width: @screen-xs-max) {
-		width: 110px;
-	}
-}
-
-.timeSelector {
-	padding: 5px 12px;
-	@media (max-width: @screen-xs-max) {
-		padding: 5px 0 5px 12px;
-	}
-}
-
-.privateWrapper {
-	padding-left: 8px
 }
 
 .subOption {
@@ -160,6 +119,48 @@
 		@media (max-width: @screen-sm-max) and ( min-width: @screen-xs-max ) {
 			padding: 16px 80px;
 		}
+
+		.alignedForm {
+			display: flex;
+			flex-direction: column;
+		}
+
+		.privateWrapper {
+			padding-left: 8px
+		}
+
+		.alignedLabel {
+			display: block;
+			width: @label-width;
+			min-width: @label-width;
+			padding-right: 8px;
+			@media (max-width: @screen-sm-max) {
+				min-width: @label-width-sm !important;
+				width: @label-width-sm !important;
+			}
+		}
+
+		.fieldOffset {
+			padding-left: @label-width;
+			@media (max-width: @screen-sm-max) {
+				padding-left: @label-width-sm;
+			}
+		}
+
+		.inlineField {
+			margin-right: 8px;
+			@media (max-width: @screen-xs-max) {
+				width: 110px;
+			}
+		}
+
+		.timeSelector {
+			padding: 5px 12px;
+			@media (max-width: @screen-xs-max) {
+				padding: 5px 0 5px 12px;
+			}
+		}
+
 	}
 
 	.footer {
