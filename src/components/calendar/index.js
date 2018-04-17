@@ -449,13 +449,11 @@ export default class Calendar extends Component {
 	};
 
 	handleCreateAppointment = appointment => {
-		try {
-			this.props.createAppointment({
-				name: '(No title)',
-				...appointment
-			});
-		}
-		catch (err) {
+
+		this.props.createAppointment({
+			name: '(No title)',
+			...appointment
+		}).catch( () => {
 			this.props.notify({
 				message: <Text id="calendar.editModal.notifications.problemInCreating" />,
 				action: {
@@ -465,7 +463,7 @@ export default class Calendar extends Component {
 					}
 				}
 			});
-		}
+		} );
 		this.handleCloseAddEvent();
 	};
 

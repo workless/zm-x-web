@@ -335,14 +335,14 @@ export default class CalendarAddEvent extends Component {
 						/>
 					</FormGroup>
 					<FormGroup>
-						<AlignedLabel>Start</AlignedLabel>
+						<AlignedLabel class={s.alignedLabel} align="left">Start</AlignedLabel>
 						<DateInput
 							class={s.inlineField}
 							dateValue={event.start}
 							onDateChange={this.handleStartChange}
 						/>
 						<TimeInput
-							class={s.inlineField}
+							class={cx(s.inlineField, s.timeSelector)}
 							dateValue={
 								allDay ? moment(event.start).startOf('day') : event.start
 							}
@@ -359,7 +359,7 @@ export default class CalendarAddEvent extends Component {
 						</label>
 					</FormGroup>
 					<FormGroup>
-						<AlignedLabel>End</AlignedLabel>
+						<AlignedLabel class={s.alignedLabel} align="left">End</AlignedLabel>
 						<DateInput
 							class={s.inlineField}
 							dateValue={endDate}
@@ -368,7 +368,7 @@ export default class CalendarAddEvent extends Component {
 							invalid={invalidDateRange}
 						/>
 						<TimeInput
-							class={s.inlineField}
+							class={cx(s.inlineField, s.timeSelector)}
 							dateValue={endDate}
 							onDateChange={this.handleEndChange}
 							disabled={allDay}
@@ -376,7 +376,7 @@ export default class CalendarAddEvent extends Component {
 						/>
 					</FormGroup>
 					<FormGroup>
-						<AlignedLabel>Repeat</AlignedLabel>
+						<AlignedLabel class={s.alignedLabel} align="left">Repeat</AlignedLabel>
 						<Select
 							value={repeatValue}
 							onChange={linkstate(this, 'repeatValue')}
@@ -387,7 +387,7 @@ export default class CalendarAddEvent extends Component {
 								</option>
 							))}
 						</Select>
-						<AlignedLabel>
+						<AlignedLabel class={s.privateWrapper} align="left">
 							<label>
 								<input
 									type="checkbox"
@@ -399,7 +399,7 @@ export default class CalendarAddEvent extends Component {
 						</AlignedLabel>
 					</FormGroup>
 					<FormGroup>
-						<AlignedLabel>Location</AlignedLabel>
+						<AlignedLabel class={s.alignedLabel} align="left">Location</AlignedLabel>
 						<TextInput
 							value={event.location}
 							onInput={linkstate(this, 'event.location')}
@@ -407,7 +407,7 @@ export default class CalendarAddEvent extends Component {
 						/>
 					</FormGroup>
 					<FormGroup class={s.inviteesGroup}>
-						<AlignedLabel>Invitees</AlignedLabel>
+						<AlignedLabel class={s.alignedLabel} align="left">Invitees</AlignedLabel>
 						<AddressField
 							class={s.addressField}
 							value={attendees}
@@ -438,7 +438,7 @@ export default class CalendarAddEvent extends Component {
 						)}
 					</FormGroup>
 					<FormGroup>
-						<AlignedLabel>Notes</AlignedLabel>
+						<AlignedLabel class={s.alignedLabel} align="left">Notes</AlignedLabel>
 						<div class={s.notesContainer}>
 							<Textarea
 								class={s.textArea}
@@ -468,7 +468,7 @@ export default class CalendarAddEvent extends Component {
 						</Button>
 					</FormGroup>
 					<FormGroup compact>
-						<AlignedLabel>Remind</AlignedLabel>
+						<AlignedLabel class={s.alignedLabel} align="left">Remind</AlignedLabel>
 						<Select
 							value={remindValue}
 							onChange={linkstate(this, 'remindValue')}
@@ -501,7 +501,7 @@ export default class CalendarAddEvent extends Component {
 						</FormGroup>
 					)}
 					<FormGroup>
-						<AlignedLabel>Show as</AlignedLabel>
+						<AlignedLabel class={s.alignedLabel} align="left">Show as</AlignedLabel>
 						<Select
 							value={showAsValue}
 							onChange={linkstate(this, 'showAsValue')}
