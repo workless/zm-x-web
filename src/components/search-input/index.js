@@ -284,6 +284,7 @@ export default class SearchInput extends Component {
 					<button
 						className={s.searchButton}
 						type="submit"
+						onClick={this.handleSubmit}
 					>
 						<Icon name="search" />
 					</button>
