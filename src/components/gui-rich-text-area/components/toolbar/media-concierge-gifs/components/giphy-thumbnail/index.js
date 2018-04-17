@@ -2,6 +2,8 @@ import { h, Component } from 'preact';
 import { connect } from 'preact-redux';
 import Thumbnail from '../../../../../../thumbnail';
 import { embed } from '../../../../../../../store/media-menu/actions';
+import style from './style';
+import cx from 'classnames';
 
 @connect(null, { onEmbed: embed })
 export default class GiphyGif extends Component {
@@ -37,6 +39,7 @@ export default class GiphyGif extends Component {
 		return (
 			<Thumbnail
 				{...props}
+				class={cx(style.thumbnail, props.class)}
 				thumbnail={thumbnail}
 				data={{ url, name: 'Gif from Giphy.com', contentType: 'image/gif' }}
 				src={url}
