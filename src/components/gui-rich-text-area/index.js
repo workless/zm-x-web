@@ -39,9 +39,9 @@ export default class GuiRichTextArea extends PureComponent {
 	}
 	exec = (command, ...args) => {
 		const { rte } = this.refs;
-		let commandName = args[0];
-		let isTextCommand = commandName === 'bold' || commandName === 'italic' || commandName === 'underline';
-		if (command !=='queryCommandValue') this.focus();
+		let commandName = args[0] || '';
+		let isTextCommand = [ 'bold', 'italic', 'underline', 'fontSize', 'fontName' ].indexOf(commandName) !== -1;
+		this.focus();
 		if (rte) {
 			let execResult = rte[command](...args);
 			// For IE as it doesn't trigger onInput
@@ -51,14 +51,15 @@ export default class GuiRichTextArea extends PureComponent {
 	};
 
 	setCommandState = debounce(() => {
-		const { rte } = this.refs;
-		let command = 'queryCommandState';
+		const { queryCommandState, queryCommandValue } = this.refs.rte;
 
 		this.setState({
 			commandState: {
-				bold: rte[command]('bold'),
-				italic: rte[command]('italic'),
-				underline: rte[command]('underline')
+				fontSize: queryCommandValue('fontSize'),
+				fontName: queryCommandValue('fontName'),
+				bold: queryCommandState('bold'),
+				italic: queryCommandState('italic'),
+				underline: queryCommandState('underline')
 			}
 		});
 	}, 100)
@@ -105,8 +106,9 @@ export default class GuiRichTextArea extends PureComponent {
 	}
 
 	focus = () => {
-		this.refs.rte.focus();
-		this.restoreRange();
+		if (this.refs && this.refs.rte) {
+			this.restoreRange();
+		}
 	};
 
 	readFiles(files, callback) {

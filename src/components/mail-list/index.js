@@ -115,6 +115,7 @@ export default class MailList extends Component {
 										onCheckboxSelect={handleItemCheckboxSelect}
 										showSnippet={showSnippets}
 										density={messageListDensity}
+										showSize={sortBy.indexOf('size') === 0}
 									/>
 								))}
 							</div>

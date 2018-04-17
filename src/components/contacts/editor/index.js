@@ -144,7 +144,7 @@ export default class ContactEditor extends Component {
 		let value;
 		//handle case where value is the return object, like DateInput
 		if (isDate) {
-			value = format(e, 'MM/DD/YY');
+			value = format(e, 'YYYY-MM-DD');
 		}
 		//handle <input/> onInput events for different input types
 		else {

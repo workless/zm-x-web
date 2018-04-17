@@ -9,11 +9,10 @@ import isSameWeek from 'date-fns/is_same_week';
 import isSameMonth from 'date-fns/is_same_month';
 import isSameYear from 'date-fns/is_same_year';
 import startOfWeek from 'date-fns/start_of_week';
-import endOfWeek from 'date-fns/end_of_week';
 import startOfMonth from 'date-fns/start_of_month';
-import endOfMonth from 'date-fns/end_of_month';
 import startOfYear from 'date-fns/start_of_year';
 import setMonth from 'date-fns/set_month';
+import addDays from 'date-fns/add_days';
 import addMonths from 'date-fns/add_months';
 import addYears from 'date-fns/add_years';
 import eachDay from 'date-fns/each_day';
@@ -220,11 +219,7 @@ class MonthView extends Component {
 					? parseInt(preferences.zimbraPrefCalendarFirstDayOfWeek, 10)
 					: 0
 			}),
-			end = endOfWeek(endOfMonth(displayDate), {
-				weekStartsOn: preferences
-					? parseInt(preferences.zimbraPrefCalendarFirstDayOfWeek, 10)
-					: 6
-			}),
+			end = addDays(start, 41), //always show an even 6 weeks so the height of the minical doesn't jumpt around
 			dates = eachDay(start, end),
 			weeks = dates.reduce(toWeeks, []);
 
