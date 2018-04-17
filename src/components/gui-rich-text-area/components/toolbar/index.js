@@ -188,6 +188,7 @@ export default class Toolbar extends PureComponent {
 		submenu ?
 			submenu.length > 1 ?
 				<SplitPaneMenu
+					commandState={this.props.commandState}
 					onChange={this.execCommand}
 					menuIcon={icon}
 					submenu={submenu}
