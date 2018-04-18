@@ -18,19 +18,17 @@ export default class RegisterAccountForm extends Component {
 		recoveryEmail: this.props.recoveryEmail
 	}
 
-	submit = (e) => {
-		this.props.onError && this.props.onError('');
-
+	submit = (evt) => {
 		this.setState({ submitting: true });
 
 		this.props.onSubmit(this.state)
 			.catch((err) => {
-				err.message = 'Error registering new account';
-				this.props.onError(err);
+				console.error('*** RegisterAccountForm.submit', err);
 				this.setState({ submitting: false });
+				return this.props.onError(new Error('registration failed'));
 			});
 
-		e.preventDefault();
+		evt.preventDefault();
 	}
 
 	componentWillReceiveProps({ firstName, lastName, userName, recoveryEmail }) {

@@ -122,10 +122,8 @@ export default class Login extends Component {
 			body: newAccount
 		}).then((resp) => {
 			console.log('**** register account success', resp);
+			this.setState({ showRegisterAccountForm: false });
 			return resp;
-		}).catch((err) => {
-			console.error('*** register account error', err);
-			throw err;
 		});
 	};
 
@@ -144,6 +142,9 @@ export default class Login extends Component {
 			}
 			else if (error.match(/maintenance mode/)) {
 				error = <Text id="loginScreen.errors.inMaintainance" />;
+			}
+			else if (error.match(/registration/)) {
+				error = <Text id="loginScreen.errors.registrationFailed" />;
 			}
 			else if (error.match(/^Error: /)) {
 				error = error.replace(/^Error: /, '');
@@ -165,7 +166,12 @@ export default class Login extends Component {
 
 		const renderForm = () => {
 			if (showRegisterAccountForm) {
-				return (<RegisterAccountForm onSubmit={this.registerAccountSubmit} />);
+				return (
+					<RegisterAccountForm
+						onSubmit={this.registerAccountSubmit}
+						onError={this.handleError}
+					/>
+				);
 			}
 			else if (showChangePassword) {
 				return (

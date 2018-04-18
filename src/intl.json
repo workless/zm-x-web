@@ -86,7 +86,8 @@
 		"errors": {
 			"invalidCredentials": "Invalid username or password",
 			"chooseNewPass": "Your password is no longer valid. Please choose a new password.",
-			"inMaintainance": "This account is currently in maintenance mode."
+			"inMaintainance": "This account is currently in maintenance mode.",
+			"registrationFailed": "Registration failed. Please contact Jennifer Goodwin"
 		},
 		"switchToBasic": "Switch to Basic Version",
 		"privacyPolicy": "Privacy Policy",
