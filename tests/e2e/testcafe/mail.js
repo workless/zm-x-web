@@ -602,7 +602,7 @@ fixture `Mail: Forward functions single user`
 		await soap.deleteAccount(t.ctx.user.id, t.fixtureCtx.adminAuthToken);
 	});
 
-test('L1 | Forward email Add Attachments | C906307', async t => {
+test('L1 | Forward email Add Attachments | C906307 | PREAPPS-565', async t => {
 	const filePath = path.join(__dirname, './data/files/JPEG_Image.jpg');
 	let emailBodyText = 'forward email';
 	let fwdEmailSubject = 'Fwd: empty';
