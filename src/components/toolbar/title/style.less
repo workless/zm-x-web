@@ -1,3 +1,4 @@
+@import '~@zimbra/x-ui/helpers.less';
 .container {
 	display: flex;
 	flex-direction: column;
@@ -19,4 +20,7 @@
 	text-overflow: ellipsis;
 	word-break: break-all;
 	overflow-x: hidden;
+	@media (max-width: @screen-phone) {
+		max-width: 220px;
+	}
 }
