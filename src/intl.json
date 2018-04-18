@@ -35,7 +35,8 @@
 		"yes": "Yes",
 		"zoomIn": "Zoom In",
 		"zoomOut": "Zoom Out",
-		"undo": "Undo"
+		"undo": "Undo",
+		"register": "Register"
 	},
 	"dates": {
 		"yesterday": "Yesterday"
@@ -64,12 +65,20 @@
 			"email": "Email",
 			"pass": "Password",
 			"newPass": "New Password",
-			"confirmPass": "Confirm Password"
+			"confirmPass": "Confirm Password",
+			"firstName": "First Name",
+			"lastName": "Last Name",
+			"userName": "User Name",
+			"recoveryEmail": "Recovery Email"
 		},
 		"forgotPass": {
 			"button": "Forgot Password?",
 			"header": "Password Assistance",
 			"paragraph": "To initiate a password reset, please contact Jennifer Goodwin at"
+		},
+		"registerAccount": {
+			"header": "Register New Account",
+			"button": "Register"
 		},
 		"resetPass": {
 			"header": "Reset Your Password"

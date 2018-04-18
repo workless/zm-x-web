@@ -7,6 +7,7 @@ import PasswordInput from '../password-input';
 import TextInput from '../text-input';
 import ClientLogo from '../client-logo';
 import ResetPasswordForm from './reset-password-form';
+import RegisterAccountForm from './register-account-form';
 import wire from 'wiretie';
 import linkState from 'linkstate';
 import cx from 'classnames';
@@ -34,6 +35,16 @@ function ForgotPasswordButton() {
 	);
 }
 
+function RegisterAccountButton({ onClick }) {
+	return (
+		<Button class={style.registerAccountButton} styleType="text" onClick={onClick}>
+			<span class={style.registerAccountButtonText}>
+				<Text id="loginScreen.registerAccount.button" />
+			</span>
+		</Button>
+	);
+}
+
 @configure('clientName')
 @withAriaId('login-form')
 @wire('zimbra', {}, zimbra => ({
@@ -58,7 +69,6 @@ export default class Login extends Component {
 
 		setTimeout(() => { this.setState({ shake: false }); }, 250);
 	}
-
 
 	submit = () => {
 		let { login, onLogin } = this.props,
@@ -93,12 +103,21 @@ export default class Login extends Component {
 		return false;
 	};
 
+	registerAccountClick = () => {
+		this.setState({ showRegisterAccountForm: true });
+	};
+
+	registerAccountSubmit = ({ firstName, lastName, userName, recoveryEmail }) => {
+		console.log('*** REGISTER ACCOUNT HERE');
+		return Promise.resolve();
+	};
+
 	componentWillMount() {
 		//invalidate any session that the user might have
 		this.props.endSession();
 	}
 
-	render({ a11yId, clientName, login, onLogin }, { showChangePassword, error, loading, username, password, validity, shake }) {
+	render({ a11yId, clientName, login, onLogin }, { showRegisterAccountForm, showChangePassword, error, loading, username, password, validity, shake }) {
 		if (error && error.match) {
 			if (error.match(/(authorization|authentication failed)/i)) {
 				error = <Text id="loginScreen.errors.invalidCredentials" />;
@@ -117,16 +136,86 @@ export default class Login extends Component {
 		const emailInputId = `${a11yId}-email`;
 		const passInputId = `${a11yId}-password`;
 
+		const renderHeader = () => {
+			if (showRegisterAccountForm) {
+				return (<Text id="loginScreen.registerAccount.header" />);
+			}
+			else if (showChangePassword) {
+				return (<Text id="loginScreen.resetPass.header" />);
+			}
+			return (<Text id="loginScreen.header.title" />);
+		};
+
+		const renderForm = () => {
+			if (showRegisterAccountForm) {
+				return (<RegisterAccountForm onSubmit={this.registerAccountSubmit} />);
+			}
+			else if (showChangePassword) {
+				return (
+					<ResetPasswordForm
+						username={username}
+						password={password}
+						class={style.form}
+						login={login}
+						onLogin={onLogin}
+						onError={this.handleError}
+					/>
+				);
+			}
+			return (
+				<form onSubmit={this.submit} action="javascript:">
+					<div class={style.form}>
+
+						<label
+							for={emailInputId}
+							class={cx(!validity.username && style.invalid)}
+						>
+							<Text id="loginScreen.labels.email" />
+						</label>
+						<TextInput
+							autofocus
+							disabled={loading}
+							id={emailInputId}
+							class={cx(!validity.username && style.invalid)}
+							value={username}
+							onInput={linkState(this, 'username')}
+						/>
+
+						<label
+							for={passInputId}
+							class={cx(!validity.password && style.invalid)}
+						>
+							<Text id="loginScreen.labels.pass" />
+						</label>
+						<PasswordInput
+							disabled={loading}
+							id={passInputId}
+							class={cx(!validity.password && style.invalid)}
+							value={password}
+							onInput={linkState(this, 'password')}
+						/>
+
+						<div class={style.buttons}>
+							<Button class={cx(shake && style.shakeHorizontal)} styleType="primary" brand="primary" disabled={loading} type="submit">
+								<Text id="loginScreen.header.title" />
+								{ loading && (
+									<Spinner dark class={style.icon} />
+								)}
+							</Button>
+							<RegisterAccountButton onClick={this.registerAccountClick} />
+						</div>
+					</div>
+				</form>
+			);
+		};
+
 		return (
 			<div class={style.container}>
 				<div class={style.login}>
 					<ClientLogo class={style.logo} />
 
 					<h1>
-						{showChangePassword
-							? <Text id="loginScreen.resetPass.header" />
-							: <Text id="loginScreen.header.title" />
-						}
+						{renderHeader()}
 					</h1>
 
 					{!error && !showChangePassword && (
@@ -138,60 +227,7 @@ export default class Login extends Component {
 							{error}
 						</div>
 					</div>
-					{showChangePassword ? (
-						<ResetPasswordForm
-							username={username}
-							password={password}
-							class={style.form}
-							login={login}
-							onLogin={onLogin}
-							onError={this.handleError}
-						/>
-					) : (
-						<form onSubmit={this.submit} action="javascript:">
-							<div class={style.form}>
-
-								<label
-									for={emailInputId}
-									class={cx(!validity.username && style.invalid)}
-								>
-									<Text id="loginScreen.labels.email" />
-								</label>
-								<TextInput
-									autofocus
-									disabled={loading}
-									id={emailInputId}
-									class={cx(!validity.username && style.invalid)}
-									value={username}
-									onInput={linkState(this, 'username')}
-								/>
-
-								<label
-									for={passInputId}
-									class={cx(!validity.password && style.invalid)}
-								>
-									<Text id="loginScreen.labels.pass" />
-								</label>
-								<PasswordInput
-									disabled={loading}
-									id={passInputId}
-									class={cx(!validity.password && style.invalid)}
-									value={password}
-									onInput={linkState(this, 'password')}
-								/>
-
-								<div class={style.buttons}>
-									<Button class={cx(shake && style.shakeHorizontal)} styleType="primary" brand="primary" disabled={loading} type="submit">
-										<Text id="loginScreen.header.title" />
-										{ loading && (
-											<Spinner dark class={style.icon} />
-										)}
-									</Button>
-									<ForgotPasswordButton />
-								</div>
-							</div>
-						</form>
-					)}
+					{renderForm()}
 				</div>
 				<footer class={style.footer}>
 					{/*
