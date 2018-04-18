@@ -4,6 +4,7 @@ import TextInput from '../../../components/text-input';
 import ZimletLoader from '../../../components/zimlet-loader';
 import { Button } from '@zimbra/blocks';
 import zimletLocalStorage from '../../../utils/zimlet-storage';
+import { callWith } from '../../../lib/util';
 import style from './style';
 
 
@@ -11,7 +12,7 @@ export default class ZimletsSdk extends Component {
 
 	state = {
 		url: 'https://localhost:8081/index.js',
-		zimlets: this.persistedZimlets ? { ...this.persistedZimlets } : {}
+		zimlets: zimletLocalStorage.get() || {}
 	}
 
 	handleLoadZimlets = (zimlets) => {
@@ -23,27 +24,24 @@ export default class ZimletsSdk extends Component {
 		});
 	}
 
-	persistedZimlets = zimletLocalStorage.get();
-
-	handlePersistZimlet = (name) => (e) => {
-		let zimlets = zimletLocalStorage.get();
-
-		if (e.target.checked) {
-			zimlets[name] = { url: this.state.zimlets[name].url };
-
-			this.persistedZimlets = zimlets;
-			zimletLocalStorage.set(zimlets);
-		}
-		else if (zimlets) {
-			delete zimlets[name];
-			this.persistedZimlets = zimlets;
-			zimletLocalStorage.set(zimlets);
-		}
+	removeZimlet = (name) => {
+		let { zimlets } = this.state;
+		delete zimlets[name];
+		zimletLocalStorage.set(zimlets);
+		this.setState({ zimlets });
 	}
 
 	addZimlet = () => {
 		const { zimlets, name, url } = this.state;
+
 		console.log(`Adding Zimlet ${name}: ${url}`); // eslint-disable-line no-console
+
+		if (zimlets[name]) {
+			return this.setState({ error: 'Zimlet with that name is already loaded' });
+		}
+
+		zimlets[name] = { url };
+		zimletLocalStorage.set(zimlets);
 
 		this.setState({
 			name: '',
@@ -55,16 +53,6 @@ export default class ZimletsSdk extends Component {
 			}
 		});
 	}
-
-	loadRemoteZimlet = () => {
-		let { zimlets } = this.props;
-		let { url, name } = this.state;
-		zimlets.loadZimletByUrl(url, { name, compat: false })
-			.then( result =>
-				Promise.resolve().then(result.init).then( () => result )
-			)
-			.catch( error => this.setState({ error }));
-	};
 
 	render({ }, { url, name, latest, zimlets, error }) {
 		return (
@@ -83,36 +71,36 @@ export default class ZimletsSdk extends Component {
 						<Button type="submit">Load Zimlet</Button>
 					</form>
 
-					{ zimlets && !!Object.keys(zimlets).length && ([
-						latest && (
+					{ latest &&
 							<div class={style.running}>
 								Successfully started <b>{latest}</b> zimlet. The zimlet will remain loaded and running until this browser tab is closed or reloaded.
 							</div>
-						),
-						<table>
-							<caption>Running Zimlets</caption>
+					}
+					<hr />
+					<table>
+						<caption>Running Zimlets</caption>
+						<thead>
 							<tr>
-								<th>Persisted</th>
 								<th>Zimlet Name</th>
 								<th>Zimlet URL</th>
+								<th>Remove</th>
 							</tr>
-							{Object.keys(zimlets) && Object.keys(zimlets).map((zimletName) => (
+						</thead>
+
+						<tbody>
+							{Object.keys(zimlets).map((zimletName) => (
 								<tr>
-									<td>
-										<span>
-											<input checked={zimletName in this.persistedZimlets} type="checkbox" onClick={this.handlePersistZimlet(zimletName)} />
-											<label>Persist</label>
-										</span>
-									</td>
 									<td>{zimletName}</td>
 									<td>{zimlets[zimletName].url}</td>
+									<td><a onClick={callWith(this.removeZimlet, zimletName)}>Remove</a></td>
 								</tr>
 							))}
-						</table>
-					])}
+						</tbody>
+					</table>
+
 					{error &&
 						<div class={style.error}>
-							Error loading/starting {latest} zimlet: {error.message}
+							Error loading/starting {latest} zimlet: {error}
 						</div>
 					}
 					<div class={style.showZimlets}>
