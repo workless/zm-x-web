@@ -146,6 +146,33 @@ test('L1 | Read Message, Inline Attachment | C581719', async t => {
 	await t.expect(sidebar.checkSidebarItemExists('Inbox')).ok({ timeout: 15000 });
 });
 
+test('L1 | Read Message, Preview Attachment, Close Preview | C666728', async t => {
+	await compose.openNewMessage();
+	await t
+		.click(elements.mailViewAttachmentPrevewButton)
+		.expect(elements.mailViewAttachmentViewer.exists).ok({ timeout: 5000 })
+		.expect(elements.mailViewAttachmentViewer.find(elements.previewPDFviewContainer).find('canvas').exists).ok()
+		.expect(elements.previewToolbarDownloadButton.exists).ok();
+	await t
+		.click(elements.previewToolbarFullScreenButton)
+		.expect(elements.overlayView.exists).ok({ timeout: 5000 });
+	await mail.closePreviewFullScreen();
+	await t.expect(elements.overlayView.exists).notOk({ timeout: 5000 });
+	await t
+		.click(elements.previewToolbarCloseButton)
+		.expect(elements.mailViewAttachmentViewer.exists).notOk({ timeout: 5000 });
+})
+.before( async t => {
+	const inject = new Inject();
+	const filePath = path.join(__dirname, './data/mime/emails/single-file-attachment.txt');
+	t.ctx.user = await soap.createAccount(t.fixtureCtx.adminAuthToken);
+	t.ctx.userAuth = await soap.getUserAuthToken(t.ctx.user.email, t.ctx.user.password);
+	inject.send(t.ctx.userAuth, filePath);
+	await t.maximizeWindow();
+	await actions.loginEmailPage(t.ctx.user.email, t.ctx.user.password);
+	await t.expect(sidebar.checkSidebarItemExists('Inbox')).ok({ timeout: 15000 }); 
+});
+
 /*****************************/
 /*** Mail: Folders fixture ***/
 /*****************************/
@@ -575,7 +602,7 @@ fixture `Mail: Forward functions single user`
 		await soap.deleteAccount(t.ctx.user.id, t.fixtureCtx.adminAuthToken);
 	});
 
-test('L1 | Forward email Add Attachments | C906307', async t => {
+test('L1 | Forward email Add Attachments | C906307 | PREAPPS-565', async t => {
 	const filePath = path.join(__dirname, './data/files/JPEG_Image.jpg');
 	let emailBodyText = 'forward email';
 	let fwdEmailSubject = 'Fwd: empty';
