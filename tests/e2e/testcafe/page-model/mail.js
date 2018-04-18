@@ -66,6 +66,10 @@ class Mail {
     	return await elements.mailListPaneSelector.find(elements.messageItem).nth(index).find(elements.mailSubject).innerText;
 	}
 	
+	async closePreviewFullScreen() {
+		await t.click(elements.overlayView.find('button').withAttribute('title', 'Close'));
+	}
+
 	selectMail = (index) => elements.mailListItemMessageSelector.nth(index);
 	getMailCount = () => elements.mailListItemMessageSelector.count;
 	checkMailExists = (text) => elements.mailListItemMessageSelector.withText(text).exists;
