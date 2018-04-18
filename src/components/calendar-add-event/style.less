@@ -3,77 +3,6 @@
 @label-width: 110px;
 @label-width-sm: 60px;
 
-.dialog {
-	width: 630px;
-}
-
-.dialogContent {
-	height: 573px;
-	overflow-y: auto;
-	padding-bottom: 0px !important;
-	margin-bottom: 76px;
-	overflow-x: visible;
-}
-
-.subOption {
-	display: block;
-	margin-bottom: 8px;
-
-	&:last-child {
-		margin-bottom: 0;
-	}
-}
-
-.inviteesGroup {
-	margin-bottom: 8px;
-}
-
-.addressField {
-	flex: 1;
-	appearance: none;
-	border-radius: 3px;
-	background-color: #fff;
-	border: solid 1px @gray-lighter;
-}
-
-.availabilityIndicatorGroup {
-	margin-left: 110px;
-	width: auto;
-}
-.availabilityButton {
-	margin: 8px 0;
-}
-.attachmentButton {
-	width: 25px;
-	height: 24px;
-	margin-bottom: auto;
-	background-color: transparent;
-	span {
-		&::before {
-			position: relative;
-			left: -12px;
-			bottom: 8px;
-		}
-	}
-}
-
-.notesContainer {
-	border: solid 1px lightgrey;
-	border-radius: 3px;
-	width: 400px;
-}
-
-.attachments {
-	margin-left: 10px;
-	margin-right: 4px;
-	display: inline-block;
-}
-
-.textArea {
-	border: none;
-	width: 99%;
-}
-
 .wrapper {
 	display: flex;
 	flex-direction: column;
@@ -92,7 +21,7 @@
 			margin: 0;
 			padding: 0;
 			font-size: @font-size-h4;
-			font-weight: 300;
+			font-weight: 400;
 		}
 
 		.actionButton {
@@ -108,6 +37,17 @@
 			&:focus, &:hover {
 				background-color: @gray-lighter;
 			}
+		}
+	}
+
+	.simpleHeader {
+		padding: 0 0 16px 0;
+
+		h2 {
+			margin: 0;
+			padding: 0;
+			font-size: @font-size-h4;
+			font-weight: 400;
 		}
 	}
 
@@ -141,24 +81,85 @@
 		}
 
 		.fieldOffset {
-			padding-left: @label-width;
+			margin-left: @label-width;
 			@media (max-width: @screen-sm-max) {
-				padding-left: @label-width-sm;
+				margin-left: @label-width-sm;
 			}
 		}
 
-		.inlineField {
+		.dateSelector {
 			margin-right: 8px;
 			@media (max-width: @screen-xs-max) {
-				width: 110px;
+				width: 80px;
 			}
 		}
 
 		.timeSelector {
 			padding: 5px 12px;
+			margin-right: 8px;
 			@media (max-width: @screen-xs-max) {
 				padding: 5px 0 5px 12px;
+				width: 110px;
 			}
+		}
+
+		.subOption {
+			display: block;
+			margin-bottom: 8px;
+
+			&:last-child {
+				margin-bottom: 0;
+			}
+		}
+
+		.inviteesGroup {
+			margin-bottom: 8px;
+		}
+
+		.addressField {
+			flex: 1;
+			appearance: none;
+			border-radius: 3px;
+			background-color: #fff;
+			border: solid 1px @gray-lighter;
+		}
+
+		.availabilityIndicatorGroup {
+			margin-left: @label-width-sm;
+			width: auto;
+		}
+		.availabilityButton {
+			margin: 8px 0;
+		}
+		.attachmentButton {
+			width: 25px;
+			height: 24px;
+			margin-bottom: auto;
+			background-color: transparent;
+			span {
+				&::before {
+					position: relative;
+					left: -12px;
+					bottom: 8px;
+				}
+			}
+		}
+
+		.notesContainer {
+			border: solid 1px @gray-lighter;
+			border-radius: 3px;
+			width: 400px;
+		}
+
+		.attachments {
+			margin-left: 10px;
+			margin-right: 4px;
+			display: inline-block;
+		}
+
+		.textArea {
+			border: none;
+			width: 99%;
 		}
 
 	}
@@ -174,5 +175,23 @@
 		line-height: 64px;
 	}
 
+	label {
+		padding: 0;
+	}
+
 }
 
+.toolbarAction {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: flex-end;
+	flex: auto;
+	padding: 5px;
+
+	.addEventAction {
+		height: 36px;
+		border-radius: 2px;
+	}
+
+}

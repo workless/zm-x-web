@@ -22,12 +22,14 @@ import AddressField from '../address-field';
 import AvailabilityIndicator from '../availability-indicator';
 import chooseFiles from 'choose-files';
 import AttachmentGrid from '../attachment-grid';
+import CalendarAddEventToolbar from './calendar-add-event-toolbar';
+import CalendarAddEventAction from './calendar-add-event-action';
 import wire from 'wiretie';
 
 import s from './style.less';
 import { ATTENDEE_ROLE } from '../../constants/calendars';
 import withMediaQuery from '../../enhancers/with-media-query';
-import { minWidth, screenXsMax } from '../../constants/breakpoints';
+import { minWidth, screenMd } from '../../constants/breakpoints';
 
 const REMIND_OPTIONS = [
 	'never',
@@ -71,7 +73,7 @@ function remindValueFor(relativeTrigger) {
 			`${relativeTrigger.minutes}m`)
 	);
 }
-@withMediaQuery(minWidth(screenXsMax))
+@withMediaQuery(minWidth(screenMd), 'matchesScreenMd')
 @wire('zimbra', {}, zimbra => ({
 	attach: zimbra.appointments.attach
 }))
@@ -292,7 +294,7 @@ export default class CalendarAddEvent extends Component {
 	}
 
 	render(
-		{ title, inline, class: cls },
+		{ title, inline, class: cls, matchesScreenMd },
 		{
 			allDay,
 			isPrivate,
@@ -313,18 +315,22 @@ export default class CalendarAddEvent extends Component {
 		const invalidDateRange = !allDay && start.diff(event.end) > 0;
 		const showAvailabilityButtonVisible =
 			!availabilityVisible && attendees.some(a => !isString(a));
-		//const error = isErrored ? errorMsg : '';
+
 		return (
 			<div className={cx(cls, s.wrapper, inline && s.inlineWrapper)}>
-				<div class={s.header}>
+				{ matchesScreenMd && <div class={s.header}>
 					<h2><Text id={title} /></h2>
 					<Button
 						styleType="floating"
 						class={s.actionButton}
 						onClick={this.onClose}
 					/>
-				</div>
+				</div> }
 				<AlignedForm class={s.formWrapper}>
+					{ !matchesScreenMd && <div class={s.simpleHeader}>
+						<h2><Text id={title} /></h2>
+					</div>  }
+
 					<FormGroup>
 						<TextInput
 							placeholderId={title}
@@ -337,12 +343,12 @@ export default class CalendarAddEvent extends Component {
 					<FormGroup>
 						<AlignedLabel class={s.alignedLabel} align="left">Start</AlignedLabel>
 						<DateInput
-							class={s.inlineField}
+							class={s.dateSelector}
 							dateValue={event.start}
 							onDateChange={this.handleStartChange}
 						/>
 						<TimeInput
-							class={cx(s.inlineField, s.timeSelector)}
+							class={s.timeSelector}
 							dateValue={
 								allDay ? moment(event.start).startOf('day') : event.start
 							}
@@ -361,14 +367,14 @@ export default class CalendarAddEvent extends Component {
 					<FormGroup>
 						<AlignedLabel class={s.alignedLabel} align="left">End</AlignedLabel>
 						<DateInput
-							class={s.inlineField}
+							class={s.dateSelector}
 							dateValue={endDate}
 							onDateChange={linkstate(this, 'event.end')}
 							disabled={allDay}
 							invalid={invalidDateRange}
 						/>
 						<TimeInput
-							class={cx(s.inlineField, s.timeSelector)}
+							class={s.timeSelector}
 							dateValue={endDate}
 							onDateChange={this.handleEndChange}
 							disabled={allDay}
@@ -514,10 +520,8 @@ export default class CalendarAddEvent extends Component {
 						</Select>
 					</FormGroup>
 				</AlignedForm>
-				<div class={s.footer}>
-					<Button styleType="primary" brand="primary" onClick={this.handleSubmit} ><Text id="buttons.save" /></Button>
-					<Button onClick={this.onClose}><Text id="buttons.cancel" /></Button>
-				</div>
+				{ matchesScreenMd && <CalendarAddEventAction class={s.footer} sendButtonEnable={!!event.name} onSave={this.handleSubmit} onCancel={this.onClose} /> }
+				{ !matchesScreenMd && <CalendarAddEventToolbar sendButtonEnable={!!event.name} onSave={this.handleSubmit} onCancel={this.onClose} />}
 			</div>
 		);
 	}

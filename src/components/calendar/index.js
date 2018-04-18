@@ -656,6 +656,11 @@ export default class Calendar extends Component {
 						onSelectEvent={this.selectEvent}
 					/>
 					<CalendarRightbar class={style.rightbar} />
+					<CalendarSectionToolbar
+						date={date}
+						onCreateNewEvent={this.handleCreateNewEvent}
+						onNavigate={this.handleNavigate}
+					/>
 				</div>)
 				}
 
@@ -678,11 +683,6 @@ export default class Calendar extends Component {
 						onClose={this.closeActiveModal}
 					/>
 				)}
-				<CalendarSectionToolbar
-					date={date}
-					onCreateNewEvent={this.handleCreateNewEvent}
-					onNavigate={this.handleNavigate}
-				/>
 			</div>
 		);
 	}
