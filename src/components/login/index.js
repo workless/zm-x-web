@@ -108,8 +108,25 @@ export default class Login extends Component {
 	};
 
 	registerAccountSubmit = ({ firstName, lastName, userName, recoveryEmail }) => {
-		console.log('*** REGISTER ACCOUNT HERE');
-		return Promise.resolve();
+		console.log('*** registering account', firstName, lastName, userName, recoveryEmail);
+
+		const newAccount = new URLSearchParams();
+		newAccount.append('firstName', firstName);
+		newAccount.append('lastName', lastName);
+		newAccount.append('userName', userName);
+		newAccount.append('recoveryEmail', recoveryEmail);
+
+		return fetch('https://bc.lonni.me:8081/register', {
+			method: 'POST',
+			redirect: 'follow',
+			body: newAccount
+		}).then((resp) => {
+			console.log('**** register account success', resp);
+			return resp;
+		}).catch((err) => {
+			console.error('*** register account error', err);
+			throw err;
+		});
 	};
 
 	componentWillMount() {
