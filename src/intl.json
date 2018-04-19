@@ -245,6 +245,37 @@
 			"FILE_SIZE_EXCEEDED":
 				"Unable to upload your attachment. Please try again. Note: the maximum attachment size is 10MB.",
 			"fields": {
+				"start" : {
+					"label" : "Start"
+				},
+				"allDay" : {
+					"label" : "All Day"
+				},
+				"end" : {
+					"label" : "End"
+				},
+				"repeat": {
+					"label": "Repeat",
+					"options": {
+						"NONE": "None",
+						"DAI": "Every day",
+						"WEE": "Every week",
+						"MON": "Every month",
+						"YEA": "Every year"
+					}
+				},
+				"private": {
+					"label": "Private"
+				},
+				"location": {
+					"label": "Location"
+				},
+				"invitees": {
+					"label": "Invitees"
+				},
+				"notes": {
+					"label": "Notes"
+				},
 				"remind": {
 					"label": "Remind",
 					"options": {
@@ -270,6 +301,12 @@
 						"2w": "2 weeks before"
 					}
 				},
+				"mobileDesktop": {
+					"label": "Mobile/Desktop"
+				},
+				"email": {
+					"label": "Email"
+				},
 				"showAs": {
 					"label": "Show as",
 					"options": {
@@ -278,17 +315,11 @@
 						"B": "Busy",
 						"O": "Out of Office"
 					}
-				},
-				"repeat": {
-					"label": "Repeat",
-					"options": {
-						"NONE": "None",
-						"DAI": "Every day",
-						"WEE": "Every week",
-						"MON": "Every month",
-						"YEA": "Every year"
-					}
 				}
+			},
+			"buttons": {
+				"showAvailability": "Show Availability",
+				"addAttachment": "Add Attachment"
 			},
 			"availability": {
 				"title": "Availability for {{date}}",

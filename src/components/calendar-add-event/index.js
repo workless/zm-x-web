@@ -73,6 +73,20 @@ function remindValueFor(relativeTrigger) {
 			`${relativeTrigger.minutes}m`)
 	);
 }
+
+const DesktopHeading = ( { title, onClose } ) => (<div class={s.header}>
+	<h2><Text id={title} /></h2>
+	<Button
+		styleType="floating"
+		class={s.actionButton}
+		onClick={onClose}
+	/>
+</div> );
+
+const MobileHeading = ( { title } ) => (<div class={s.simpleHeader}>
+	<h2><Text id={title} /></h2>
+</div>);
+
 @withMediaQuery(minWidth(screenMd), 'matchesScreenMd')
 @wire('zimbra', {}, zimbra => ({
 	attach: zimbra.appointments.attach
@@ -316,21 +330,20 @@ export default class CalendarAddEvent extends Component {
 		const showAvailabilityButtonVisible =
 			!availabilityVisible && attendees.some(a => !isString(a));
 
+		let desktopHeading, mobileHeading;
+		if ( matchesScreenMd ){
+			// desktop view
+			desktopHeading = ( <DesktopHeading title={title} onClose={this.onClose} /> );
+		}
+		else {
+			mobileHeading = ( <MobileHeading title={title} /> );
+		}
+
 		return (
 			<div className={cx(cls, s.wrapper, inline && s.inlineWrapper)}>
-				{ matchesScreenMd && <div class={s.header}>
-					<h2><Text id={title} /></h2>
-					<Button
-						styleType="floating"
-						class={s.actionButton}
-						onClick={this.onClose}
-					/>
-				</div> }
+				{ desktopHeading }
 				<AlignedForm class={s.formWrapper}>
-					{ !matchesScreenMd && <div class={s.simpleHeader}>
-						<h2><Text id={title} /></h2>
-					</div>  }
-
+					{ mobileHeading }
 					<FormGroup>
 						<TextInput
 							placeholderId={title}
@@ -341,48 +354,52 @@ export default class CalendarAddEvent extends Component {
 						/>
 					</FormGroup>
 					<FormGroup>
-						<AlignedLabel class={s.alignedLabel} align="left">Start</AlignedLabel>
-						<DateInput
-							class={s.dateSelector}
-							dateValue={event.start}
-							onDateChange={this.handleStartChange}
-						/>
-						<TimeInput
-							class={s.timeSelector}
-							dateValue={
-								allDay ? moment(event.start).startOf('day') : event.start
-							}
-							onDateChange={this.handleStartChange}
-							disabled={allDay}
-						/>
-						<label>
-							<input
-								type="checkbox"
-								checked={allDay}
-								onChange={linkstate(this, 'allDay')}
+						<AlignedLabel class={s.alignedLabel} align="left"><Text id="calendar.editModal.fields.start.label" /></AlignedLabel>
+						<div class={s.datepickerWrapper}>
+							<DateInput
+								class={s.dateSelector}
+								dateValue={event.start}
+								onDateChange={this.handleStartChange}
 							/>
-							All Day
-						</label>
+							<TimeInput
+								class={s.timeSelector}
+								dateValue={
+									allDay ? moment(event.start).startOf('day') : event.start
+								}
+								onDateChange={this.handleStartChange}
+								disabled={allDay}
+							/>
+							<label class={s.allDay}>
+								<input
+									type="checkbox"
+									checked={allDay}
+									onChange={linkstate(this, 'allDay')}
+								/>
+								<Text id="calendar.editModal.fields.allDay.label" />
+							</label>
+						</div>
 					</FormGroup>
 					<FormGroup>
-						<AlignedLabel class={s.alignedLabel} align="left">End</AlignedLabel>
-						<DateInput
-							class={s.dateSelector}
-							dateValue={endDate}
-							onDateChange={linkstate(this, 'event.end')}
-							disabled={allDay}
-							invalid={invalidDateRange}
-						/>
-						<TimeInput
-							class={s.timeSelector}
-							dateValue={endDate}
-							onDateChange={this.handleEndChange}
-							disabled={allDay}
-							invalid={invalidDateRange}
-						/>
+						<AlignedLabel class={s.alignedLabel} align="left"><Text id="calendar.editModal.fields.end.label" /></AlignedLabel>
+						<div class={s.datepickerWrapper}>
+							<DateInput
+								class={s.dateSelector}
+								dateValue={endDate}
+								onDateChange={linkstate(this, 'event.end')}
+								disabled={allDay}
+								invalid={invalidDateRange}
+							/>
+							<TimeInput
+								class={s.timeSelector}
+								dateValue={endDate}
+								onDateChange={this.handleEndChange}
+								disabled={allDay}
+								invalid={invalidDateRange}
+							/>
+						</div>
 					</FormGroup>
 					<FormGroup>
-						<AlignedLabel class={s.alignedLabel} align="left">Repeat</AlignedLabel>
+						<AlignedLabel class={s.alignedLabel} align="left"><Text id="calendar.editModal.fields.repeat.label" /></AlignedLabel>
 						<Select
 							value={repeatValue}
 							onChange={linkstate(this, 'repeatValue')}
@@ -400,12 +417,12 @@ export default class CalendarAddEvent extends Component {
 									checked={isPrivate}
 									onChange={linkstate(this, 'isPrivate')}
 								/>
-								Private
+								<Text id="calendar.editModal.fields.private.label" />
 							</label>
 						</AlignedLabel>
 					</FormGroup>
 					<FormGroup>
-						<AlignedLabel class={s.alignedLabel} align="left">Location</AlignedLabel>
+						<AlignedLabel class={s.alignedLabel} align="left"><Text id="calendar.editModal.fields.location.label" /></AlignedLabel>
 						<TextInput
 							value={event.location}
 							onInput={linkstate(this, 'event.location')}
@@ -413,7 +430,7 @@ export default class CalendarAddEvent extends Component {
 						/>
 					</FormGroup>
 					<FormGroup class={s.inviteesGroup}>
-						<AlignedLabel class={s.alignedLabel} align="left">Invitees</AlignedLabel>
+						<AlignedLabel class={s.alignedLabel} align="left"><Text id="calendar.editModal.fields.invitees.label" /></AlignedLabel>
 						<AddressField
 							class={s.addressField}
 							value={attendees}
@@ -438,13 +455,13 @@ export default class CalendarAddEvent extends Component {
 									class={cx(s.fieldOffset, s.availabilityButton)}
 									onClick={this.handleToggleAvailabilty}
 								>
-										Show Availability
+									<Text id="calendar.editModal.buttons.showAvailability" />
 								</Button>
 							)
 						)}
 					</FormGroup>
 					<FormGroup>
-						<AlignedLabel class={s.alignedLabel} align="left">Notes</AlignedLabel>
+						<AlignedLabel class={s.alignedLabel} align="left"><Text id="calendar.editModal.fields.notes.label" /></AlignedLabel>
 						<div class={s.notesContainer}>
 							<Textarea
 								class={s.textArea}
@@ -466,7 +483,7 @@ export default class CalendarAddEvent extends Component {
 								))}
 						</div>
 						<Button
-							title="Add Attachment"
+							title={<Text id="calendar.editModal.buttons.addAttachment" />}
 							class={s.attachmentButton}
 							onClick={this.chooseAttachments}
 						>
@@ -474,7 +491,7 @@ export default class CalendarAddEvent extends Component {
 						</Button>
 					</FormGroup>
 					<FormGroup compact>
-						<AlignedLabel class={s.alignedLabel} align="left">Remind</AlignedLabel>
+						<AlignedLabel class={s.alignedLabel} align="left"><Text id="calendar.editModal.fields.remind.label" /></AlignedLabel>
 						<Select
 							value={remindValue}
 							onChange={linkstate(this, 'remindValue')}
@@ -494,7 +511,7 @@ export default class CalendarAddEvent extends Component {
 									onChange={linkstate(this, 'remindDesktop')}
 									checked={remindDesktop}
 								/>
-								Mobile/Desktop
+								<Text id="calendar.editModal.fields.mobileDesktop.label" />
 							</label>
 							<label class={s.subOption}>
 								<input
@@ -502,12 +519,12 @@ export default class CalendarAddEvent extends Component {
 									onChange={linkstate(this, 'remindEmail')}
 									checked={remindEmail}
 								/>
-								Email
+								<Text id="calendar.editModal.fields.email.label" />
 							</label>
 						</FormGroup>
 					)}
 					<FormGroup>
-						<AlignedLabel class={s.alignedLabel} align="left">Show as</AlignedLabel>
+						<AlignedLabel class={s.alignedLabel} align="left"><Text id="calendar.editModal.fields.showAs.label" /></AlignedLabel>
 						<Select
 							value={showAsValue}
 							onChange={linkstate(this, 'showAsValue')}
@@ -520,8 +537,7 @@ export default class CalendarAddEvent extends Component {
 						</Select>
 					</FormGroup>
 				</AlignedForm>
-				{ matchesScreenMd && <CalendarAddEventAction class={s.footer} sendButtonEnable={!!event.name} onSave={this.handleSubmit} onCancel={this.onClose} /> }
-				{ !matchesScreenMd && <CalendarAddEventToolbar sendButtonEnable={!!event.name} onSave={this.handleSubmit} onCancel={this.onClose} />}
+				<CalendarAddEventToolbar isMobileActive={!matchesScreenMd} onSave={this.handleSubmit} onCancel={this.onClose} />
 			</div>
 		);
 	}
