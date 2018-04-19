@@ -5,6 +5,8 @@
 .headerActions {
 	font-family: @branding-font-family-medium;
 	white-space: nowrap;
+	display: flex;
+	align-items: center;
 
 	@media (min-width: @screen-md) {
 		padding-right: 12px;
@@ -13,9 +15,9 @@
 
 .headerAction {
 	color: @header-actions-fg;
-	font-size: 19px;
-	margin-left: 1.25rem;
-	opacity: .5;
+	margin-left: @spacing-sm;
+	opacity: .8;
+	display: flex;
 
 	&:hover,
 	&:hover[href],
@@ -43,8 +45,11 @@
 	display: none;
 
 	@media (min-width: @screen-md) {
-		display: inline;
-		vertical-align: middle;
+		display: flex;
+		align-items: center;
+		font-size: 14px;
+		font-weight: 500;
+		line-height: 1;
 	}
 }
 

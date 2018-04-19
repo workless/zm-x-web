@@ -1,5 +1,4 @@
 import { h, Component } from 'preact';
-import { withText, Text } from 'preact-i18n';
 import { route } from 'preact-router';
 import { Link } from 'preact-router/match';
 import { connect } from 'preact-redux';
@@ -13,7 +12,6 @@ import { getView, getSearchFolder } from '../../store/url/selectors';
 
 import SearchInput from '../search-input';
 import HeaderActions from '../header-actions';
-import ZimletSlot from '../zimlet-slot';
 
 import ClientLogo from '../client-logo';
 import ActionMenuSearchFolder from '../action-menu-search-folder';
@@ -52,11 +50,6 @@ const VIEW_TO_SEARCH = {
 		}
 	]
 }))
-@withText({
-	emailButtonType: 'search.buttonTypes.mail',
-	calendarButtonType: 'search.buttonTypes.calendar',
-	contactsButtonType: 'search.buttonTypes.contacts'
-})
 class Search extends Component {
 	state = {
 		focused: false,
@@ -105,21 +98,6 @@ class Search extends Component {
 		{ focused }
 	) {
 
-
-		const fieldType =
-			pathType === null || pathType === 'message' || pathType === 'conversation'
-				? this.props.emailButtonType
-				: this.props[`${pathType}ButtonType`];
-
-		const placeHolderText = (<ZimletSlot name="searchHeaderButton" pathType={pathType} >
-			{ zimletResponses => {
-			//get the first truthy response from all zimlets that register to add search text placeholder data
-				let zimletText = zimletResponses && zimletResponses.filter(Boolean)[0];
-				return <Text id="search.primaryButtonLabel" fields={{ type: zimletText || fieldType }} />;
-			}}
-		</ZimletSlot>);
-
-
 		return (
 			<div className={s.searchContainer}>
 				<div className={s.search}>
@@ -145,12 +123,6 @@ class Search extends Component {
 							}
 						/>
 					</div>
-					<button className={s.searchMail} type="submit" >
-						{placeHolderText}
-					</button>
-					<button className={s.searchWeb} type="button">
-						Search Web
-					</button>
 				</div>
 			</div>
 		);

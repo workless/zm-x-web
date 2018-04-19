@@ -15,10 +15,8 @@ import { getFolder } from '../../store/folders/selectors';
 import { flagMailItem, readMailItem } from '../../store/mail/actions';
 import find from 'lodash-es/find';
 import cloneDeep from 'lodash-es/cloneDeep';
-import { configure } from '../../config';
 import style from './style';
 
-@configure('modalReply,modalReplyMobile')
 @connect(
 	(state, { message }) => {
 		const { email = {} } = state;
