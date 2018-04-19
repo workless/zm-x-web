@@ -23,7 +23,6 @@ import AvailabilityIndicator from '../availability-indicator';
 import chooseFiles from 'choose-files';
 import AttachmentGrid from '../attachment-grid';
 import CalendarAddEventToolbar from './calendar-add-event-toolbar';
-import CalendarAddEventAction from './calendar-add-event-action';
 import wire from 'wiretie';
 
 import s from './style.less';
