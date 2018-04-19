@@ -482,11 +482,11 @@ class SoapClient {
 		}
 	}
 
-	async addMessage(userAuthToken, attachmentId) {
+	async addMessage(userAuthToken, attachmentId, folder) {
 
 		let requestObj =
 			`<AddMsgRequest xmlns='urn:zimbraMail'>
-			<m l='Inbox' f='u' aid='${attachmentId}'></m>
+			<m l='${folder}' f='u' aid='${attachmentId}'></m>
 			</AddMsgRequest>`;
 
 		await this.soapSend(userAuthToken,requestObj);

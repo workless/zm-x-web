@@ -371,23 +371,6 @@ test('L1 | Reply to Message Containing Inline Attachments | C881169', async t =>
 		await actions.loginEmailPage(t.ctx.user.email, t.ctx.user.password);
 		await t.expect(sidebar.checkSidebarItemExists('Inbox')).ok({ timeout: 15000 });
 	});
-	
-
-	test('L1 | Delete thread by viewing message, conversation view | C727310', async t => {
-		await compose.openNewMessage();
-		await compose.clickToolbarButtonByName('Delete');
-		await t.expect(elements.mailListSubjectSelector.withText('empty').exists).notOk();
-	})
-	.before( async t => {
-		t.ctx.user = await soap.createAccount(t.fixtureCtx.adminAuthToken);
-		t.ctx.userAuth = await soap.getUserAuthToken(t.ctx.user.email, t.ctx.user.password);
-		const inject = new Inject();
-		const filePath = path.join(__dirname, './data/mime/emails/empty.txt');
-		inject.send(t.ctx.userAuth, filePath);
-		await t.maximizeWindow();
-		await actions.loginEmailPage(t.ctx.user.email, t.ctx.user.password);
-		await t.expect(sidebar.checkSidebarItemExists('Inbox')).ok({ timeout: 15000 });
-	});
 
 /****************************/
 /*** Compose, Functional  ***/

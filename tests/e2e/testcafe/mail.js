@@ -116,6 +116,45 @@ test('L0 | Delete message | C951765', async t => {
 	await t.expect(mail.checkMailExists(messageSubject)).ok();
 });
 
+
+test('L1 | Delete thread by viewing message, conversation view | C727310', async t => {
+	await compose.clickToolbarButtonByName('Delete');
+	await t.expect(elements.mailListSubjectSelector.withText('ABC').exists).notOk();
+});
+
+test('L1 | Delete thread by checking message box, conversation view | C727311', async t => {
+	await mail.selectAllMail();
+	await compose.clickToolbarButtonByName('Delete');
+	await t.expect(elements.mailListSubjectSelector.withText('ABC').exists).notOk();
+});
+
+test('L1 | Mark as spam message from inbox | C727320', async t => {
+	await compose.clickToolbarButtonByName('Spam');
+	await t.expect(elements.mailListSubjectSelector.withText('ABC').exists).notOk({ timeout: 5000 });
+	await t.click(sidebar.sidebarContentItemWithText('Junk'));
+	await t.expect(elements.mailListSubjectSelector.withText('ABC').exists).ok({ timeout: 5000 });
+});
+
+test('L1 | Mark as not spam from Junk folder | C727324', async t => {
+	//await compose.clickToolbarButtonByName('Spam');
+	//await t.expect(elements.mailListSubjectSelector.withText('ABC').exists).notOk({ timeout: 5000 });
+	await t.click(sidebar.sidebarContentItemWithText('Junk'));
+	await t.expect(elements.mailListSubjectSelector.withText('empty').exists).ok({ timeout: 5000 });
+	await mail.openEmail(0);
+	await compose.clickToolbarButtonByName('Not Spam');
+	await t.expect(elements.mailListSubjectSelector.withText('empty').exists).notOk({ timeout: 5000 });
+	await t.click(sidebar.sidebarContentItemWithText('Inbox'));
+	await t.expect(elements.mailListSubjectSelector.withText('empty').exists).ok({ timeout: 5000 });
+}).before(async t => {
+	t.ctx.user = await soap.createAccount(t.fixtureCtx.adminAuthToken);
+	t.ctx.userAuth = await soap.getUserAuthToken(t.ctx.user.email, t.ctx.user.password);
+	const inject = new Inject();
+	const filePath = path.join(__dirname, './data/mime/emails/empty.txt');
+	inject.send(t.ctx.userAuth, filePath, 'Junk');
+	await t.maximizeWindow();
+	await actions.loginEmailPage(t.ctx.user.email, t.ctx.user.password);
+});
+
 test.skip('L1 | Mark as star from more options | C727488 | PREAPPS-388', async t => {
 	await mail.clickToolbarButton('More');
 	await mail.clickPopoverMenuItem('Star');
