@@ -48,6 +48,7 @@ class Elements {
     messageLabel = clientName + '_mail-list-item_label';
     mailSubject = clientName + '_mail-list-item_subject';
     sidebarRefreshButton = Selector(clientName + '_folder-list_refresh');
+    mailListHeader = Selector(clientName + '_mail-list-header_mailListHeader');
     // Mail Elements - Right Pane
     condensedMessage = clientName + '_condensed-message_message';
     previewPDFviewContainer = clientName + '_pdfjs-viewer_container';
