@@ -1,13 +1,14 @@
 #import "../../fragments/calendar.graphql"
 
 query CalendarsAndAppointmentsQuery($start: Float, $end: Float) {
-	calendars {
-		...calendarWithAppointmentFields
-		linkedFolders {
-			...calendarWithAppointmentFields
-		}
+	getFolder(view: appointment, traverseMountpoints: true) {
 		folders {
-			...calendarWithAppointmentFields
+			linkedFolders {
+				...calendarWithAppointmentFields
+			}
+			folders {
+				...calendarWithAppointmentFields
+			}
 		}
 	}
 }
