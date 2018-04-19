@@ -1,0 +1,11 @@
+version: "3.3"
+
+services:
+  zm-x:
+    image: 252733421092.dkr.ecr.us-east-2.amazonaws.com/test-blockchain:zm-x-web
+    container_name: zm-x-web
+    hostname: zm-x-web
+    entrypoint:
+      - /app/init
+    ports:
+      - "443:443"
