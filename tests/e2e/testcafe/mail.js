@@ -136,8 +136,6 @@ test('L1 | Mark as spam message from inbox | C727320', async t => {
 });
 
 test('L1 | Mark as not spam from Junk folder | C727324', async t => {
-	//await compose.clickToolbarButtonByName('Spam');
-	//await t.expect(elements.mailListSubjectSelector.withText('ABC').exists).notOk({ timeout: 5000 });
 	await t.click(sidebar.sidebarContentItemWithText('Junk'));
 	await t.expect(elements.mailListSubjectSelector.withText('empty').exists).ok({ timeout: 5000 });
 	await mail.openEmail(0);
