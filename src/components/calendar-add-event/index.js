@@ -353,7 +353,7 @@ export default class CalendarAddEvent extends Component {
 						/>
 					</FormGroup>
 					<FormGroup>
-						<AlignedLabel class={s.alignedLabel} align="left"><Text id="calendar.editModal.fields.start.label" /></AlignedLabel>
+						<AlignedLabel class={s.alignedLabel} align="left"><Text id="calendar.editModal.fields.start" /></AlignedLabel>
 						<div class={s.datepickerWrapper}>
 							<DateInput
 								class={s.dateSelector}
@@ -374,12 +374,12 @@ export default class CalendarAddEvent extends Component {
 									checked={allDay}
 									onChange={linkstate(this, 'allDay')}
 								/>
-								<Text id="calendar.editModal.fields.allDay.label" />
+								<Text id="calendar.editModal.fields.allDay" />
 							</label>
 						</div>
 					</FormGroup>
 					<FormGroup>
-						<AlignedLabel class={s.alignedLabel} align="left"><Text id="calendar.editModal.fields.end.label" /></AlignedLabel>
+						<AlignedLabel class={s.alignedLabel} align="left"><Text id="calendar.editModal.fields.end" /></AlignedLabel>
 						<div class={s.datepickerWrapper}>
 							<DateInput
 								class={s.dateSelector}
@@ -398,14 +398,14 @@ export default class CalendarAddEvent extends Component {
 						</div>
 					</FormGroup>
 					<FormGroup>
-						<AlignedLabel class={s.alignedLabel} align="left"><Text id="calendar.editModal.fields.repeat.label" /></AlignedLabel>
+						<AlignedLabel class={s.alignedLabel} align="left"><Text id="calendar.editModal.fields.repeat" /></AlignedLabel>
 						<Select
 							value={repeatValue}
 							onChange={linkstate(this, 'repeatValue')}
 						>
 							{REPEAT_OPTIONS.map(k => (
 								<option value={k} key={k}>
-									<Text id={`calendar.editModal.fields.repeat.options.${k}`} />
+									<Text id={`calendar.editModal.fields.repeatOptions.${k}`} />
 								</option>
 							))}
 						</Select>
@@ -416,12 +416,12 @@ export default class CalendarAddEvent extends Component {
 									checked={isPrivate}
 									onChange={linkstate(this, 'isPrivate')}
 								/>
-								<Text id="calendar.editModal.fields.private.label" />
+								<Text id="calendar.editModal.fields.private" />
 							</label>
 						</AlignedLabel>
 					</FormGroup>
 					<FormGroup>
-						<AlignedLabel class={s.alignedLabel} align="left"><Text id="calendar.editModal.fields.location.label" /></AlignedLabel>
+						<AlignedLabel class={s.alignedLabel} align="left"><Text id="calendar.editModal.fields.location" /></AlignedLabel>
 						<TextInput
 							value={event.location}
 							onInput={linkstate(this, 'event.location')}
@@ -429,7 +429,7 @@ export default class CalendarAddEvent extends Component {
 						/>
 					</FormGroup>
 					<FormGroup class={s.inviteesGroup}>
-						<AlignedLabel class={s.alignedLabel} align="left"><Text id="calendar.editModal.fields.invitees.label" /></AlignedLabel>
+						<AlignedLabel class={s.alignedLabel} align="left"><Text id="calendar.editModal.fields.invitees" /></AlignedLabel>
 						<AddressField
 							class={s.addressField}
 							value={attendees}
@@ -460,7 +460,7 @@ export default class CalendarAddEvent extends Component {
 						)}
 					</FormGroup>
 					<FormGroup>
-						<AlignedLabel class={s.alignedLabel} align="left"><Text id="calendar.editModal.fields.notes.label" /></AlignedLabel>
+						<AlignedLabel class={s.alignedLabel} align="left"><Text id="calendar.editModal.fields.notes" /></AlignedLabel>
 						<div class={s.notesContainer}>
 							<Textarea
 								class={s.textArea}
@@ -490,14 +490,14 @@ export default class CalendarAddEvent extends Component {
 						</Button>
 					</FormGroup>
 					<FormGroup compact>
-						<AlignedLabel class={s.alignedLabel} align="left"><Text id="calendar.editModal.fields.remind.label" /></AlignedLabel>
+						<AlignedLabel class={s.alignedLabel} align="left"><Text id="calendar.editModal.fields.remind" /></AlignedLabel>
 						<Select
 							value={remindValue}
 							onChange={linkstate(this, 'remindValue')}
 						>
 							{REMIND_OPTIONS.map(k => (
 								<option value={k} key={k}>
-									<Text id={`calendar.editModal.fields.remind.options.${k}`} />
+									<Text id={`calendar.editModal.fields.remindOptions.${k}`} />
 								</option>
 							))}
 						</Select>
@@ -510,7 +510,7 @@ export default class CalendarAddEvent extends Component {
 									onChange={linkstate(this, 'remindDesktop')}
 									checked={remindDesktop}
 								/>
-								<Text id="calendar.editModal.fields.mobileDesktop.label" />
+								<Text id="calendar.editModal.fields.mobileDesktop" />
 							</label>
 							<label class={s.subOption}>
 								<input
@@ -518,19 +518,19 @@ export default class CalendarAddEvent extends Component {
 									onChange={linkstate(this, 'remindEmail')}
 									checked={remindEmail}
 								/>
-								<Text id="calendar.editModal.fields.email.label" />
+								<Text id="calendar.editModal.fields.email" />
 							</label>
 						</FormGroup>
 					)}
 					<FormGroup>
-						<AlignedLabel class={s.alignedLabel} align="left"><Text id="calendar.editModal.fields.showAs.label" /></AlignedLabel>
+						<AlignedLabel class={s.alignedLabel} align="left"><Text id="calendar.editModal.fields.showAs" /></AlignedLabel>
 						<Select
 							value={showAsValue}
 							onChange={linkstate(this, 'showAsValue')}
 						>
 							{SHOW_AS_OPTIONS.map(k => (
 								<option value={k} key={k}>
-									<Text id={`calendar.editModal.fields.showAs.options.${k}`} />
+									<Text id={`calendar.editModal.fields.showAsOptions.${k}`} />
 								</option>
 							))}
 						</Select>
