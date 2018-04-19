@@ -81,7 +81,7 @@ export default class ZimletsSdk extends Component {
 					</form>
 
 					<table>
-						<caption>Zimlets Loaded By SDK 2</caption>
+						<caption>Zimlets Loaded By SDK</caption>
 						<thead>
 							<tr>
 								<th>Name</th>
@@ -93,8 +93,7 @@ export default class ZimletsSdk extends Component {
 
 						<tbody>
 							{Object.keys(zimlets).map((zimletName) =>
-								<ZimletRow name={zimletName} url={zimlets[zimletName].url} error={errors[zimletName]}
-									running={runningZimlets[zimletName]} onChangePersist={this.togglePersist} persisted={!!persistedZimlets[zimletName]} />
+								<ZimletRow name={zimletName} url={zimlets[zimletName].url} error={errors[zimletName]} running={runningZimlets[zimletName]} onChangePersist={this.togglePersist} persisted={!!persistedZimlets[zimletName]} />
 							)}
 						</tbody>
 					</table>
