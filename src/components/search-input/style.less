@@ -18,7 +18,7 @@
 	height: @input-height;
 	border: 0;
 	border-radius: 2px;
-	padding: 0 @spacing-lg 0 @spacing-md;
+	padding-left: @spacing-md;
 	outline: none;
 	&::placeholder {
 		color: @gray-light;
@@ -26,10 +26,7 @@
 }
 
 .clearBtn {
-	position: absolute;
-	right: 0;
-	top: 50%;
-	transform: translateY(-50%);
+	margin-left: auto;
 	border: none;
 	background: transparent;
 }
@@ -91,4 +88,11 @@
 	cursor: pointer;
 	padding-right: 7px;
   font-size: inherit;
+}
+
+.searchButton {
+	padding: 0 8px;
+	border: 0;
+	color: @gray-light;
+	cursor: pointer;
 }

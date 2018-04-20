@@ -27,7 +27,8 @@ export default class CalendarListItem extends Component {
 	onChangeColor = value =>
 		this.props.changeCalendarColor(this.props.calendar.id, value);
 
-	onDeleteLinkedCalendar = () =>
+	onDeleteLinkedCalendar = () => {
+		let name = this.props.calendar.name;
 		this.props
 			.folderAction({ op: 'delete', id: this.props.calendar.id })
 			.then(() => this.props.calendarsAndAppointmentsData.refetch())
@@ -36,11 +37,12 @@ export default class CalendarListItem extends Component {
 					message: (
 						<Text
 							id="calendar.contextMenu.unlinkShared"
-							fields={{ calendarName: this.props.calendar.name }}
+							fields={{ calendarName: name }}
 						/>
 					)
 				});
 			});
+	}
 
 	openImportModal = (calendar) =>
 		this.props.openModal('importCalendarModal', {

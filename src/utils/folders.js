@@ -113,6 +113,18 @@ export function hasFlag(folder, flag) {
 	return flags ? flags.indexOf(FLAGS[flag] || flag) > -1 : false;
 }
 
+/**
+ * Mutate the flags on the folder to add the specified flag
+ */
+export function toggleFlag(folder, flag) {
+	if (hasFlag(folder,flag)) {
+		folder.flags = folder.flags.replace(FLAGS[flag],'');
+	}
+	else {
+		folder.flags = (folder.flags || '') + FLAGS[flag];
+	}
+}
+
 export function inFolder(currentFolder, name) {
 	return currentFolder && currentFolder.name.toLowerCase() === name;
 }

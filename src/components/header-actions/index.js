@@ -1,6 +1,5 @@
 import { h, Component } from 'preact';
 import get from 'lodash-es/get';
-import { Link } from 'preact-router';
 import { Icon } from '@zimbra/blocks';
 import { connect } from 'preact-redux';
 import withLogout from '../../graphql-decorators/logout';
@@ -41,10 +40,6 @@ export default class HeaderActions extends Component {
 	render({ name, ...props }) {
 		return (
 			<div class={s.headerActions}>
-				<Link href="/" class={s.headerAction}>
-					<Icon class={s.headerActionIcon} name="home" />
-					<span class={s.headerActionTitle}>Home</span>
-				</Link>
 				<ActionMenu
 					actionButtonClass={s.headerActionButton}
 					anchor="end"
