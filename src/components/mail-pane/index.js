@@ -118,17 +118,19 @@ const BULK_DELETE_PER_PAGE = 1000;
 const toolbarEmitter = mitt();
 
 function updateFlags(flags, variables) {
-	if (variables.op === ActionOps.read) {
-		return flags.replace('u', '');
-	}
-	if (variables.op === ActionOps.unread) {
-		return `${flags}u`;
-	}
-	if (variables.op === ActionOps.unflag) {
-		return flags.replace('f', '');
-	}
-	if (variables.op === ActionOps.flag) {
-		return `${flags}f`;
+	if (flags){
+		if (variables.op === ActionOps.read) {
+			return flags.replace('u', '');
+		}
+		if (variables.op === ActionOps.unread) {
+			return `${flags}u`;
+		}
+		if (variables.op === ActionOps.unflag) {
+			return flags.replace('f', '');
+		}
+		if (variables.op === ActionOps.flag) {
+			return `${flags}f`;
+		}
 	}
 	return flags;
 }
@@ -175,7 +177,7 @@ function updateFlags(flags, variables) {
 						return;
 					}
 
-					const typename = ActionResultType[variables.type];
+					const typename = ActionResultType[variables.type] + 'Info';
 					const fragment = gql`
 						fragment item on ${typename} {
 							flags
@@ -188,7 +190,7 @@ function updateFlags(flags, variables) {
 						});
 						const data = {
 							__typename: r.__typename,
-							flags: updateFlags(r.flags, variables)
+							flags: r.flags && updateFlags(r.flags, variables)
 						};
 						proxy.writeFragment({
 							id: `${typename}:${id}`,
@@ -334,6 +336,7 @@ export default class MailPane extends Component {
 
 		promise.then(() => {
 			this.props.afterAction(actionOptions, itemContext);
+			this.props.notify({ message: 'Action performed successfully!' });
 		});
 
 		this.props.clearSelected();
