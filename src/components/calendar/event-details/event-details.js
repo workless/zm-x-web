@@ -15,6 +15,7 @@ import MessageQuery from '../../../graphql/queries/message.graphql';
 	options: ({ event: { inviteId } }) => ({ variables: { id: inviteId } })
 })
 export default class CalendarEventDetails extends Component {
+
 	render({ event, appointmentData, onPrint, onDelete, onEdit, ...props }) {
 		const inviteComponent = get(appointmentData, 'message.invitations.0.components.0');
 		const excerpt = get(inviteComponent, 'excerpt');

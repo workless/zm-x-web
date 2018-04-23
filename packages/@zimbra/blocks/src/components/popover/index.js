@@ -42,8 +42,59 @@ export default class Popover extends Component {
 	 * close the Popover when clicked outside
 	 */
 	closePopover = () => {
-		this.setState({ active: false }, this.focusAfterToggle);
-		this.props.onToggle && this.props.onToggle(false);
+		if (this.state.active) {
+			this.setState({ active: false }, this.focusAfterToggle);
+			this.props.onToggle && this.props.onToggle(false);
+		}
+	}
+
+	openPopover = () => {
+		if (!this.state.active) {
+			this.setState({ active: true }, this.focusAfterToggle);
+			this.props.onToggle && this.props.onToggle(true);
+		}
+	}
+
+	handleMouseEnterTarget = () => {
+		this.hoverTarget = true;
+		this.handleMouseEnter();
+	}
+
+	handleMouseEnterChild = () => {
+		this.hoverChild = true;
+		this.handleMouseEnter();
+	}
+
+	// Hovering over target will open its popover after a waiting period if it isn't already open
+	// If an active timer to close a popover is running, it will clear it
+	handleMouseEnter = () => {
+		if (this.timer) {
+			clearTimeout(this.timer);
+			delete this.timer;
+		}
+		if (!this.state.active) {
+			this.timer = setTimeout(() => (this.hoverTarget || this.hoverChild) && this.openPopover(), this.props.hoverDuration);
+		}
+	}
+
+	handleMouseLeaveTarget = () => {
+		this.hoverTarget = false;
+		this.handleMouseLeave();
+	}
+
+	handleMouseLeaveChild = () => {
+		this.hoverChild = false;
+		this.handleMouseLeave();
+	}
+
+	handleMouseLeave = () => {
+		if (this.timer) {
+			clearTimeout(this.timer);
+			delete this.timer;
+		}
+		if (this.state.active) {
+			this.timer = setTimeout(() => !(this.hoverTarget || this.hoverChild) && this.closePopover(), this.props.hoverDuration);
+		}
 	}
 
 	componentWillReceiveProps({ active }) {
@@ -71,6 +122,7 @@ export default class Popover extends Component {
 		href,
 		onDropdownClick,
 		useMouseDownEvents,
+		hoverDuration,
 		...props
 	}, {
 		active
@@ -93,11 +145,13 @@ export default class Popover extends Component {
 				<Manager>
 					<Target>
 						<div
-							role='button'
+							role="button"
 							aria-haspopup="true"
 							aria-expanded={String(Boolean(active))}
 							class={cx(classes.toggleClass, style.button)}
 							{...handler}
+							onMouseEnter={hoverDuration && this.handleMouseEnterTarget}
+							onMouseLeave={hoverDuration && this.handleMouseLeaveTarget}
 							ref={linkRef(this, 'button')}
 							disabled={disabled}
 							title={tooltip}
@@ -111,11 +165,14 @@ export default class Popover extends Component {
 					{active &&
 						<Portal into="body">
 							<ClickOutsideDetector onClickOutside={this.closePopover}>
-								<Popper arrow={arrow} placement={`${placement}${anchor ? `-${anchor}` : ''}`} class={cx(style.popper, classes.popoverClass)} modifiers={{
-									preventOverflow: {
-										boundariesElement
-									}
-								}}
+								<Popper arrow={arrow} placement={`${placement}${anchor ? `-${anchor}` : ''}`} class={cx(style.popper, classes.popoverClass)}
+									modifiers={{
+										preventOverflow: {
+											boundariesElement
+										}
+									}}
+									onMouseEnter={hoverDuration && this.handleMouseEnterChild}
+									onMouseLeave={hoverDuration && this.handleMouseLeaveChild}
 								>
 									{ children && children.length && (
 										<div
