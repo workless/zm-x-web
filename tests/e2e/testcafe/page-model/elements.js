@@ -41,7 +41,7 @@ class Elements {
     iconSearch = '.zimbra-icon-search';
     iconClose = '.zimbra-icon-close';
     angleRight = '.fa-angle-right';
-    star = '.fa-star';
+    starIcon = '.zimbra-icon-star';
 
     // Mail Elements - Left Pane
     messageItem = clientName + '_mail-list-item_message';
@@ -80,7 +80,7 @@ class Elements {
     addressListAddressDetail = Selector(clientName + '_address-list_addressDetail');
     addressListAddress = Selector(clientName + '_address-list_address');
     addressListAddressType = Selector(clientName + '_address-list_addressType');
-    
+
     // Dialog Elements
     blocksDialogOverlaySelector = Selector('.blocks_dialog_overlay');
     dialogSelector = Selector(clientName + '_modal-dialog_dialog');
