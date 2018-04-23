@@ -116,6 +116,43 @@ test('L0 | Delete message | C951765', async t => {
 	await t.expect(mail.checkMailExists(messageSubject)).ok();
 });
 
+
+test('L1 | Delete thread by viewing message, conversation view | C727310', async t => {
+	await compose.clickToolbarButtonByName('Delete');
+	await t.expect(elements.mailListSubjectSelector.withText('ABC').exists).notOk();
+});
+
+test('L1 | Delete thread by checking message box, conversation view | C727311', async t => {
+	await mail.selectAllMail();
+	await compose.clickToolbarButtonByName('Delete');
+	await t.expect(elements.mailListSubjectSelector.withText('ABC').exists).notOk();
+});
+
+test('L1 | Mark as spam message from inbox | C727320', async t => {
+	await compose.clickToolbarButtonByName('Spam');
+	await t.expect(elements.mailListSubjectSelector.withText('ABC').exists).notOk({ timeout: 5000 });
+	await t.click(sidebar.sidebarContentItemWithText('Junk'));
+	await t.expect(elements.mailListSubjectSelector.withText('ABC').exists).ok({ timeout: 5000 });
+});
+
+test('L1 | Mark as not spam from Junk folder | C727324', async t => {
+	await t.click(sidebar.sidebarContentItemWithText('Junk'));
+	await t.expect(elements.mailListSubjectSelector.withText('empty').exists).ok({ timeout: 5000 });
+	await mail.openEmail(0);
+	await compose.clickToolbarButtonByName('Not Spam');
+	await t.expect(elements.mailListSubjectSelector.withText('empty').exists).notOk({ timeout: 5000 });
+	await t.click(sidebar.sidebarContentItemWithText('Inbox'));
+	await t.expect(elements.mailListSubjectSelector.withText('empty').exists).ok({ timeout: 5000 });
+}).before(async t => {
+	t.ctx.user = await soap.createAccount(t.fixtureCtx.adminAuthToken);
+	t.ctx.userAuth = await soap.getUserAuthToken(t.ctx.user.email, t.ctx.user.password);
+	const inject = new Inject();
+	const filePath = path.join(__dirname, './data/mime/emails/empty.txt');
+	inject.send(t.ctx.userAuth, filePath, 'Junk');
+	await t.maximizeWindow();
+	await actions.loginEmailPage(t.ctx.user.email, t.ctx.user.password);
+});
+
 test.skip('L1 | Mark as star from more options | C727488 | PREAPPS-388', async t => {
 	await mail.clickToolbarButton('More');
 	await mail.clickPopoverMenuItem('Star');
@@ -144,6 +181,33 @@ test('L1 | Read Message, Inline Attachment | C581719', async t => {
 	await t.maximizeWindow();
 	await actions.loginEmailPage(t.ctx.user.email, t.ctx.user.password);
 	await t.expect(sidebar.checkSidebarItemExists('Inbox')).ok({ timeout: 15000 });
+});
+
+test('L1 | Read Message, Preview Attachment, Close Preview | C666728', async t => {
+	await compose.openNewMessage();
+	await t
+		.click(elements.mailViewAttachmentPrevewButton)
+		.expect(elements.mailViewAttachmentViewer.exists).ok({ timeout: 5000 })
+		.expect(elements.mailViewAttachmentViewer.find(elements.previewPDFviewContainer).find('canvas').exists).ok()
+		.expect(elements.previewToolbarDownloadButton.exists).ok();
+	await t
+		.click(elements.previewToolbarFullScreenButton)
+		.expect(elements.overlayView.exists).ok({ timeout: 5000 });
+	await mail.closePreviewFullScreen();
+	await t.expect(elements.overlayView.exists).notOk({ timeout: 5000 });
+	await t
+		.click(elements.previewToolbarCloseButton)
+		.expect(elements.mailViewAttachmentViewer.exists).notOk({ timeout: 5000 });
+})
+.before( async t => {
+	const inject = new Inject();
+	const filePath = path.join(__dirname, './data/mime/emails/single-file-attachment.txt');
+	t.ctx.user = await soap.createAccount(t.fixtureCtx.adminAuthToken);
+	t.ctx.userAuth = await soap.getUserAuthToken(t.ctx.user.email, t.ctx.user.password);
+	inject.send(t.ctx.userAuth, filePath);
+	await t.maximizeWindow();
+	await actions.loginEmailPage(t.ctx.user.email, t.ctx.user.password);
+	await t.expect(sidebar.checkSidebarItemExists('Inbox')).ok({ timeout: 15000 }); 
 });
 
 /*****************************/
@@ -575,7 +639,7 @@ fixture `Mail: Forward functions single user`
 		await soap.deleteAccount(t.ctx.user.id, t.fixtureCtx.adminAuthToken);
 	});
 
-test('L1 | Forward email Add Attachments | C906307', async t => {
+test('L1 | Forward email Add Attachments | C906307 | PREAPPS-565', async t => {
 	const filePath = path.join(__dirname, './data/files/JPEG_Image.jpg');
 	let emailBodyText = 'forward email';
 	let fwdEmailSubject = 'Fwd: empty';

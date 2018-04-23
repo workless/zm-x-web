@@ -51,7 +51,7 @@ export default class ResetPasswordForm extends Component {
 		const confirmPassInputId = 'loginConfirmNewPassword';
 
 		return (
-			<form {...props} onSubmit={this.submit} action="javascript:">
+			<form {...props} onSubmit={this.submit} action="javascript:" method="POST">
 				<label for={newPassInputId}><Text id="loginScreen.labels.newPass" /></label>
 				<PasswordInput
 					autofocus
