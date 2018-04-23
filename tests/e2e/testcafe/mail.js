@@ -161,6 +161,11 @@ test.skip('L1 | Mark as star from more options | C727488 | PREAPPS-388', async t
 	await mail.clickPopoverMenuItem('Clear Star');
 });
 
+test('L1 | Star message by hover action in the message list view | C727480', async t => {
+	await t.click(mail.mailListStarIconButtonBySubject("ABC"));
+	await t.expect(String(await mail.mailListStarIconButtonBySubject("ABC").classNames)).contains('item_starred');
+});	
+
 test('L1 | Read Message, Inline Attachment | C581719', async t => {
 	const emailBodyText = 'test text';
 	await compose.openNewMessage();
@@ -238,7 +243,6 @@ test('L0 | Read a Message | C778022', async t => {
 
 test('L1 | Move message to folder by drag-drop | C726318', async t => {
 	await sidebar.clickFolder(/^Folders/);
-	//##todo: drag all emails from testFolder to inbox
 	await t.dragToElement(mail.selectMail(0), sidebar.sidebarContentItemWithText('testFolder'));
 	await sidebar.clickSidebarContent('testFolder');
 	let messageCountBefore = await mail.getMailCount();
