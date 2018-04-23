@@ -41,7 +41,6 @@ class Elements {
     iconSearch = '.zimbra-icon-search';
     iconClose = '.zimbra-icon-close';
     angleRight = '.fa-angle-right';
-    starIcon = '.zimbra-icon-star';
 
     // Mail Elements - Left Pane
     messageItem = clientName + '_mail-list-item_message';
@@ -86,7 +85,6 @@ class Elements {
     dialogSelector = Selector(clientName + '_modal-dialog_dialog');
     calendarModalDialogButtonSelector = Selector(clientName + '_modal-dialog_footer');
 
-
     // Compose - Rich Text Area Elements
     richtextareaContainer = Selector(clientName + '_gui-rich-text-area_relative'); // Refactor
     richtextarea = Selector(clientName + '_gui-rich-text-area_relative'); // Same as above
@@ -116,7 +114,6 @@ class Elements {
     plusSignMenuPopularGIFsItemButton = this.plusSignMenuPopularGIFs.find('.blocks_card_square').withAttribute('role', 'button'); //Refactor
     plusSignMenuSearchesItemButton = this.plusSignMenuSearches.find('*').withAttribute('draggable','true').withAttribute('role', 'button'); //Refactor
     plusSignMenuGifsItemButton = this.plusSignMenuGifs.find('.blocks_card_square').withAttribute('role', 'button'); //Refactor
-    
 
     //Compose Elements
     buttonWithText = buttonText => Selector('button').withText(buttonText); // Refactor
@@ -172,7 +169,6 @@ class Elements {
     contactListItemWithName = this.contactListInner.find('h4'); // Refactor
     addContactInfoItem = Selector((id) => document.getElementById('contact-x-' + id));
 
-
     //Notes Elements
     markupPopoverSelector = Selector('.markup');
     noteWrapperSelector = Selector(notepadName + '_notepad_noteWrapper');
@@ -196,7 +192,6 @@ class Elements {
     noteCardDraggableSelectorByTitle = byTitle => this.noteCardTitleSelector.withText(byTitle).parent('a').withAttribute('draggable', 'true') // Refactor
     noteCardDraggableDeleteButtonSelectorByTitle = byTitle => this.noteCardDraggableSelectorByTitle(byTitle).sibling('button') // Refactor
     sidebarContactItemWithTextSelector = withText => elements.sidebarContentSelector.find('a').withText(withText) // Refactor
-
 
     // Calendar Elements
     calendarActionButtonSelector = Selector(clientName + '_calendar_toolbar_toolbarTop');
