@@ -53,20 +53,24 @@ describe('util', () => {
 	});
 
 	describe.only('pluck', () => {
+		it('should return undefined if value is undefined', () => {
+			expect(pluck([{ a: 'b' }], 'a', undefined)).to.be.undefined;
+		});
+
 		it('should return undefined if no match exists', () => {
 			expect(pluck([], 'foo', 1)).to.be.undefined;
 		});
 
 		it('should return first match if there are multiples', () => {
-			expect(pluck[{ a: 'b', c: 1 }, { a: 'b', c: 2 }], 'a', 'b').to.eql({ a: 'b', c: 1 });
+			expect(pluck([{ a: 'b', c: 1 }, { a: 'b', c: 2 }], 'a', 'b')).to.eql({ a: 'b', c: 1 });
 		});
 
 		it('should check value using == equality, not verifying type', () => {
-			expect(pluck[{ a: '1' }], 'a', 1).to.eql({ a: '1' });
+			expect(pluck([{ a: '1' }], 'a', 1)).to.eql({ a: '1' });
 		});
 
 		it('should test using regext when value is a regex', () => {
-			expect(pluck[{ a: 'b' }], 'a', /B/i).to.eql({ a: 'b' });
+			expect(pluck([{ a: 'b' }], 'a', /B/i)).to.eql({ a: 'b' });
 		});
 	});
 });

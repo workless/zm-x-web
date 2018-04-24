@@ -1,5 +1,6 @@
 import moment from 'moment-timezone';
-import findIndex from 'lodash-es/findIndex';
+import findIndex from 'lodash/findIndex';
+import find from 'lodash/find';
 import isNil from 'lodash-es/isNil';
 import array from '@zimbra/util/src/array';
 import { calendarDateFormat } from '../utils/calendar';
@@ -9,20 +10,17 @@ import CALENDAR_FORMATS from '../constants/calendar-formats';
 const HOP = Object.prototype.hasOwnProperty;
 
 /**
- * Find and return the element in `arr` that has a key whose value is equal to value if value
- * is not a regex, or passes the regex test if value is a regex
+ * Find and return the element in `arr` that has a key with name `key` whose value is equal to `value` if `value`
+ * is not a regex, or passes the regex test if `value` is a regex
  * @param {Array} arr
  * @param {String} key
  * @param {*} value A value to == match against (no type equality), or a regex to test
  * @return {*} The element in `arr` that has the key matching `value`, or undefined if not found
  */
 export function pluck(arr, key, value) {
-	for (let i = arr.length; i--; ) {
-		//eslint-disable-next-line eqeqeq
-		if (value && value.test ? value.test(arr[i][key]) : arr[i][key] == value)  {
-			return arr[i];
-		}
-	}
+	//eslint-disable-next-line eqeqeq
+	const predicate = value && value.test ? (item) => value.test(item[key]) : (item) => item[key] == value;
+	return find(arr, predicate);
 }
 
 export function getId(obj) {
