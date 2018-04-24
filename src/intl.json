@@ -1,6 +1,7 @@
 {
 	"app": {
-		"loading": "Loading…"
+		"loading": "Loading…",
+		"generalError": "The application has encountered an error"
 	},
 	"buttons": {
 		"add": "Add",
@@ -23,6 +24,8 @@
 		"no": "No",
 		"ok": "OK",
 		"previous": "Previous",
+		"print": "Print",
+		"private": "Private",
 		"removeMailbox": "Remove mailbox",
 		"reply": "Reply",
 		"replyToAll": "Reply to All",
@@ -197,6 +200,11 @@
 	"calendar": {
 		"title": "Calendar",
 		"today": "Today",
+		"repeats": "Repeats",
+		"eventFields": {
+			"organizer": "Organizer",
+			"recurring": "Recurring"
+		},
 		"search": {
 			"refineHeader": "Refine by",
 			"results": "{{count}} {{types}} were found matching your search",
@@ -993,5 +1001,8 @@
 		"AUTH_REQUIRED": "Please login to continue",
 		"AUTH_EXPIRED": "Please login to continue",
 		"AUTH_FAILED": "Your username/email or password was incorrect. Please try again"
+	},
+	"prepositions": {
+		"at": "at"
 	}
 }

@@ -66,11 +66,20 @@ class Mail {
     	return await elements.mailListPaneSelector.find(elements.messageItem).nth(index).find(elements.mailSubject).innerText;
 	}
 	
+	//close attachment preview full screen
+	async closePreviewFullScreen() {
+		await t.click(elements.overlayView.find('button').withAttribute('title', 'Close'));
+	}
+
+	//select all the mails from mail list toolbar
+	async selectAllMail() {
+		await t.click(elements.mailListHeader.find('input').withAttribute('type', 'checkbox'));
+	}
+	
 	selectMail = (index) => elements.mailListItemMessageSelector.nth(index);
 	getMailCount = () => elements.mailListItemMessageSelector.count;
 	checkMailExists = (text) => elements.mailListItemMessageSelector.withText(text).exists;
-	checkStarEnabledInMailList = () => elements.mailListItemMessageSelector.nth(0).find(elements.star).withAttribute('value', 'true');
-
+	mailListStarIconButtonBySubject = (subject) => elements.mailListSubjectSelector.withText(subject).parent().find('span').nth(1);
 }
 
 export let mail = new Mail();

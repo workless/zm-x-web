@@ -16,6 +16,7 @@ import addMilliseconds from 'date-fns/add_milliseconds';
 import { connect } from 'preact-redux';
 import * as calendarActionCreators from '../../store/calendar/actions';
 import { graphql } from 'react-apollo';
+import get from 'lodash/get';
 import flatMap from 'lodash/flatMap';
 import invert from 'lodash/invert';
 import find from 'lodash/find';
@@ -37,6 +38,7 @@ import CalendarRightbar from './rightbar';
 import CalendarDateHeader from './date-header';
 import CreateCalendarModal from './create-calendar-modal';
 import CreateSharedCalendarModal from './create-shared-calendar-modal';
+import { CalendarEventDetailsModal } from './event-details';
 import ImportCalendarModal from './import-calendar-modal';
 import ExportCalendarModal from './export-calendar-modal';
 import { CalendarEvent, CalendarEventWrapper, getEventProps } from './event';
@@ -64,6 +66,7 @@ import { notify as notifyActionCreator } from '../../store/notifications/actions
 
 import style from './style';
 import { switchTimeFormat } from '../../lib/util';
+import { shallowEqual } from '../../lib/pure-component';
 
 BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment));
 
@@ -173,9 +176,20 @@ function getDOW({ preferences }) {
 @graphql(PreferencesQuery, {
 	name: 'preferencesData'
 })
+@withProps(({ preferencesData }) => ({
+	view: getView(preferencesData)
+}))
 @graphql(CalendarsAndAppointmentsQuery, {
-	name: 'calendarsData',
-	options: ({ date, preferencesData }) => {
+	props: ({ data: { getFolder = {}, ...data } }) => ({
+		calendarsData: {
+			...data,
+			calendars: [
+				...(get(getFolder, 'folders.0.folders') || []),
+				...(get(getFolder, 'folders.0.linkedFolders') || [])
+			]
+		}
+	}),
+	options: ({ date, preferencesData, view }) => {
 		if (!preferencesData.preferences) {
 			return { skip: true };
 		}
@@ -188,7 +202,6 @@ function getDOW({ preferences }) {
 			}
 		});
 
-		const view = getView(preferencesData);
 		let start = new Date(date);
 		let end;
 
@@ -422,7 +435,10 @@ export default class Calendar extends Component {
 	};
 
 	closeActiveModal = () => {
-		this.setState({ activeModal: '' });
+		this.setState({
+			activeModal: '',
+			activeModalProps: {}
+		});
 	};
 
 	openModal = (modalType, extraProps) => {
@@ -435,14 +451,19 @@ export default class Calendar extends Component {
 	selectEvent = event => {
 		// eslint-disable-next-line no-console
 		console.log('selected event', event);
-		// TODO impelment actual click behavior, the deletion prompt here is just
-		// a test.
-		// if (confirm(`Delete ${event.name}?`)) { // eslint-disable-line no-alert
-		// 	this.props.deleteAppointment(event.inviteId);
-		// }
+
+		const { matchesScreenMd } = this.props;
+		if (!matchesScreenMd) {
+			this.openModal('eventDetails', { event });
+		}
 	};
 
 	handleQuickAddRender = ({ bounds }) => {
+		// Called on render of the QuickAddPopover, avoid infinite loops
+		if (this.state.quickAddBounds && shallowEqual(this.state.quickAddBounds, bounds)) {
+			return;
+		}
+
 		this.setState({
 			quickAddBounds: bounds
 		});
@@ -491,8 +512,13 @@ export default class Calendar extends Component {
 		this.setState( { showAddEventView: true } );
 	};
 
-	constructor() {
-		super();
+	handleBeginSelectEvent = () => {
+		this.clearNewEvent();
+	}
+
+	constructor(props) {
+		super(props);
+
 		// BigCalendar passes through only whitelisted props, we can circumvent
 		// to pass through components bound to component methods. You could
 		// also e.g. rebind on render if necessary.
@@ -503,7 +529,9 @@ export default class Calendar extends Component {
 			})(CalendarToolbar),
 			dateHeader: CalendarDateHeader,
 			eventWrapper: CalendarEventWrapper,
-			event: CalendarEvent
+			event: withProps({
+				view: props.view
+			})(CalendarEvent)
 		};
 		this.MODALS = {
 			createCalendar: {
@@ -531,6 +559,9 @@ export default class Calendar extends Component {
 						)[1]
 				})
 			},
+			eventDetails: {
+				Component: CalendarEventDetailsModal
+			},
 			importCalendarModal: {
 				Component: ImportCalendarModal,
 				props: () => ({
@@ -544,11 +575,16 @@ export default class Calendar extends Component {
 		};
 	}
 
+	componentWillReceiveProps({ view }) {
+		if (view !== this.props.view) {
+			this.BIG_CALENDAR_COMPONENTS.event = withProps({ view })(CalendarEvent);
+		}
+	}
+
 	render(
-		{ date, calendarsData, preferencesData, pending, matchesScreenMd },
+		{ view, date, calendarsData, preferencesData, pending, matchesScreenMd },
 		{ newEvent, quickAddBounds, activeModal, activeModalProps, showAddEventView }
 	) {
-		const view = getView(preferencesData);
 		if (!view) {
 			return null;
 		}
@@ -565,6 +601,7 @@ export default class Calendar extends Component {
 				c.appointments
 					? c.appointments.appointments.map(appointment => ({
 						...appointment,
+						parentFolderName: c.name,
 						color: colorForCalendar(c)
 					}))
 					: []
@@ -590,7 +627,7 @@ export default class Calendar extends Component {
 
 		const modal = cloneDeep(find(this.MODALS, (_, key) => key === activeModal));
 		if (modal) {
-			const modalProps = modal.props();
+			const modalProps = modal.props ? modal.props() : {};
 			// Enable modals to set custom onClose, onSubmit handlers, but
 			// pipe into our modal visibility state handler.
 			modalProps.onAction = modalProps.onAction

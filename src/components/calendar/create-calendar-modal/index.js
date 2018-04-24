@@ -49,7 +49,7 @@ import style from './style';
 export default class CreateCalendarModal extends Component {
 	state = {
 		calendarName: '',
-		calendarColor: null,
+		calendarColor: 1,
 		loading: false,
 		error: null
 	};

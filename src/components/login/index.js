@@ -148,7 +148,7 @@ export default class Login extends Component {
 							onError={this.handleError}
 						/>
 					) : (
-						<form onSubmit={this.submit} action="javascript:">
+						<form onSubmit={this.submit} action="javascript:" method="POST">
 							<div class={style.form}>
 
 								<label

@@ -22,6 +22,7 @@ class Elements {
     mainHeaderActions = Selector(clientName + '_header-actions_headerActions');
 
     // Main Page Elements - Navbar, Sidebar, Folder, Context Menu, Progress indicator
+    overlayView = Selector('.blocks_dialog_overlay');
 	navButtonList = Selector(clientName + '_app-navigation_nav');
     sidebarContentSelector = Selector(clientName + '_sidebar_content');
     progressIndicatorSelector = Selector(clientName + '_progress-indicator_progress');
@@ -40,21 +41,27 @@ class Elements {
     iconSearch = '.zimbra-icon-search';
     iconClose = '.zimbra-icon-close';
     angleRight = '.fa-angle-right';
-    star = '.fa-star';
 
     // Mail Elements - Left Pane
     messageItem = clientName + '_mail-list-item_message';
     messageLabel = clientName + '_mail-list-item_label';
     mailSubject = clientName + '_mail-list-item_subject';
     sidebarRefreshButton = Selector(clientName + '_folder-list_refresh');
+    mailListHeader = Selector(clientName + '_mail-list-header_mailListHeader');
     // Mail Elements - Right Pane
     condensedMessage = clientName + '_condensed-message_message';
+    previewPDFviewContainer = clientName + '_pdfjs-viewer_container';
     conversationSectionSelector = Selector(clientName + '_conversation-viewer_section');
     conversationSubjectSelector = Selector(clientName + '_viewer-title_subject');
     mailViewerBodySelector = Selector(clientName + '_viewer_body');
     clientHtmlViewerInner = Selector(clientName + '_html-viewer_inner');
     mailViewerTitleCountText = Selector(clientName + '_viewer-title_countText');
     mailViewPlaceholderView = Selector(clientName + '_viewer-placeholder_placeholder');
+    mailViewAttachmentPrevewButton = Selector(clientName + '_attachment_button');
+    mailViewAttachmentViewer = Selector(clientName + '_attachment-viewer_showing');
+    previewToolbarDownloadButton = this.mailViewAttachmentViewer.find('button').withAttribute('title', 'Download');
+    previewToolbarCloseButton = this.mailViewAttachmentViewer.find('button').withAttribute('title', 'Close');
+    previewToolbarFullScreenButton = this.mailViewAttachmentViewer.find('button').withAttribute('title', 'Full Screen');
     // Mail Elements - Toolbar
     actionButton = clientName + '_action-button_button';
     actionMenuGroup = clientName + '_action-menu-group_group';
@@ -72,12 +79,11 @@ class Elements {
     addressListAddressDetail = Selector(clientName + '_address-list_addressDetail');
     addressListAddress = Selector(clientName + '_address-list_address');
     addressListAddressType = Selector(clientName + '_address-list_addressType');
-    
+
     // Dialog Elements
     blocksDialogOverlaySelector = Selector('.blocks_dialog_overlay');
     dialogSelector = Selector(clientName + '_modal-dialog_dialog');
     calendarModalDialogButtonSelector = Selector(clientName + '_modal-dialog_footer');
-
 
     // Compose - Rich Text Area Elements
     richtextareaContainer = Selector(clientName + '_gui-rich-text-area_relative'); // Refactor
@@ -108,7 +114,6 @@ class Elements {
     plusSignMenuPopularGIFsItemButton = this.plusSignMenuPopularGIFs.find('.blocks_card_square').withAttribute('role', 'button'); //Refactor
     plusSignMenuSearchesItemButton = this.plusSignMenuSearches.find('*').withAttribute('draggable','true').withAttribute('role', 'button'); //Refactor
     plusSignMenuGifsItemButton = this.plusSignMenuGifs.find('.blocks_card_square').withAttribute('role', 'button'); //Refactor
-    
 
     //Compose Elements
     buttonWithText = buttonText => Selector('button').withText(buttonText); // Refactor
@@ -164,7 +169,6 @@ class Elements {
     contactListItemWithName = this.contactListInner.find('h4'); // Refactor
     addContactInfoItem = Selector((id) => document.getElementById('contact-x-' + id));
 
-
     //Notes Elements
     markupPopoverSelector = Selector('.markup');
     noteWrapperSelector = Selector(notepadName + '_notepad_noteWrapper');
@@ -188,7 +192,6 @@ class Elements {
     noteCardDraggableSelectorByTitle = byTitle => this.noteCardTitleSelector.withText(byTitle).parent('a').withAttribute('draggable', 'true') // Refactor
     noteCardDraggableDeleteButtonSelectorByTitle = byTitle => this.noteCardDraggableSelectorByTitle(byTitle).sibling('button') // Refactor
     sidebarContactItemWithTextSelector = withText => elements.sidebarContentSelector.find('a').withText(withText) // Refactor
-
 
     // Calendar Elements
     calendarActionButtonSelector = Selector(clientName + '_calendar_toolbar_toolbarTop');

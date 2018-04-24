@@ -5,8 +5,6 @@
   "main": "build/bundle.js",
   "module": "src/index.js",
   "scripts": {
-    "apollo-codegen:watch": "nodemon -e graphql -x \"npm run apollo-codegen\"",
-    "apollo-codegen": "./scripts/apollo-codegen.js",
     "build": "webpack -p && npm run build:netlify",
     "build:dev": "webpack",
     "build:netlify": "node packages/static-app-to-netlify",
@@ -35,7 +33,6 @@
   ],
   "license": "GPL-3.0",
   "devDependencies": {
-    "apollo-codegen": "^0.19.0",
     "axe-testcafe": "^1.1.0",
     "babel-eslint": "=8.2.1",
     "chalk": "^2.0.1",
@@ -72,7 +69,6 @@
     "recursive-install": "^1.3.0",
     "redux-immutable-state-invariant": "^2.0.0",
     "request-promise": "^4.2.2",
-    "shelljs": "^0.8.1",
     "sinon": "^4.2.1",
     "sinon-chai": "^2.14.0",
     "superstatic": "^5.0.1",
@@ -89,8 +85,8 @@
     "xml2js": "^0.4.19"
   },
   "dependencies": {
-    "@zimbra/api-client": "^1.0.0",
-    "@zimbra/x-ui": "^1.0.1",
+    "@zimbra/api-client": "^1.0.2",
+    "@zimbra/x-ui": "^1.0.2",
     "apollo-client": "^2.2.8",
     "choose-files": "^1.0.1",
     "classnames": "^2.2.5",

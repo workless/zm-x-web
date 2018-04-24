@@ -35,18 +35,9 @@ export default class QuickAddEventPopover extends Component {
 		this.props.onClose();
 	};
 
-	handleClickOutside = e => {
-		// Handle a misleading event coming from Big Calendar
-		// that will cause ClickOutsideDetector to fire a close event
-		if (
-			!e ||
-			!(
-				e.target.classList.contains('rbc-time-slot') ||
-				e.target.classList.contains('rbc-row') ||
-				e.target.classList.contains('rbc-row-segment')
-			)
-		) {
-			this.props.onClose();
+	handleClickOutside = () => {
+		if (this.mounted) {
+			this.handleClose();
 		}
 	};
 
@@ -56,6 +47,12 @@ export default class QuickAddEventPopover extends Component {
 
 	componentWillReceiveProps(nextProps) {
 		this.setEvent(nextProps);
+	}
+
+	componentDidUpdate() {
+		// Ignore any click-outside-events until after the first call to componentDidUpdate
+		// Solves a problem when this component is mounted in the middle of an ongoing click event
+		this.mounted = true;
 	}
 
 	render({ style }, { event }) {
