@@ -161,6 +161,11 @@ test.skip('L1 | Mark as star from more options | C727488 | PREAPPS-388', async t
 	await mail.clickPopoverMenuItem('Clear Star');
 });
 
+test('L1 | Star message by hover action in the message list view | C727480', async t => {
+	await t.click(mail.mailListStarIconButtonBySubject('ABC'));
+	await t.expect(String(await mail.mailListStarIconButtonBySubject('ABC').classNames)).contains('item_starred');
+});
+
 test('L1 | Read Message, Inline Attachment | C581719', async t => {
 	const emailBodyText = 'test text';
 	await compose.openNewMessage();
@@ -172,16 +177,16 @@ test('L1 | Read Message, Inline Attachment | C581719', async t => {
 	const endRectTop = await elements.clientHtmlViewerInner.find('img').nth(0).getBoundingClientRectProperty('top');
 	await t.expect(startRectTop > endRectTop);
 })
-.before( async t => {
-	t.ctx.user = await soap.createAccount(t.fixtureCtx.adminAuthToken);
-	t.ctx.userAuth = await soap.getUserAuthToken(t.ctx.user.email, t.ctx.user.password);
-	const inject = new Inject();
-	const filePath = path.join(__dirname, './data/mime/emails/multi-inline-attachment.txt');
-	inject.send(t.ctx.userAuth, filePath);
-	await t.maximizeWindow();
-	await actions.loginEmailPage(t.ctx.user.email, t.ctx.user.password);
-	await t.expect(sidebar.checkSidebarItemExists('Inbox')).ok({ timeout: 15000 });
-});
+	.before( async t => {
+		t.ctx.user = await soap.createAccount(t.fixtureCtx.adminAuthToken);
+		t.ctx.userAuth = await soap.getUserAuthToken(t.ctx.user.email, t.ctx.user.password);
+		const inject = new Inject();
+		const filePath = path.join(__dirname, './data/mime/emails/multi-inline-attachment.txt');
+		inject.send(t.ctx.userAuth, filePath);
+		await t.maximizeWindow();
+		await actions.loginEmailPage(t.ctx.user.email, t.ctx.user.password);
+		await t.expect(sidebar.checkSidebarItemExists('Inbox')).ok({ timeout: 15000 });
+	});
 
 test('L1 | Read Message, Preview Attachment, Close Preview | C666728', async t => {
 	await compose.openNewMessage();
@@ -199,16 +204,16 @@ test('L1 | Read Message, Preview Attachment, Close Preview | C666728', async t =
 		.click(elements.previewToolbarCloseButton)
 		.expect(elements.mailViewAttachmentViewer.exists).notOk({ timeout: 5000 });
 })
-.before( async t => {
-	const inject = new Inject();
-	const filePath = path.join(__dirname, './data/mime/emails/single-file-attachment.txt');
-	t.ctx.user = await soap.createAccount(t.fixtureCtx.adminAuthToken);
-	t.ctx.userAuth = await soap.getUserAuthToken(t.ctx.user.email, t.ctx.user.password);
-	inject.send(t.ctx.userAuth, filePath);
-	await t.maximizeWindow();
-	await actions.loginEmailPage(t.ctx.user.email, t.ctx.user.password);
-	await t.expect(sidebar.checkSidebarItemExists('Inbox')).ok({ timeout: 15000 }); 
-});
+	.before( async t => {
+		const inject = new Inject();
+		const filePath = path.join(__dirname, './data/mime/emails/single-file-attachment.txt');
+		t.ctx.user = await soap.createAccount(t.fixtureCtx.adminAuthToken);
+		t.ctx.userAuth = await soap.getUserAuthToken(t.ctx.user.email, t.ctx.user.password);
+		inject.send(t.ctx.userAuth, filePath);
+		await t.maximizeWindow();
+		await actions.loginEmailPage(t.ctx.user.email, t.ctx.user.password);
+		await t.expect(sidebar.checkSidebarItemExists('Inbox')).ok({ timeout: 15000 });
+	});
 
 /*****************************/
 /*** Mail: Folders fixture ***/
@@ -233,12 +238,11 @@ fixture `Mail: Folders fixture`
 
 test('L0 | Read a Message | C778022', async t => {
 	await compose.openNewMessage();
-	await t.expect(elements.conversationSectionSelector.exists).ok({ timeout: 2000});
+	await t.expect(elements.conversationSectionSelector.exists).ok({ timeout: 2000 });
 });
 
 test('L1 | Move message to folder by drag-drop | C726318', async t => {
 	await sidebar.clickFolder(/^Folders/);
-	//##todo: drag all emails from testFolder to inbox
 	await t.dragToElement(mail.selectMail(0), sidebar.sidebarContentItemWithText('testFolder'));
 	await sidebar.clickSidebarContent('testFolder');
 	let messageCountBefore = await mail.getMailCount();
@@ -352,18 +356,18 @@ fixture `Mail: Settings Folder settings multi-user`
 	});
 
 test('L1 | Verify the filter with respect to custom folder | C830220', async t => {
-	const filterName = 'testFilter'
+	const filterName = 'testFilter';
 	const ruleFolder = 'testFolder';
 	//setup filter rule for user2
 	await settings.clickSettings();
 	await settings.clickSettingSidebarItem('Filter');
 	await settings.clickSubsectionBodyButton('Add');
 	await settings.enterEditFilterText('Filter Name', filterName);
-	await settings.selectFilterSelectByLabel('Then move the messages to this folder', ruleFolder)
+	await settings.selectFilterSelectByLabel('Then move the messages to this folder', ruleFolder);
 	await settings.enterEditFilterText('From', t.ctx.user2.email);
 	await settings.clickModalDialogFooterButton('Save');
 	await t
-		.expect(elements.settingsFiltersListEntrySelector.exists).ok({ timeout: 5000})
+		.expect(elements.settingsFiltersListEntrySelector.exists).ok({ timeout: 5000 })
 		.expect(await elements.settingsSubsectionBodySelector.innerText).contains(filterName)
 		.expect(await elements.settingsSubsectionBodySelector.innerText).contains(ruleFolder);
 	await settings.clickDialogButton('Save');
@@ -612,7 +616,7 @@ test('L1 | Immediately refresh conversation view once a forward is sent | C72748
 	await compose.openMessageWithSubject(fwdEmailSubject);
 	await mail.openCondensedMessage(0);
 	await t.expect(await elements.clientHtmlViewerInner.nth(1).innerText).contains(emailBodyText);
-})
+});
 
 /*******************************************/
 /*** Mail: Forward functions single user ***/

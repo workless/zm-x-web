@@ -1,6 +1,6 @@
 import { h } from 'preact';
 import { Text } from 'preact-i18n';
-import { deepClone } from '../../../lib/util';
+import { deepClone, capitalizeFirstLetter } from '../../../lib/util';
 
 import {
 	NICKNAME,
@@ -19,10 +19,6 @@ import {
 
 export function removeAttrSuffix(key) {
 	return key.replace(/\d+/g, '');
-}
-
-function capitalizeFirstLetter(string) {
-	return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 export function getAddressFieldPrefixAndSuffix(attribute) {

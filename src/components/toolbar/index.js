@@ -16,17 +16,23 @@ export default class Toolbar extends Component {
 		}, 0);
 	}
 
-	render ({ className, children }) {
+	render(props) {
 		if (this.state.mounted) {
 			return (
 				<Portal into="#app-navigation-toolbar">
-					<div class={cx(s.toolbarContainer, className)}>
-						<div class={s.toolbar}>
-							{children}
-						</div>
-					</div>
+					<ToolbarContainer {...props} />
 				</Portal>
 			);
 		}
 	}
+}
+
+export function ToolbarContainer({ children, ...props }) {
+	return (
+		<div {...props} class={cx(s.toolbarContainer, props.class)}>
+			<div class={s.toolbar}>
+				{children}
+			</div>
+		</div>
+	);
 }

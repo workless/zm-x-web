@@ -277,6 +277,16 @@ class Compose {
 		await t.click(elements.toolbarArrowBackIcon);
 	}
 
+	//Mobile - Click compose
+	async clickComposeMobile() {
+		await t.click(elements.toolbarComposeButton);
+	}
+
+	//Mobile - Click send
+	async clickSendEmailMobile() {
+		await t.click(elements.toolbarSendButton);
+	}
+
 }
 
 export let compose = new Compose();
