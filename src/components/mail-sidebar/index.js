@@ -36,7 +36,7 @@ import s from './style.less';
 
 const { ActionType } = apiClientTypes;
 
-const INBOX_REGEX = /inbox/i;
+const INBOX_REGEX = /^inbox$/i;
 
 @withMediaQuery(minWidth(screenMd))
 @configure({ urlSlug: 'routes.slugs.email' })
