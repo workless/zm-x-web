@@ -1,12 +1,11 @@
-/* eslint-disable react/no-string-refs */
-import { h, Component } from 'preact';
-import style from './style';
+import { h, Component, cloneElement } from 'preact';
+import s from './style';
 import cx from 'classnames';
 import Portal from 'preact-portal';
 import Icon from '../icon';
-import { Manager, Target, Popper, Arrow } from 'react-popper';
+import { Manager, Reference, Popper } from 'react-popper';
 import ClickOutsideDetector from '../click-outside-detector';
-import linkRef from 'linkref';
+import { callWith } from '@zimbra/util/src/call-with';
 
 export default class Popover extends Component {
 	static defaultProps = {
@@ -25,7 +24,7 @@ export default class Popover extends Component {
 	 * After closing the Popover, if props.focusAfterClosing is truthy, re-focus the Popover button
 	 */
 	focusAfterToggle = () => {
-		!this.state.active && this.props.focusAfterClosing && this.refs.button.focus();
+		!this.state.active && this.props.focusAfterClosing && this.buttonRef.focus();
 	};
 
 	/**
@@ -97,9 +96,67 @@ export default class Popover extends Component {
 		}
 	}
 
+	/**
+	 * set our own ref for the button/target, and tell react-popper about it as well by calling its callback function
+	 */
+	chainReferences = (refFn, c) => {
+		this.buttonRef = c;
+		refFn(c);
+	}
+
 	componentWillReceiveProps({ active }) {
 		typeof active === 'boolean' && this.props.active !== active && this.setState({ active }, this.focusAfterToggle);
 	}
+
+	renderReference = ({ ref }) => {
+		let handler = this.props.useMouseDownEvents ? { onMouseDown: this.togglePopover } : { onClick: this.togglePopover };
+		let { classes, disabled, icon, iconPosition, target, text, tooltip, hoverDuration } = this.props;
+		return (
+			<div
+				ref={callWith(this.chainReferences, ref, true)}
+				role="button"
+				aria-haspopup="true"
+				aria-expanded={String(Boolean(this.state.active))}
+				class={cx(classes.toggleClass, s.button)}
+				{...handler}
+				onMouseEnter={hoverDuration && this.handleMouseEnterTarget}
+				onMouseLeave={hoverDuration && this.handleMouseLeaveTarget}
+
+				disabled={disabled}
+				title={tooltip}
+			>
+				{ iconPosition==='left' && icon }
+				{ text && <span class={cx(s.title, classes.titleClass)}>{text}</span> }
+				{ target }
+				{ iconPosition!=='left' && icon }
+			</div>
+		);
+	}
+
+	// Pass the scheduleUpdate function that the Popper component gives to its first child if it is a function, to each
+	// child, so any given child can kick tell popper to reposition itself
+	renderPopper =  ({ ref, style, placement, scheduleUpdate, arrowProps }) => {
+		let { arrow, children, classes, hoverDuration, onDropdownClick } = this.props;
+
+		return (
+			<div arrow={!!arrow} ref={ref} style={style} data-placement={placement} class={cx(s.popper, classes.popoverClass)}
+				onMouseEnter={hoverDuration && this.handleMouseEnterChild} onMouseLeave={hoverDuration && this.handleMouseLeaveChild}
+			>
+				{children && children.length &&
+					<div onClick={onDropdownClick}>
+						{children.map(c => c ? cloneElement(c, { scheduleUpdate }) : c)}
+					</div>
+				}
+				{ arrow &&
+					 <div {...arrowProps} class={s.borderArrow} />
+				}
+				{ arrow &&
+					<div {...arrowProps} class={s.arrow} />
+				}
+			</div>
+		);
+	}
+
 
 	render({
 		placement,
@@ -107,6 +164,7 @@ export default class Popover extends Component {
 		children,
 		classes,
 		disabled,
+		hoverDuration,
 		popoverClass,
 		toggleClass,
 		titleClass,
@@ -122,7 +180,6 @@ export default class Popover extends Component {
 		href,
 		onDropdownClick,
 		useMouseDownEvents,
-		hoverDuration,
 		...props
 	}, {
 		active
@@ -130,69 +187,35 @@ export default class Popover extends Component {
 		delete props.onToggle;
 		delete props.active;
 
-		// Rather than support 4 props for classes, just use one classes object:
-		classes = { popoverClass, toggleClass, titleClass, containerClass, ...classes };
-
 		if (typeof icon==='string') {
 			icon = <Icon name={icon} />;
 		}
-		let handler = useMouseDownEvents ? { onMouseDown: this.togglePopover } : { onClick: this.togglePopover };
 
 		if (anchor === 'center') anchor=false;
 
 		return (
-			<div {...props} class={cx(style['popover-container'], classes.containerClass, props.class)}>
-				<Manager>
-					<Target>
-						<div
-							role="button"
-							aria-haspopup="true"
-							aria-expanded={String(Boolean(active))}
-							class={cx(classes.toggleClass, style.button)}
-							{...handler}
-							onMouseEnter={hoverDuration && this.handleMouseEnterTarget}
-							onMouseLeave={hoverDuration && this.handleMouseLeaveTarget}
-							ref={linkRef(this, 'button')}
-							disabled={disabled}
-							title={tooltip}
-						>
-							{ iconPosition==='left' && icon }
-							{ text && <span class={cx(style.title, classes.titleClass)}>{text}</span> }
-							{ target }
-							{ iconPosition!=='left' && icon }
-						</div>
-					</Target>
+			<Manager>
+				<div {...props} class={cx(s['popover-container'], classes.containerClass, props.class)}>
+					<Reference>
+						{this.renderReference}
+					</Reference>
 					{active &&
-						<Portal into="body">
-							<ClickOutsideDetector onClickOutside={this.closePopover}>
-								<Popper arrow={arrow} placement={`${placement}${anchor ? `-${anchor}` : ''}`} class={cx(style.popper, classes.popoverClass)}
-									modifiers={{
-										preventOverflow: {
-											boundariesElement
-										}
-									}}
-									onMouseEnter={hoverDuration && this.handleMouseEnterChild}
-									onMouseLeave={hoverDuration && this.handleMouseLeaveChild}
-								>
-									{ children && children.length && (
-										<div
-											onClick={onDropdownClick}
-										>
-											{children}
-										</div>
-									) }
-									{arrow &&
-										<Arrow class={style.borderArrow} />
-									}
-									{arrow &&
-										<Arrow class={style.arrow} />
-									}
-								</Popper>
-							</ClickOutsideDetector>
-						</Portal>
+							<Portal into="body">
+								<ClickOutsideDetector onClickOutside={this.closePopover}>
+									<Popper arrow={arrow} placement={`${placement}${anchor ? `-${anchor}` : ''}`}
+										modifiers={{
+											preventOverflow: {
+												boundariesElement
+											}
+										}}
+									>
+										{this.renderPopper}
+									</Popper>
+								</ClickOutsideDetector>
+							</Portal>
 					}
-				</Manager>
-			</div>
+				</div>
+			</Manager>
 		);
 	}
 }

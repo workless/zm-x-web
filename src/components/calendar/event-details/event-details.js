@@ -16,6 +16,14 @@ import MessageQuery from '../../../graphql/queries/message.graphql';
 })
 export default class CalendarEventDetails extends Component {
 
+	componentDidUpdate() {
+		let { appointmentData, scheduleUpdate } = this.props;
+		if (!appointmentData.loading && scheduleUpdate && !this.calledScheduleUpdate) {
+			this.calledScheduleUpdate = true;
+			scheduleUpdate();
+		}
+	}
+
 	render({ event, appointmentData, onPrint, onDelete, onEdit, ...props }) {
 		const inviteComponent = get(appointmentData, 'message.invitations.0.components.0');
 		const excerpt = get(inviteComponent, 'excerpt');

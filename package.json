@@ -131,7 +131,7 @@
     "query-string": "^5.0.0",
     "react-apollo": "^2.1.3",
     "react-big-calendar": "^0.18.0",
-    "react-popper": "^0.7.5",
+    "react-popper": "^1.0.0-beta.5",
     "react-string-replace": "^0.4.0",
     "recharts": "^1.0.0-beta.9",
     "recompose": "^0.26.0",
