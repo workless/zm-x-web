@@ -1,5 +1,6 @@
 import { h, Component } from 'preact';
 import { Icon } from '@zimbra/blocks';
+import { CALENDAR_TYPE, CALENDAR_IDS } from '../../../constants/calendars';
 
 import style from './style.less';
 
@@ -18,12 +19,25 @@ export default class CalendarListSectionItem extends Component {
 
 
 	render({
+		type,
 		items,
 		label,
 		renderItem,
 		renderAction,
 		matchesScreenMd
 	}, { expanded }) {
+		let itemsList = items;
+
+		if (type === CALENDAR_TYPE.own) {
+			let defaultCalendarItems = [], otherCalendarItems = [];
+
+			items.forEach(item => {
+				(item.id === CALENDAR_IDS[CALENDAR_TYPE.own].DEFAULT) ? defaultCalendarItems.push(item) : otherCalendarItems.push(item);
+			});
+
+			itemsList = [ ...defaultCalendarItems, ...otherCalendarItems ];
+		}
+
 		return (
 			<li class={style.group}>
 				{matchesScreenMd &&
@@ -46,7 +60,7 @@ export default class CalendarListSectionItem extends Component {
 
 				{(!matchesScreenMd || expanded) && (
 					<ul class={style.list}>
-						{items.map((item) => renderItem(item))}
+						{itemsList.map((item) => renderItem(item))}
 					</ul>
 				)}
 			</li>

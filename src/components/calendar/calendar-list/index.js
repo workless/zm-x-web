@@ -163,6 +163,7 @@ class CalendarList extends Component {
 			<ul class={style.groupList}>
 				{calendarSections.map(({ label, items, type }) => (
 					<CalendarListSection
+						type={type}
 						items={items}
 						label={label}
 						renderAction={this.renderSectionAction(type)}
