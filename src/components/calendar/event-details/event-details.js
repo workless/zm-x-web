@@ -16,11 +16,10 @@ import MessageQuery from '../../../graphql/queries/message.graphql';
 })
 export default class CalendarEventDetails extends Component {
 
-	componentDidUpdate() {
-		let { appointmentData, scheduleUpdate } = this.props;
-		if (!appointmentData.loading && scheduleUpdate && !this.calledScheduleUpdate) {
-			this.calledScheduleUpdate = true;
-			scheduleUpdate();
+	componentWillReceiveProps({ appointmentData }) {
+		//If we are in a pop-over, tell the popover to reposition properly after we render our new appointment data
+		if (this.props.scheduleUpdate && appointmentData.loading !== this.props.appointmentData.loadin) {
+			this.setState({}, this.props.scheduleUpdate);
 		}
 	}
 
