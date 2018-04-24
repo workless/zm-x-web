@@ -670,3 +670,68 @@ test('L1 | Emoticon button | C979109', async t => {
 	const actualEmojiData = await elements.richtextareaTextContentSelector.find('img').getAttribute('src');
 	await t.expect(expectedEmojiData).eql(actualEmojiData);
 });
+
+/****************************/
+/*** Mail: Draft Messages ***/
+/****************************/
+
+fixture `Mail: Forward functions single user`
+	.page(profile.hostURL)
+	.before( async ctx => {
+		ctx.adminAuthToken = await soap.getAdminAuthToken();
+	})
+	.beforeEach( async t => {
+		t.ctx.user = await soap.createAccount(t.fixtureCtx.adminAuthToken);
+		t.ctx.userAuth = await soap.getUserAuthToken(t.ctx.user.email, t.ctx.user.password);
+		await soap.sendMessage(t.ctx.userAuth,t.ctx.user.email);
+		await actions.loginEmailPage(t.ctx.user.email, t.ctx.user.password);
+		await t.expect(sidebar.checkSidebarItemExists('Inbox')).ok({ timeout: 15000 });
+	})
+	.afterEach( async t  => {
+		await soap.deleteAccount(t.ctx.user.id, t.fixtureCtx.adminAuthToken);
+	});
+
+test('L1 | Automatically save draft for new compose | C730222', async t => {
+	let emailTo = t.ctx.user.email;
+	let emailContent = 'testDraft';
+	await compose.clickCompose();
+	await compose.enterTextToFieldElement(emailTo, compose.addressFieldTextField('To'));
+	await compose.enterTextToFieldElement(emailContent, elements.composerSubject);
+	await compose.enterBodyText(emailContent);
+	await t.wait(3000);
+	await compose.closeCompose();
+	await sidebar.clickSidebarContent('Drafts');
+	await t.eval(() => location.reload(true));
+	await compose.openMessageWithSubject(emailContent);
+	await t.expect(elements.inboxReadPane().exists).ok();
+	await t.expect(await elements.inboxReadPane().innerText).contains(emailContent);
+});
+
+test.skip('L1 | Automatically save draft for reply message | C730223 | PREAPPS-585', async t => {
+	let emailTo = t.ctx.user.email;
+	let emailBodyText = 'reply email';
+	await compose.openNewMessage();
+	await compose.clickReplyButton();
+	await compose.enterBodyText(emailBodyText);
+	await t.wait(3000);
+	await t.debug();
+	await sidebar.clickSidebarContent('Drafts');
+	await compose.openMessageWithSubject("ABC");
+	await mail.openCondensedMessage(0);
+	await t.expect(await elements.clientHtmlViewerInner.nth(1).innerText).contains(emailBodyText);
+});
+
+test('L1 | Delete draft confirmation message | C730226', async t => {
+	await sidebar.clickSidebarContent('Drafts');
+	await compose.openMessageWithSubject("empty");
+	await mail.clickToolbarButton('Delete');
+	await t.expect(elements.mailListSubjectSelector.withText('empty').exists).notOk();
+}).before(async t => {
+	t.ctx.user = await soap.createAccount(t.fixtureCtx.adminAuthToken);
+	t.ctx.userAuth = await soap.getUserAuthToken(t.ctx.user.email, t.ctx.user.password);
+	const inject = new Inject();
+	const filePath = path.join(__dirname, './data/mime/emails/empty.txt');
+	inject.send(t.ctx.userAuth, filePath, 'Drafts');
+	await t.maximizeWindow();
+	await actions.loginEmailPage(t.ctx.user.email, t.ctx.user.password);
+});
