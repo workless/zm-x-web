@@ -582,7 +582,7 @@ export default class Calendar extends Component {
 	}
 
 	render(
-		{ view, date, calendarsData, preferencesData, pending, matchesScreenMd },
+		{ view, date, calendarsData, pending, matchesScreenMd },
 		{ newEvent, quickAddBounds, activeModal, activeModalProps, showAddEventView }
 	) {
 		if (!view) {
