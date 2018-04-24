@@ -52,7 +52,7 @@ describe('util', () => {
 		});
 	});
 
-	describe.only('pluck', () => {
+	describe('pluck', () => {
 		it('should return undefined if value is undefined', () => {
 			expect(pluck([{ a: 'b' }], 'a', undefined)).to.be.undefined;
 		});
