@@ -178,23 +178,14 @@ export default class MailSidebar extends Component {
 
 		const enableAccountSelector = this.enableAccountSelector();
 		const accounts = enableAccountSelector && this.accountSelectorList();
-		const activeAccounts = accounts && accounts.filter(a => a.id === activeAccountId);
-		const otherAccounts = accounts && accounts.filter(a => a.id !== activeAccountId);
-		const topAccounts = matchesMediaQuery ? accounts : activeAccounts;
 
 		return (
 			<Sidebar header={!matchesMediaQuery}>
 				{matchesMediaQuery && <ComposeButton />}
-				{!matchesMediaQuery && (
-					<div class={s.sidebarSectionHeader}>
-						<span class={s.sidebarSectionHeaderIcon} />
-						Mail
-					</div>
-				)}
 				{enableAccountSelector && (
 					<div>
 						<div class={s.accountList}>
-							{topAccounts.map(a => (
+							{accounts.map(a => (
 								<Link
 									href={a.navigateTo}
 									class={cx(
@@ -217,7 +208,7 @@ export default class MailSidebar extends Component {
 								</Link>
 							))}
 						</div>
-						{matchesMediaQuery && <div class={s.accountSeparator} />}
+						<div class={s.accountSeparator} />
 					</div>
 				)}
 				<FolderList
@@ -236,36 +227,7 @@ export default class MailSidebar extends Component {
 					collapsibleSmartGroup
 					showSmartFolders
 				/>
-				{otherAccounts.length > 0 && !matchesMediaQuery && [
-					<div class={s.sidebarSectionHeader}>
-						<span class={s.sidebarSectionHeaderIcon} />
-						Mail
-					</div>,
-					...otherAccounts.map(a => (
-						<div class={s.otherAccountWrapper}>
-							<Link
-								href={a.navigateTo}
-								class={cx(
-									s.account,
-									a.id === activeAccountId && s.active,
-									!a.navigateTo && s.failing
-								)}
-								onClick={callWith(this.handleSelectAccount, a)}
-								disabled={!a.navigateTo}
-								title={a.failingSince ? get(a, 'lastError.0') : a.title}
-							>
-								{a.title} {a.unread ? `(${a.unread})` : ''}
-								{a.failingSince && (
-									<Icon
-										name="fa:exclamation-triangle"
-										size="xs"
-										class={s.warningIcon}
-									/>
-								)}
-							</Link>
-						</div>
-					))
-				]}
+				{ matchesMediaQuery && <div class={s.accountSeparator} /> }
 			</Sidebar>
 		);
 	}

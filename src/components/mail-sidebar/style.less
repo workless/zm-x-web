@@ -4,26 +4,8 @@
 	padding: 8px 0;
 
 	@media(max-width: @screen-sm-max) {
-		padding: 0;
+		padding: 8px 0 8px 50px;
 	}
-}
-
-.sidebarSectionHeaderIcon {
-	background-image: url('../../assets/mail.svg');
-	background-repeat: no-repeat;
-	display: block;
-	width: 20px;
-	height: 19px;
-	position: absolute;
-	left: 15px;
-	top: 14px;
-}
-
-.sidebarSectionHeader {
-	position: relative;
-	padding: 10px 0 0 50px;
-	font-family: @branding-font-family-bold;
-	font-size: 13px;
 }
 
 a.account {
@@ -37,9 +19,8 @@ a.account {
 	align-items: center;
 
 	@media(max-width: @screen-sm-max) {
-		padding-left: 50px;
-		font-size: 11px;
-		line-height: 12px;
+		padding: 12px 0;
+		line-height: initial;
 	}
 
 	&:focus,
@@ -51,7 +32,6 @@ a.account {
 		color: inherit;
 	}
 
-	@media(min-width: @screen-md) {
 		&.active {
 			color: black;
 			font-weight: 500;
@@ -67,6 +47,10 @@ a.account {
 				border-top: 6px solid transparent;
 				border-bottom: 6px solid transparent;
 				border-left: 6px solid @brand-primary;
+
+			@media(max-width: @screen-sm-max) {
+				left: -16px;
+				top: 16px;
 			}
 		}
 	}

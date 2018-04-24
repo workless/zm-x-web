@@ -39,18 +39,21 @@ export default class AppNavigation extends Component {
 		return [{
 			name: 'email',
 			href: '/',
+			match: `/${slugs.email}/`,
 			icon: 'envelope',
 			iconText: null
 		},
 		{
 			name: 'contacts',
 			href: `/${slugs.contacts}`,
+			match: `/${slugs.contacts}/`,
 			icon: 'address-book',
 			iconText: null
 		},
 		{
 			name: 'calendar',
 			href: `/${slugs.calendar}`,
+			match: `/${slugs.calendar}/`,
 			icon: 'calendar-o',
 			iconText: new Date().getDate()
 		}];
@@ -58,25 +61,20 @@ export default class AppNavigation extends Component {
 
 	render({ slugs, desktopView, renderBefore, renderAfter, url }) {
 
+		const navList = this.getNavList();
 		let matchedRoute, listView = [];
 
-		for ( let listItem of this.getNavList() ) {
+		for ( let listItem of navList ) {
 			if ( renderBefore || renderAfter ) {
-				if ( renderBefore ) {
-					if ( listItem.name === url.view ) {
-						break;
-					}
+
+				if ( renderBefore && !matchedRoute ) {
 					listView.push( <MenuItemView desktopView={desktopView} slugs={slugs} {...listItem} /> );
 				}
-				else if ( renderAfter ) {
-					if ( matchedRoute ){
-						listView.push( <MenuItemView desktopView={desktopView} slugs={slugs} {...listItem} /> );
-					}
-
-					if ( listItem.name === url.view ) {
-						matchedRoute = true;
-					}
+				else if ( renderAfter && matchedRoute ) {
+					listView.push( <MenuItemView desktopView={desktopView} slugs={slugs} {...listItem} /> );
 				}
+
+				matchedRoute = listItem.name === url.view || matchedRoute;
 			}
 			else {
 				listView.push( <MenuItemView desktopView={desktopView} slugs={slugs} {...listItem} /> );
@@ -87,7 +85,7 @@ export default class AppNavigation extends Component {
 			<div class={style.appMenu}>
 				<div class={cx( !( renderBefore || renderAfter ) && style.hideSmDown, style.nav, !desktopView && style.sidebarNavWrapper)}>
 					{ listView }
-					<ZimletSlot props class={style.slot} name="menu" />
+					{ !renderBefore && <ZimletSlot props class={style.slot} name="menu" /> }
 					{ desktopView && <AppNavigationTabs /> }
 				</div>
 				<ToolbarPortalTarget />
