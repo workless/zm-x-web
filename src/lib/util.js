@@ -8,9 +8,21 @@ import CALENDAR_FORMATS from '../constants/calendar-formats';
 
 const HOP = Object.prototype.hasOwnProperty;
 
+/**
+ * Find and return the element in `arr` that has a key whose value is equal to value if value
+ * is not a regex, or passes the regex test if value is a regex
+ * @param {Array} arr
+ * @param {String} key
+ * @param {*} value A value to == match against (no type equality), or a regex to test
+ * @return {*} The element in `arr` that has the key matching `value`, or undefined if not found
+ */
 export function pluck(arr, key, value) {
-	// eslint-disable-next-line
-	for (let i = arr.length; i--; ) if (arr[i][key] == value) return arr[i];
+	for (let i = arr.length; i--; ) {
+		//eslint-disable-next-line eqeqeq
+		if (value && value.test ? value.test(arr[i][key]) : arr[i][key] == value)  {
+			return arr[i];
+		}
+	}
 }
 
 export function getId(obj) {
