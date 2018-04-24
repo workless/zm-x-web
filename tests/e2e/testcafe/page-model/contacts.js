@@ -3,7 +3,8 @@
 import { Selector, t } from 'testcafe';
 import { elements } from './elements';
 import { sidebar } from './sidebar';
-import { UtilFunc } from './common';
+import { utilFunc } from './common';
+import { calendar } from './calendar';
 
 class Contacts {
     
@@ -16,7 +17,13 @@ class Contacts {
 	}
 
 	async typeContactDetail(toFieldId, enteredText) {
-    	await t.typeText(Selector(elements.addContactInfoItem(toFieldId)), enteredText);
+		if (toFieldId === 'birthday' || toFieldId === 'anniversary') {
+			await t.click(Selector(elements.addContactInfoItem(toFieldId)));
+			await calendar.sidepanel.clickDayInMinicalendar('15');
+		}
+		else {
+			await t.typeText(Selector(elements.addContactInfoItem(toFieldId)), enteredText);
+		}
 	}
 
 	async openNewContact() {
@@ -131,8 +138,7 @@ class Contacts {
 	}
 
 	async isContactSideBarItemSelected(contactName) {
-    	let util = new UtilFunc();
-    	return util.isElementClassNamesContainsStr(sidebar.sidebarContentItemWithText(contactName), 'active');
+    	return utilFunc.isElementClassNamesContainsStr(sidebar.sidebarContentItemWithText(contactName), 'active');
 	}
 
 	readPaneButtonWithText = withText => elements.contactsReadPane.find('button').withText(withText);
