@@ -40,6 +40,11 @@
 		"zoomOut": "Zoom Out",
 		"undo": "Undo"
 	},
+	"appNavigation" : {
+		"email": "Mail",
+		"contacts": "Contacts",
+		"calendar": "Calendar"
+	},
 	"dates": {
 		"yesterday": "Yesterday"
 	},

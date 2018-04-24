@@ -6,6 +6,8 @@ import { empty } from '../../lib/util';
 import { screenSmMax } from '../../constants/breakpoints';
 import get from 'lodash-es/get';
 import cx from 'classnames';
+import AppNavigation from '../app-navigation';
+
 import preactRedux from 'preact-redux';
 import { bindActionCreators } from 'redux';
 import * as sidebarActionCreators from '../../store/sidebar/actions';
@@ -88,8 +90,9 @@ export default class Sidebar extends PureComponent {
 					)}
 
 					{!empty(footer) ? footer : null}
-
+					{modal && <AppNavigation renderBefore />}
 					<div class={style.content}>{children}</div>
+					{modal && <AppNavigation renderAfter />}
 				</div>
 			</div>
 		);
