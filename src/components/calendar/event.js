@@ -94,12 +94,14 @@ class SavedCalendarEvent extends Component {
 		return (
 			<Popover active={active}
 				onToggle={this.handleToggle}
+				arrow
 				classes={{
 					containerClass: style.eventTooltipTarget,
 					toggleClass: style.eventTooltipTarget,
 					popoverClass: style.eventTooltip
 				}}
 				placement="top"
+				anchor="center"
 				hoverDuration={SHOW_EVENT_DETAILS_AFTER_HOVER_DELAY}
 				target={<div
 					class={style.eventInner}
