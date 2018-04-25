@@ -153,7 +153,7 @@ test('L2 | Add duplicate task in the same tasklist | C871013', async t => {
 	const taskListName = t.ctx.user.email;
 	const taskName = 'Sample Task';
 	await t.expect(await tasks.tasksHeaderSelector.innerText).contains('Tasks - List');
-	await t.expect(tasks.panel.checkTaskListExists(taskListName)).ok();
+	await t.expect(tasks.panel.checkTaskListExists(taskListName)).ok({ allowUnawaitedPromise: true });
 	await tasks.header.clickTasksSettingsIcon();
 	await tasks.header.selectMenuItem('New Task');
 	await tasks.dialog.enterNewTaskText(taskName);
