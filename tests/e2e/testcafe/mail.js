@@ -443,7 +443,7 @@ test.skip('L1 | Responsive Composer Toolbar | C612378 | PREAPPS-206', async t =>
 		.expect(await elements.componentsToolbarMiddleSelector.child().count).eql(toolbarItemCount);
 });
 
-test.skip('L2 | Font > Type | C769875 | PREAPPS-250', async t => {
+test('L2 | Font > Type | C769875 | PREAPPS-250', async t => {
 	let emailBodyText = 'Font';
 	await compose.enterBodyText(emailBodyText);
 	await t.wait(500);
@@ -454,7 +454,7 @@ test.skip('L2 | Font > Type | C769875 | PREAPPS-250', async t => {
 	await t.expect(await elements.richtextareaTextContentSelector.find('font').getAttribute('face')).contains('TimesNewRoman');
 });
 
-test.skip('L2 | Font > Size | C813884', async t => {
+test('L2 | Font > Size | C813884', async t => {
 	let emailBodyText = 'Size';
 	await compose.enterBodyText(emailBodyText);
 	await t.wait(500);
@@ -465,7 +465,7 @@ test.skip('L2 | Font > Size | C813884', async t => {
 	await t.expect(await elements.richtextareaTextContentSelector.find('font').getAttribute('size')).eql('5');
 });
 
-test.skip('L2 | Font > Bold | C813885', async t => {
+test('L2 | Font > Bold | C813885', async t => {
 	let emailBodyText = 'Bold';
 	await compose.enterBodyText(emailBodyText);
 	await t.wait(500);
@@ -476,7 +476,7 @@ test.skip('L2 | Font > Bold | C813885', async t => {
 	await t.expect(await elements.richtextareaTextContentSelector.find('b').exists).ok();
 });
 
-test.skip('L2 | Font > Italics | C813886', async t => {
+test('L2 | Font > Italics | C813886', async t => {
 	let emailBodyText = 'Test';
 	await compose.enterBodyText(emailBodyText);
 	await t.wait(500);
@@ -487,7 +487,7 @@ test.skip('L2 | Font > Italics | C813886', async t => {
 	await t.expect(await elements.richtextareaTextContentSelector.find('i').exists).ok();
 });
 
-test.skip('L2 | Font > Underline | C813887', async t => {
+test('L2 | Font > Underline | C813887', async t => {
 	let emailBodyText = 'Test';
 	await compose.enterBodyText(emailBodyText);
 	await t.wait(500);
@@ -498,7 +498,7 @@ test.skip('L2 | Font > Underline | C813887', async t => {
 	await t.expect(await elements.richtextareaTextContentSelector.find('u').exists).ok();
 });
 
-test.skip('L2 | Font > Text, Background Color | C818253 | PREAPPS-250', async t => {
+test('L2 | Font > Text, Background Color | C818253 | PREAPPS-250', async t => {
 	let expectedFontColor = '#888888';
 	let expectedFontBackgroundColor = 'rgb(136, 136, 136)';
 	let emailBodyText = 'Test';
@@ -574,7 +574,7 @@ test('L1 | Verify the insert link with respect to the cursor position | C871114 
 		.expect((await elements.richtextareaTextContentSelector.innerText).split(emailBodyText).length - 1).eql(1);
 });
 
-test.skip('L1 | Emoticon button | C828577 | PREAPPS-250', async t => {
+test('L1 | Emoticon button | C828577 | PREAPPS-250', async t => {
 	const expectedEmojiData = await compose.insertEmoji(0);
 	const actualEmojiData = await elements.richtextareaTextContentSelector.find('img').getAttribute('src');
 	await t.expect(expectedEmojiData).eql(actualEmojiData);
