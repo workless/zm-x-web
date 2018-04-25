@@ -212,7 +212,7 @@ class Elements {
     settingsFilterSubsectionTitleSelector = Selector(clientName + '_settings_filters-settings_filter-modal_subsectionTitle');
     settingsFiltersList  = Selector(clientName + '_settings_filtersList');
     blocksButtonSelector = Selector('.blocks_button_regular');
-    settingsModalDialogFooterButtonSelector = Selector(clientName + '_inline-modal-dialog_footer');
+    settingsModalDialogFooterButtonSelector = Selector(clientName + '_settings-modal_footer');
     checkBoxSelector = Selector('input[type=checkbox]');
     labelSelector = Selector('label');
     settingsSendMeCopyButtonSelector = Selector('#settings.vacationResponse.sendMeCopy');
