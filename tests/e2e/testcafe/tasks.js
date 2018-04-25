@@ -510,6 +510,7 @@ test('L3 | View task details for task without notes | C876498', async t => {
 	await tasks.panel.rightClickonTaskListAndSelectOption(taskListName,'New Task');
 	await tasks.dialog.enterNewTaskText(taskName);
 	await tasks.dialog.clickModalDialogFooterButton('Save');
+	await t.wait(1000);
 	await tasks.panel.singleClickonTask(taskListName,taskName);
 	await t.expect(await tasks.popup.isTaskPresentInPopup(taskName)).ok('Verification of Task Name');
 	await t.expect(await tasks.popup.isHorizontalDividerInPopup()).notOk('Verification of Horizontal divider');

@@ -277,13 +277,13 @@ test('L1 | Verify the Week, Month, Year and List view using button | C972897', a
 	await calendar.clickToolBarTopButton('List');
 });
 
-test.skip('Create new calendar event - Empty title', async t => {
-	await calendar.clickSidebarPrimaryButton('NEW EVENT');
+test('L1 | Create new calendar event - Empty title | C972902', async t => {
+	await calendar.clickSidebarPrimaryButton(/New Event/i);
 	await calendar.dialog.clickModalDialogFooterButton('OK');
 });
 
 test('L1 | Create new calendar event - With title | C972901', async t => {
-	await calendar.clickSidebarPrimaryButton('New Event');
+	await calendar.clickSidebarPrimaryButton(/New Event/i);
 	await calendar.enterNewEventText('My New Calendar Event');
 	await calendar.dialog.clickModalDialogFooterButton('OK');
 });
