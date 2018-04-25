@@ -13,52 +13,57 @@ const CONSTANT_ZIMLETS = {
 @wire('zimlets', null, ({ loadZimletByUrl }) => ({ loadZimletByUrl }))
 export default class ZimletLoader extends Component {
 	static localStorageInitialized = false;
-	state = {
-		running: {}
-	}
+	static pending = {};
+	static running = {};
+	static errors = {};
 
 	loadRemoteZimlet = (props) => {
 		let { loadZimletByUrl, zimlets } = props;
-		let { running } = this.state;
 
 		if (!zimlets || !Object.keys(zimlets).length) { return; }
 
-		Promise.all(
-			Object.keys(zimlets).map((name) => {
-				const { url } = zimlets[name];
-				if (running[name]) {
-					console.warn(`[ZimletSDK "${name}"]: Zimlet is already running.`); // eslint-disable-line no-console
-					return;
-				}
+		Object.keys(zimlets).forEach((name) => {
+			const { url } = zimlets[name];
+			if (ZimletLoader.running[name]) {
+				return console.warn(`[ZimletSDK "${name}"]: Zimlet is already running.`); // eslint-disable-line no-console
+			}
 
-				if (!url) {
-					console.warn(`[ZimletSDK "${name}"]: Invalid Zimlet URL.`); // eslint-disable-line no-console
-					return;
-				}
+			if (ZimletLoader.pending[name]) {
+				ZimletLoader.pending[name].then(this.callOnLoad);
+				return console.warn(`[ZimletSDK "${name}"]: Zimlet is already pending.`); // eslint-disable-line no-console
+			}
 
-				return loadZimletByUrl(url, { name, compat: false })
-					.then( result =>
-						Promise.resolve().then(result.init).then( () => result )
-					)
-					.then(() => {
-						console.info(`[ZimletSDK "${name}"]: Loaded successfully from ${url}`); // eslint-disable-line no-console
-						this.setState({
-							running: {
-								...this.state.running,
-								[name]: { url }
-							}
-						});
-					})
-					.catch( error => console.warn(`[ZimletSDK "${name}"]:`, error)); // eslint-disable-line no-console
-			})
-		).then(() => {
-			this.props.onLoadZimlets && this.props.onLoadZimlets(this.state.running);
-			return this.state.running;
+			if (!url) {
+				let errorMsg = 'Zimlet URL Required';
+				ZimletLoader.errors[name] = errorMsg;
+				return console.warn(`[ZimletSDK "${name}"]: ${errorMsg}`); // eslint-disable-line no-console
+			}
+
+			return ZimletLoader.pending[name] = loadZimletByUrl(url, { name, compat: false })
+				.then( result => result.init())
+				.then(() => {
+					console.info(`[ZimletSDK "${name}"]: Loaded successfully from ${url}`); // eslint-disable-line no-console
+					ZimletLoader.running[name] =  { url };
+					delete ZimletLoader.errors[name];
+				})
+				.catch( error => {
+					console.warn(`[ZimletSDK "${name}"]:`, error);// eslint-disable-line no-console
+					ZimletLoader.errors[name] = error;
+				})
+				.then(() => {
+					this.callOnLoad();
+					delete ZimletLoader.pending[name];
+				});
 		});
+
+		return this.callOnLoad();
 	};
+
+	callOnLoad = () => this.props.onLoadZimlets && this.props.onLoadZimlets({ running: ZimletLoader.running, errors: ZimletLoader.errors })
 
 	componentWillMount() {
 		if (!ZimletLoader.localStorageInitialized) {
+			ZimletLoader.localStorageInitialized = true;
 			const persistedZimlets = zimletLocalStorage.get();
 
 			if (persistedZimlets && Object.keys(persistedZimlets)) {
@@ -69,8 +74,6 @@ export default class ZimletLoader extends Component {
 					zimlets
 				});
 			}
-
-			ZimletLoader.localStorageInitialized = true;
 		}
 		else {
 			this.loadRemoteZimlet(this.props);
