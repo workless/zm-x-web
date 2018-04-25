@@ -34,9 +34,8 @@ class Settings {
 
 	selectFilterSelectByLabelSelector = (label) => elements.settingsFilterSubsectionTitleSelector.withText(label).sibling().find('select');
 
-	async isSettingIconDisplay(){
-		return await elements.iconCogSelector.exists;
-	}
+	isSettingIconDisplay = () => elements.iconCogSelector.exists;
+
 	async clickSettings() {
 	    await t.click(elements.iconCogSelector);
 	}
@@ -114,7 +113,7 @@ class Settings {
 			const IsSavebutton = await settings.editFilterDialogSelector.find('button').withText('Save').exists;
 			const IsCancelbutton = await settings.editFilterDialogSelector.find('button').withText('Cancel').exists;
 
-			console.log(IsTitle,IsFilterNameLabel,IsFromLabel,IsTOCCLabel,IsSubjectLabel,IsBodyLabel,IsMoveMessageLabel,IsSavebutton,IsCancelbutton);
+			// console.log(IsTitle,IsFilterNameLabel,IsFromLabel,IsTOCCLabel,IsSubjectLabel,IsBodyLabel,IsMoveMessageLabel,IsSavebutton,IsCancelbutton);
 			return IsTitle && IsFilterNameLabel && IsFromLabel && IsTOCCLabel && IsSubjectLabel && IsBodyLabel && IsMoveMessageLabel && IsSavebutton && IsCancelbutton;
 		},
 
@@ -147,10 +146,10 @@ class Settings {
 					return true;
 				}
 				
-				console.log('Rule value is not exist');
+				// console.log('Rule value is not exist');
 				return false;
 			}
-			console.log('Rule name is not exist');
+			// console.log('Rule name is not exist');
 			return false;
 			
 		},
