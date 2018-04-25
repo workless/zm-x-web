@@ -18,7 +18,7 @@ export default class CalendarEventDetails extends Component {
 
 	componentWillReceiveProps({ appointmentData }) {
 		//If we are in a pop-over, tell the popover to reposition properly after we render our new appointment data
-		if (this.props.scheduleUpdate && appointmentData.loading !== this.props.appointmentData.loadin) {
+		if (this.props.scheduleUpdate && appointmentData.loading !== this.props.appointmentData.loading) {
 			this.setState({}, this.props.scheduleUpdate);
 		}
 	}
