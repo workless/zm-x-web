@@ -24,7 +24,7 @@ import CalendarCheckMutation from '../../../graphql/queries/calendar/calendar-ch
 import { FolderActionMutation } from '../../../graphql/queries/folders/folders.graphql';
 import SendShareNotificationMutation from '../../../graphql/queries/shares/send-notification.graphql';
 import { notify } from '../../../store/notifications/actions';
-import { hasFlag } from '../../../utils/folders';
+import { toggleFlag, hasFlag } from '../../../utils/folders';
 import {
 	calendarType as getCalendarType
 } from '../../../utils/calendar';
@@ -187,35 +187,37 @@ export default compose(
 		username: get(email, 'account.name')
 	}), { notify }),
 	graphql(CalendarsQuery, {
-		props: ({ data: { calendars = [] } }) => {
-			const calFolders = calendars.filter(cl => cl.id !== String(USER_FOLDER_IDS.TRASH));
+		props: ({ data: { getFolder = [] } }) => {
+			let calendars = (get(getFolder, 'folders.0.folders') || [])
+				.concat(...(get(getFolder, 'folders.0.linkedFolders') || []))
+				.filter(cl => cl.id !== String(USER_FOLDER_IDS.TRASH));
+			const calendarSections = [
+				{
+					type: CALENDAR_TYPE.own,
+					label: 'My Calendars',
+					items: []
+				},
+				{
+					type: CALENDAR_TYPE.holiday,
+					label: 'Holidays',
+					items: []
+				},
+				{
+					type: CALENDAR_TYPE.other,
+					label: 'Others',
+					items: []
+				}
+			];
+
+			calendars.forEach(cal => {
+				const sectionsIdx = CALENDAR_LIST_ORDER[getCalendarType(cal)];
+				calendarSections[sectionsIdx || 0].items.push(cal);
+			});
+
 
 			return {
-				calendars: calFolders,
-				calendarSections: calFolders.reduce(
-					(sections, calendar) => {
-						const sectionsIdx = CALENDAR_LIST_ORDER[getCalendarType(calendar)];
-						sections[sectionsIdx || 0].items.push(calendar);
-						return sections;
-					},
-					[
-						{
-							type: CALENDAR_TYPE.own,
-							label: 'My Calendars',
-							items: []
-						},
-						{
-							type: CALENDAR_TYPE.holiday,
-							label: 'Holidays',
-							items: []
-						},
-						{
-							type: CALENDAR_TYPE.other,
-							label: 'Others',
-							items: []
-						}
-					]
-				)
+				calendars,
+				calendarSections
 			};
 		}
 	}),
@@ -235,6 +237,17 @@ export default compose(
 					variables: {
 						calendarId: id,
 						value: !hasFlag(find(calendars, { id }), 'checked')
+					},
+					optimisticResponse: {
+						__typename: 'Mutation',
+						checkCalendar: true
+					},
+					update: (cache) => {
+						const data = cache.readQuery({ query: CalendarsQuery });
+						let cal = find((get(data, 'getFolder.folders.0.folders') || [])
+							.concat(...(get(data, 'getFolder.folders.0.linkedFolders') || [])),  { id });
+						toggleFlag(cal, 'checked');
+						cache.writeQuery({ query: CalendarsQuery, data });
 					}
 				}).then(() => calendarsAndAppointmentsData.refetch())
 		})

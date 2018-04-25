@@ -1,9 +1,9 @@
 import { h, Component } from 'preact';
 import wire from 'wiretie';
 import { Button, Icon } from '@zimbra/blocks';
-import get from 'lodash-es/get';
 import AddressList from '../address-list';
 import cx from 'classnames';
+import Recurrence from '../recurrence';
 import { isMessageTrashed } from '../../utils/mail-item';
 import array from '@zimbra/util/src/array';
 import style from './style';
@@ -67,7 +67,7 @@ export default class Invitation extends Component {
 						<dt>Repeats:</dt>,
 						<dd>
 							{ array(component.recurrence).map( recurrence =>
-								<Repeats recurrence={recurrence} invite={component} />
+								<Recurrence recurrence={recurrence} class={style.recurrence} />
 							) }
 						</dd>
 					] }
@@ -88,51 +88,3 @@ export default class Invitation extends Component {
 	}
 }
 
-
-// @TODO use <Text /> pluralization
-const FREQS = {
-	SEC: ['seconds', 'secondly'],
-	MIN: ['minutes', 'minutely'],
-	HOU: ['hours', 'hourly'],
-	DAI: ['days', 'daily'],
-	WEE: ['weeks', 'weekly'],
-	MON: ['months', 'monthly'],
-	YEA: ['years', 'yearly']
-};
-
-const DAYS = {
-	MO: 'Monday',
-	TU: 'Tuesday',
-	WE: 'Wednesday',
-	TH: 'Thursday',
-	FR: 'Friday',
-	SA: 'Saturday',
-	SU: 'Sunday'
-};
-
-const Repeats = ({ recurrence }) => {
-	let freq = FREQS[getRecurrenceField(recurrence, 'freq')],
-		slots = array(getRecurrenceField(recurrence, 'byday')),
-		interval = getRecurrenceField(recurrence, 'interval');
-
-	freq = interval===1 ? freq[1] : `Every ${interval} ${freq[0]}`;
-
-	if (slots.join(',')==='MO,TU,WE,TH,FR') {
-		freq = 'Every weekday';
-	}
-	else {
-		freq += ' on ' + slots.map(s => DAYS[s.day || s] || s).join(', ') + '.';
-	}
-
-	// console.log(recurrence, invite);
-
-	return <span class={style.recurrence}>{freq}</span>;
-};
-
-/**
- * Recurrence can look like { freq: "WEE", byday: ["MO", "TU"], interval: 1 } or if there are exceptions to the recurence, like
- * { add: { [ {freq: "WEE", byday: ["MO", "TU"], interval: [1] ] }, exclude: [ "20170601T140000Z", { dtval: ["20171123T100000", tz: "America/New_York"} ] },
- */
-function getRecurrenceField(recurrence, field) {
-	return get(recurrence, field, get(recurrence, `add.0.${field}`));
-}

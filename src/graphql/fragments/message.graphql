@@ -89,8 +89,23 @@ fragment messageFields on MessageInfo {
 			}
 			percentComplete
 			priority
-			recurrenceId
+			utcRecurrenceId
 			rsvp
+			recurrence {
+				add {
+					rule {
+						frequency
+						interval {
+							intervalCount
+						}
+						byday {
+							wkday {
+								day
+							}
+						}
+					}
+				}
+			}
 			sequence
 			start {
 				date

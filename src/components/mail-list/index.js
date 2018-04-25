@@ -16,6 +16,7 @@ const SCROLL_BUFFER = 500;
 @getMailboxMetadata()
 export default class MailList extends Component {
 	static defaultProps = {
+		sortBy: '',
 		viewingId: null,
 		wide: true,
 		selectedIds: new Set()
