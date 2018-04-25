@@ -41,7 +41,7 @@ test('L1 | Contacts, View Existing | C543079', async t => {
 });
 
 test('L1 | Contacts, Add Contact after viewing existing contact. | C543080 | L2: Contacts, Phone > 10 digits ', async t => {
-	let contactDetailFieldValue = '';
+	// let contactDetailFieldValue = '';
 	let contactDetailFieldID = profile.pageElements.id.contacts.detailField;
 	let testUserName = contactDetailFieldID.lastName + ', ' + contactDetailFieldID.firstName;
 
@@ -64,17 +64,18 @@ test('L1 | Contacts, Add Contact after viewing existing contact. | C543080 | L2:
 
 	contacts.selectContactByName(testUserName);
 	// Verify contact detail info, starting from the 4th object in json. skip check when key=phone
-	let keys = Object.keys(contactDetailFieldID);
+	// let keys = Object.keys(contactDetailFieldID);
   
-	for (let i = 3; i < keys.length; i++) {
-		contactDetailFieldValue = contactDetailFieldID[keys[i]];
-		if (keys[i] !== 'website') {
-			if (keys[i] === 'birthday' || keys[i] === 'anniversary') {
-				contactDetailFieldValue = await utilFunc.convertDate(contactDetailFieldValue);
-			}
-			await t.expect(elements.contactCard.innerText).contains(contactDetailFieldValue);
-		}
-	}
+	// for (let i = 3; i < keys.length; i++) {
+	// 	contactDetailFieldValue = contactDetailFieldID[keys[i]];
+	// 	if (keys[i] !== 'website') {
+	// 		if (keys[i] === 'birthday' || keys[i] === 'anniversary') {
+	// 			contactDetailFieldValue = await utilFunc.convertDate(contactDetailFieldValue);
+	// 		}
+	// 		await t.expect(elements.contactCard.innerText).contains(contactDetailFieldValue);
+	// 	}
+	// }
+	await t.expect(elements.contactCard.innerText).contains(`firstName middleName lastName\njobTitle at company\nemail@zimbra.comemail\nphonephone\nApril 15, 2018birthday\nApril 15, 2018anniversary\nwww.website.comwebsite\nnotes here\n`);
 	await contacts.clickToobBarButton('Delete');
 	// Verify new added contact does not exist in contact list
 	await t.expect(elements.contactListItemWithName.withText(testUserName).exists).notOk();
