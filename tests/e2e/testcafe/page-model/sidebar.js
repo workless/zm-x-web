@@ -10,8 +10,10 @@ class SideBar {
 
 	// Click folder to collapse
 	async clickFolder(folderName) {
-		await t
-			.click(elements.folderToggleSelector.withText(folderName));
+		if (!String(await elements.folderToggleSelector.withText(folderName).prevSibling().getAttribute('class')).includes('zimbra-client_collapsible-control_open')) {
+			await t
+				.click(elements.folderToggleSelector.withText(folderName));
+		}
 	}
 
 	// Click sub folder angle icon to collapse
