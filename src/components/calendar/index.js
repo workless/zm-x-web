@@ -4,6 +4,7 @@ import { branch, renderComponent, withProps } from 'recompose';
 import moment from 'moment';
 import BigCalendar from 'react-big-calendar';
 import 'react-big-calendar/lib/less/styles.less';
+import { Text } from 'preact-i18n';
 
 import startOfDay from 'date-fns/start_of_day';
 import startOfWeek from 'date-fns/start_of_week';
@@ -43,7 +44,7 @@ import ExportCalendarModal from './export-calendar-modal';
 import { CalendarEvent, CalendarEventWrapper, getEventProps } from './event';
 import YearView from './year-view';
 import QuickAddEventPopover from './quick-add-event-popover';
-import EditEventModal from '../edit-event-modal';
+import CalendarAddEvent from '../calendar-add-event';
 import SkeletonWithSidebar from '../skeletons/with-sidebar';
 
 import CalendarsAndAppointmentsQuery from '../../graphql/queries/calendar/calendars-and-appointments.graphql';
@@ -61,6 +62,7 @@ import plainTextInviteEmail from './emails/plain-text-invite-email';
 import { soapTimeToJson } from '../../utils/prefs';
 import withMediaQuery from '../../enhancers/with-media-query';
 import { minWidth, screenMd } from '../../constants/breakpoints';
+import { notify as notifyActionCreator } from '../../store/notifications/actions';
 
 import style from './style';
 import { switchTimeFormat } from '../../lib/util';
@@ -164,7 +166,8 @@ function getDOW({ preferences }) {
 		date: calendar.date
 	}),
 	{
-		setDate: calendarActionCreators.setDate
+		setDate: calendarActionCreators.setDate,
+		notify: notifyActionCreator
 	}
 )
 @graphql(AccountInfoQuery, {
@@ -363,7 +366,8 @@ export default class Calendar extends Component {
 		newEvent: null,
 		quickAddBounds: null,
 		showEditModal: false,
-		activeModal: ''
+		activeModal: '',
+		showAddEventView: false
 	};
 
 	getSlotProps = time => {
@@ -415,7 +419,12 @@ export default class Calendar extends Component {
 			start: start.toDate(),
 			end: start.add(30, 'minutes').toDate()
 		});
-		this.openModal('editEvent');
+		this.setState( { showAddEventView: true } );
+	};
+
+	handleCloseAddEvent = () => {
+		this.setState( { showAddEventView: false } );
+		this.clearNewEvent();
 	};
 
 	clearNewEvent = () => {
@@ -461,11 +470,22 @@ export default class Calendar extends Component {
 	};
 
 	handleCreateAppointment = appointment => {
+
 		this.props.createAppointment({
 			name: '(No title)',
 			...appointment
-		});
-		this.clearNewEvent();
+		}).catch( () => {
+			this.props.notify({
+				message: <Text id="calendar.editModal.notifications.problemInCreating" />,
+				action: {
+					label: <Text id="calendar.editModal.notifications.tryAgain" />,
+					fn: () => {
+						this.handleCreateNewEvent();
+					}
+				}
+			});
+		} );
+		this.handleCloseAddEvent();
 	};
 
 	handleCancelAdd = () => {
@@ -487,9 +507,9 @@ export default class Calendar extends Component {
 
 	handleQuickAddMoreDetails = event => {
 		this.setState({
-			newEvent: event,
-			activeModal: 'editEvent'
+			newEvent: event
 		});
+		this.setState( { showAddEventView: true } );
 	};
 
 	handleBeginSelectEvent = () => {
@@ -539,16 +559,6 @@ export default class Calendar extends Component {
 						)[1]
 				})
 			},
-			editEvent: {
-				Component: EditEventModal,
-				props: () => ({
-					event: this.state.newEvent,
-					onAction: this.handleCreateAppointment,
-					onClose: this.handleCancelAdd,
-					preferencesData: this.props.preferencesData,
-					accountInfoData: this.props.accountInfoData
-				})
-			},
 			eventDetails: {
 				Component: CalendarEventDetailsModal
 			},
@@ -573,7 +583,7 @@ export default class Calendar extends Component {
 
 	render(
 		{ view, date, calendarsData, pending, matchesScreenMd },
-		{ newEvent, quickAddBounds, activeModal, activeModalProps }
+		{ newEvent, quickAddBounds, activeModal, activeModalProps, showAddEventView }
 	) {
 		if (!view) {
 			return null;
@@ -647,35 +657,51 @@ export default class Calendar extends Component {
 					openModal={this.openModal}
 					matchesScreenMd={matchesScreenMd}
 				/>
-				<BigCalendar
-					className={style.calendarInner}
-					formats={FORMATS}
-					components={this.BIG_CALENDAR_COMPONENTS}
-					views={VIEWS}
-					elementProps={{ className: style.calendarInner }}
-					eventPropGetter={getEventProps}
-					slotPropGetter={this.getSlotProps}
-					view={view}
-					date={date}
-					events={events.filter(isParticipatingInEvent)}
-					titleAccessor="name"
-					allDayAccessor="allDay"
-					// @TODO: scrollToTime happens on any re-render of Big Calendar,
-					// which causes various issues with manipulation and is disabled
-					// until a fix is available.
-					// scrollToTime={isToday(date) ? new Date() : null}
-					popup={false}
-					selectable
-					onSelecting={this.handleBeginSelectEvent}
-					onNavigate={this.handleNavigate}
-					onView={this.handleSetView}
-					onSelectSlot={this.selectSlot}
-					onSelectEvent={this.selectEvent}
-				/>
-				<CalendarRightbar class={style.rightbar} />
-				{newEvent &&
-					quickAddBounds &&
-					activeModal !== 'editEvent' && (
+				{ showAddEventView ? (
+					<CalendarAddEvent
+						className={style.calendarInner}
+						event={newEvent}
+						onAction={this.handleCreateAppointment}
+						onClose={this.handleCloseAddEvent}
+						preferencesData={this.props.preferencesData}
+						accountInfoData={this.props.accountInfoData}
+						{...activeModalProps}
+					/>
+				) : (<div className={style.calendarWrapper}>
+					<BigCalendar
+						className={style.calendarInner}
+						formats={FORMATS}
+						components={this.BIG_CALENDAR_COMPONENTS}
+						views={VIEWS}
+						elementProps={{ className: style.calendarInner }}
+						eventPropGetter={getEventProps}
+						slotPropGetter={this.getSlotProps}
+						view={view}
+						date={date}
+						events={events.filter(isParticipatingInEvent)}
+						titleAccessor="name"
+						allDayAccessor="allDay"
+						// @TODO: scrollToTime happens on any re-render of Big Calendar
+						// which causes various issues with manipulation and is disabled
+						// until a fix is available.
+						// scrollToTime={isToday(date) ? new Date() : null}
+						popup={false}
+						selectable
+						onNavigate={this.handleNavigate}
+						onView={this.handleSetView}
+						onSelectSlot={this.selectSlot}
+						onSelectEvent={this.selectEvent}
+					/>
+					<CalendarRightbar class={style.rightbar} />
+					<CalendarSectionToolbar
+						date={date}
+						onCreateNewEvent={this.handleCreateNewEvent}
+						onNavigate={this.handleNavigate}
+					/>
+				</div>)
+				}
+
+				{newEvent && quickAddBounds && !showAddEventView && (
 					<QuickAddEventPopover
 						event={newEvent}
 						onSubmit={this.handleCreateAppointment}
@@ -694,11 +720,6 @@ export default class Calendar extends Component {
 						onClose={this.closeActiveModal}
 					/>
 				)}
-				<CalendarSectionToolbar
-					date={date}
-					onCreateNewEvent={this.handleCreateNewEvent}
-					onNavigate={this.handleNavigate}
-				/>
 			</div>
 		);
 	}
