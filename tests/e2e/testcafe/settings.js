@@ -473,7 +473,7 @@ test('L1 | Verify incoming condition From only | C681678', async t => {
 	await t.expect(messageCountTestfolder).eql(1,'Verify the testfolder message count should be one');
 });
 
-test('L1 | Verify incoming condition To/cc only | C681678', async t => {
+test('L1 | Verify incoming condition To/cc only | C681679', async t => {
 	await soap.mailCreateFolder(t.ctx.userAuth, '1', 'testFolder');
 	let newuser = await soap.createAccount(t.fixtureCtx.adminAuthToken);
 	let newuserAuth = await soap.getUserAuthToken(newuser.email, newuser.password);
