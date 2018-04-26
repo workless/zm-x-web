@@ -45,10 +45,6 @@
 			width: 250px;
 		}
 
-		.error, .running {
-			margin: 12px 0px;
-			padding: 12px 20px;
-		}
 
 		.running {
 			color: @brand-success;
@@ -63,6 +59,48 @@
 		.showZimlets {
 			margin-top: 20px;
 			font-size: 16px;
+		}
+
+		table {
+			margin-top: 20px;
+			border-collapse: collapse;
+
+			caption {
+				background-color: @gray-lighter;
+				font-weight: bold;
+			}
+
+			td, th {
+				padding: 5px;
+			}
+
+			th {
+				background-color: @gray-lightest;
+			}
+
+			.name {
+				font-weight: bold;
+			}
+
+			.persist {
+				text-align: center;
+			}
+
+			.statusLoading {
+				text-align: center;
+			}
+
+			.statusRunning {
+				text-align: center;
+				color: @brand-success;
+				background-color: fadeout(@brand-success, 90%);
+			}
+
+			.statusError {
+				text-align: center;
+				color: @brand-danger;
+				background-color: fadeout(@brand-danger, 90%);
+			}
 		}
 
 	}

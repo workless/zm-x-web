@@ -151,24 +151,25 @@ class Compose {
 
 	//select toolbar popmenu
 	async selectComposeToolbarPopmenu(toolbarTitle, popmenuSelectStr) {
-        	let elementTag = '';
-        	await t.click(compose.toolbarButtonsSelector(toolbarTitle));
-        	await t.wait(1000);
-        	switch (toolbarTitle) {
-        		case 'Font':
-        			elementTag = 'a';
-        			break;
-        		default:
-        			elementTag = 'li';
-        	}
-        	await t.click(elements.componentsToolbarMiddleSelector.find(elementTag).withText(popmenuSelectStr));
+        await t.click(compose.toolbarButtonsSelector(toolbarTitle));
+        await t.wait(1000);
+        switch (toolbarTitle) {
+        	case 'Link':
+        		await t.click(Selector('#select_6-ul').find('li').withText(popmenuSelectStr));
+				break;
+			case 'Attachments':
+				await t.click(Selector('#select_2-ul').find('li').withText(popmenuSelectStr));
+				break;
+			default:
+				await t.click(elements.blocksPopover.find('a').withText(popmenuSelectStr));
+		}
 	}
 		
 	//select text color or highlight color
 	async selectComoposeToolbarFontColor(textOrHighlight, byIndex) {
-        	await t.click(compose.toolbarButtonsSelector('Text Color'));
-        	await t.click(elements.componentsToolbarColorMenuSelector.withText(textOrHighlight).find('a').nth(byIndex));
-        	await t.wait(1000);
+        await t.click(compose.toolbarButtonsSelector('Text Color'));
+		await t.click(elements.blocksPopover.find('h3').withText(textOrHighlight).parent().find('a').nth(byIndex));
+        await t.wait(1000);
 	}
         
 	//select toolbar menu Lists/Indentation
@@ -249,8 +250,8 @@ class Compose {
 	}
 
 	toolbarButtonsSelector = itemTitle => {
-    	const buttonTitleChain = 'Switch to Plain Text, Switch to Rich Text, Bold, Italic, Underline, Text Color';
-    	const submenuTitleChain = 'Attachments, Lists, Text Alignment, Indentation, Link, Font, Insert Emoji';
+    	const buttonTitleChain = 'Switch to Plain Text, Switch to Rich Text, Bold, Italic, Underline';
+    	const submenuTitleChain = 'Attachments, Lists, Text Alignment, Indentation, Link, Font, Insert Emoji, Text Color';
     	if (buttonTitleChain.includes(itemTitle)) {
     		return elements.componentsToolbarMiddleSelector.find('button').withAttribute('title', itemTitle);
     	}

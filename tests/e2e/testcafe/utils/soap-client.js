@@ -206,6 +206,22 @@ class SoapClient {
 		}
 	}
 
+	async mailGetFolder(userAuthToken) {
+		let requestObj =
+			`<GetFolderRequest xmlns='urn:zimbraMail'>
+			<view>message</view>
+			</GetFolderRequest>`;
+
+		let req = this.makeSOAPEnvelope(requestObj,userAuthToken);
+		try {
+			let res = await rp.post({ uri: this.soapURL, body: req, strictSSL: false, timeout: 10000 });
+			return JSON.parse(res).Body.GetFolderResponse.folder[0].id;
+		}
+		catch (err) {
+			throw new Error(`${err.statusCode} ${JSON.parse(err.response.body).Body.Fault.Reason.Text}`);
+		}
+	}
+
 	async mailCreateFolder(userAuthToken, parentFolder, folderName) {
 		let requestObj =
 			`<CreateFolderRequest xmlns='urn:zimbraMail'>
@@ -216,7 +232,7 @@ class SoapClient {
 					<sync>1</sync>
 				</folder>
 			</CreateFolderRequest>`;
-
+		 
 		let req = this.makeSOAPEnvelope(requestObj, userAuthToken);
 		try {
 			let res = await rp.post({ uri: this.soapURL, body: req, strictSSL: false, timeout: 10000 });
@@ -227,15 +243,15 @@ class SoapClient {
 		}
 	}
 
-	async sendMessage(userAuthToken, to, cc='') {
+	async sendMessage(userAuthToken, to,subject='ABC', body='ExampleContent',cc='') {
 		let requestObj =
 			`<SendMsgRequest xmlns='urn:zimbraMail'>
 				<m>
 					<e t='t' a='${to}' />
 					<e t='c' a='${cc}' />
-					<su>ABC</su>
+					<su>${subject}</su>
 					<mp ct='text/plain'>
-						<content>ExampleContent</content>
+						<content>${body}</content>
 					</mp>
 				</m>
 			</SendMsgRequest>`;

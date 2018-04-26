@@ -365,7 +365,7 @@ test('L1 | Verify the filter with respect to custom folder | C830220', async t =
 	await settings.enterEditFilterText('Filter Name', filterName);
 	await settings.selectFilterSelectByLabel('Then move the messages to this folder', ruleFolder);
 	await settings.enterEditFilterText('From', t.ctx.user2.email);
-	await settings.clickModalDialogFooterButton('Save');
+	await settings.filters.clickFilterPanelButton('Save');
 	await t
 		.expect(elements.settingsFiltersListEntrySelector.exists).ok({ timeout: 5000 })
 		.expect(await elements.settingsSubsectionBodySelector.innerText).contains(filterName)
@@ -443,7 +443,7 @@ test.skip('L1 | Responsive Composer Toolbar | C612378 | PREAPPS-206', async t =>
 		.expect(await elements.componentsToolbarMiddleSelector.child().count).eql(toolbarItemCount);
 });
 
-test.skip('L2 | Font > Type | C769875 | PREAPPS-250', async t => {
+test('L2 | Font > Type | C769875 | PREAPPS-250', async t => {
 	let emailBodyText = 'Font';
 	await compose.enterBodyText(emailBodyText);
 	await t.wait(500);
@@ -454,7 +454,7 @@ test.skip('L2 | Font > Type | C769875 | PREAPPS-250', async t => {
 	await t.expect(await elements.richtextareaTextContentSelector.find('font').getAttribute('face')).contains('TimesNewRoman');
 });
 
-test.skip('L2 | Font > Size | C813884', async t => {
+test('L2 | Font > Size | C813884', async t => {
 	let emailBodyText = 'Size';
 	await compose.enterBodyText(emailBodyText);
 	await t.wait(500);
@@ -465,7 +465,7 @@ test.skip('L2 | Font > Size | C813884', async t => {
 	await t.expect(await elements.richtextareaTextContentSelector.find('font').getAttribute('size')).eql('5');
 });
 
-test.skip('L2 | Font > Bold | C813885', async t => {
+test('L2 | Font > Bold | C813885', async t => {
 	let emailBodyText = 'Bold';
 	await compose.enterBodyText(emailBodyText);
 	await t.wait(500);
@@ -476,7 +476,7 @@ test.skip('L2 | Font > Bold | C813885', async t => {
 	await t.expect(await elements.richtextareaTextContentSelector.find('b').exists).ok();
 });
 
-test.skip('L2 | Font > Italics | C813886', async t => {
+test('L2 | Font > Italics | C813886', async t => {
 	let emailBodyText = 'Test';
 	await compose.enterBodyText(emailBodyText);
 	await t.wait(500);
@@ -487,7 +487,7 @@ test.skip('L2 | Font > Italics | C813886', async t => {
 	await t.expect(await elements.richtextareaTextContentSelector.find('i').exists).ok();
 });
 
-test.skip('L2 | Font > Underline | C813887', async t => {
+test('L2 | Font > Underline | C813887', async t => {
 	let emailBodyText = 'Test';
 	await compose.enterBodyText(emailBodyText);
 	await t.wait(500);
@@ -498,7 +498,7 @@ test.skip('L2 | Font > Underline | C813887', async t => {
 	await t.expect(await elements.richtextareaTextContentSelector.find('u').exists).ok();
 });
 
-test.skip('L2 | Font > Text, Background Color | C818253 | PREAPPS-250', async t => {
+test('L2 | Font > Text, Background Color | C818253 | PREAPPS-250', async t => {
 	let expectedFontColor = '#888888';
 	let expectedFontBackgroundColor = 'rgb(136, 136, 136)';
 	let emailBodyText = 'Test';
@@ -558,7 +558,7 @@ test.skip('L2 | Font > Alignment | C826709 | PREAPPS-250', async t => {
 	await t.expect(await elements.richtextareaTextContentSelector.find('div').getStyleProperty('text-align')).eql('right');
 });
 
-test('L1 | Verify the insert link with respect to the cursor position | C871114 | (Bug:PREAPPS-274)', async t => {
+test.skip('L1 | Verify the insert link with respect to the cursor position | C871114 | (Bug:PREAPPS-274)', async t => {
 	let emailBodyText = 'test';
 	let linkUrl = 'http://www.google.ca';
 	await t.wait(500);
@@ -574,7 +574,7 @@ test('L1 | Verify the insert link with respect to the cursor position | C871114 
 		.expect((await elements.richtextareaTextContentSelector.innerText).split(emailBodyText).length - 1).eql(1);
 });
 
-test.skip('L1 | Emoticon button | C828577 | PREAPPS-250', async t => {
+test('L1 | Emoticon button | C828577 | PREAPPS-250', async t => {
 	const expectedEmojiData = await compose.insertEmoji(0);
 	const actualEmojiData = await elements.richtextareaTextContentSelector.find('img').getAttribute('src');
 	await t.expect(expectedEmojiData).eql(actualEmojiData);
@@ -643,7 +643,7 @@ fixture `Mail: Forward functions single user`
 		await soap.deleteAccount(t.ctx.user.id, t.fixtureCtx.adminAuthToken);
 	});
 
-test('L1 | Forward email Add Attachments | C906307 | PREAPPS-565', async t => {
+test.skip('L1 | Forward email Add Attachments | C906307 | PREAPPS-565', async t => {
 	const filePath = path.join(__dirname, './data/files/JPEG_Image.jpg');
 	let emailBodyText = 'forward email';
 	let fwdEmailSubject = 'Fwd: empty';
@@ -669,4 +669,68 @@ test('L1 | Emoticon button | C979109', async t => {
 	const expectedEmojiData = await compose.insertEmoji(0);
 	const actualEmojiData = await elements.richtextareaTextContentSelector.find('img').getAttribute('src');
 	await t.expect(expectedEmojiData).eql(actualEmojiData);
+});
+
+/****************************/
+/*** Mail: Draft Messages ***/
+/****************************/
+
+fixture `Mail: Forward functions single user`
+	.page(profile.hostURL)
+	.before( async ctx => {
+		ctx.adminAuthToken = await soap.getAdminAuthToken();
+	})
+	.beforeEach( async t => {
+		t.ctx.user = await soap.createAccount(t.fixtureCtx.adminAuthToken);
+		t.ctx.userAuth = await soap.getUserAuthToken(t.ctx.user.email, t.ctx.user.password);
+		await soap.sendMessage(t.ctx.userAuth,t.ctx.user.email);
+		await actions.loginEmailPage(t.ctx.user.email, t.ctx.user.password);
+		await t.expect(sidebar.checkSidebarItemExists('Inbox')).ok({ timeout: 15000 });
+	})
+	.afterEach( async t  => {
+		await soap.deleteAccount(t.ctx.user.id, t.fixtureCtx.adminAuthToken);
+	});
+
+test('L1 | Automatically save draft for new compose | C730222', async t => {
+	let emailTo = t.ctx.user.email;
+	let emailContent = 'testDraft';
+	await compose.clickCompose();
+	await compose.enterTextToFieldElement(emailTo, compose.addressFieldTextField('To'));
+	await compose.enterTextToFieldElement(emailContent, elements.composerSubject);
+	await compose.enterBodyText(emailContent);
+	await t.wait(3000);
+	await compose.closeCompose();
+	await sidebar.clickSidebarContent('Drafts');
+	await t.eval(() => location.reload(true));
+	await compose.openMessageWithSubject(emailContent);
+	await t.expect(elements.inboxReadPane().exists).ok();
+	await t.expect(await elements.inboxReadPane().innerText).contains(emailContent);
+});
+
+test.skip('L1 | Automatically save draft for reply message | C730223 | PREAPPS-585', async t => {
+	let emailTo = t.ctx.user.email;
+	let emailBodyText = 'reply email';
+	await compose.openNewMessage();
+	await compose.clickReplyButton();
+	await compose.enterBodyText(emailBodyText);
+	await t.wait(3000);
+	await sidebar.clickSidebarContent('Drafts');
+	await compose.openMessageWithSubject("ABC");
+	await mail.openCondensedMessage(0);
+	await t.expect(await elements.clientHtmlViewerInner.nth(1).innerText).contains(emailBodyText);
+});
+
+test('L1 | Delete draft confirmation message | C730226', async t => {
+	await sidebar.clickSidebarContent('Drafts');
+	await compose.openMessageWithSubject("empty");
+	await mail.clickToolbarButton('Delete');
+	await t.expect(elements.mailListSubjectSelector.withText('empty').exists).notOk();
+}).before(async t => {
+	t.ctx.user = await soap.createAccount(t.fixtureCtx.adminAuthToken);
+	t.ctx.userAuth = await soap.getUserAuthToken(t.ctx.user.email, t.ctx.user.password);
+	const inject = new Inject();
+	const filePath = path.join(__dirname, './data/mime/emails/empty.txt');
+	inject.send(t.ctx.userAuth, filePath, 'Drafts');
+	await t.maximizeWindow();
+	await actions.loginEmailPage(t.ctx.user.email, t.ctx.user.password);
 });
