@@ -2,6 +2,7 @@ import { h, Component } from 'preact';
 import format from 'date-fns/format';
 import { STATUS_BUSY, STATUS_FREE, VIEW_MONTH } from './constants';
 import { CalendarEventDetailsTooltip } from './event-details';
+import CalendarEventContextMenu from './event-contextmenu';
 import cx from 'classnames';
 import withMediaQuery from '../../enhancers/with-media-query';
 import { minWidth, screenMd } from '../../constants/breakpoints';
@@ -113,26 +114,31 @@ class SavedCalendarEvent extends Component {
 		this.setState({ hoverOrigin: false });
 	}
 
-	render({ view, title, event, matchesScreenMd }, { hoverOrigin }) {
+	render({ view, title, event, matchesScreenMd, onEdit }, { hoverOrigin }) {
 		const start = event.date;
 		return (
-			<div
-				class={style.eventInner}
-				onMouseEnter={matchesScreenMd && this.handleMouseEnter}
-				onMouseLeave={matchesScreenMd && this.handleMouseLeave}
-				onClick={matchesScreenMd && this.showEventDetails}
+			<CalendarEventContextMenu
+				onEdit={onEdit}
+				event={event}
 			>
-				{view === VIEW_MONTH && !event.allDay && (
-					<time title={start}>
-						{format(start, 'h:mm A').replace(':00', '')}
-					</time>
-				)}
-				{title}
+				<div
+					class={style.eventInner}
+					onMouseEnter={matchesScreenMd && this.handleMouseEnter}
+					onMouseLeave={matchesScreenMd && this.handleMouseLeave}
+					onClick={matchesScreenMd && this.showEventDetails}
+				>
+					{view === VIEW_MONTH && !event.allDay && (
+						<time title={start}>
+							{format(start, 'h:mm A').replace(':00', '')}
+						</time>
+					)}
+					{title}
 
-				{hoverOrigin && (
-					<CalendarEventDetailsTooltip origin={hoverOrigin} event={event} onClose={this.hideHoverTooltip} />
-				)}
-			</div>
+					{hoverOrigin && (
+						<CalendarEventDetailsTooltip origin={hoverOrigin} event={event} onClose={this.hideHoverTooltip} onEdit={onEdit} />
+					)}
+				</div>
+			</CalendarEventContextMenu>
 		);
 	}
 }

@@ -1,6 +1,7 @@
 import { h, Component } from 'preact';
 import { Icon, Spinner, Button } from '@zimbra/blocks';
 import { Text } from 'preact-i18n';
+import { callWith } from '../../../lib/util';
 import format from 'date-fns/format';
 import get from 'lodash/get';
 import isSameDay from 'date-fns/is_same_day';
@@ -85,17 +86,15 @@ export default class CalendarEventDetails extends Component {
 					</p>
 				)}
 
-				<div style={'display: none' /* Buttons are unimplemented */}>
-					<Button onClick={onEdit}>
-						<Text id="buttons.edit" />
-					</Button>
-					<Button onClick={onPrint}>
-						<Text id="buttons.print" />
-					</Button>
-					<Button onClick={onDelete}>
-						<Text id="buttons.delete" />
-					</Button>
-				</div>
+				<Button onClick={callWith(onEdit, event)}>
+					<Text id="buttons.edit" />
+				</Button>
+				<Button onClick={callWith(onPrint, event)}>
+					<Text id="buttons.print" />
+				</Button>
+				<Button onClick={callWith(onDelete, event)}>
+					<Text id="buttons.delete" />
+				</Button>
 			</div>
 		);
 	}

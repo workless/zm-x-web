@@ -7,28 +7,28 @@ import isString from 'lodash/isString';
 import { Button, Icon } from '@zimbra/blocks';
 import cx from 'classnames';
 
-import { newAlarm, hasEmailAlarm, hasDisplayAlarm } from '../../utils/event';
-import { getPrimaryAccountAddress } from '../../utils/account';
+import { newAlarm, hasEmailAlarm, hasDisplayAlarm } from '../../../utils/event';
+import { getPrimaryAccountAddress } from '../../../utils/account';
 
-import FormGroup from '../form-group';
-import TextInput from '../text-input';
-import Textarea from '../textarea';
-import DateInput from '../date-input';
-import TimeInput from '../time-input';
-import Select from '../select';
-import AlignedForm from '../aligned-form';
-import AlignedLabel from '../aligned-form/label';
-import AddressField from '../address-field';
-import AvailabilityIndicator from '../availability-indicator';
+import FormGroup from '../../form-group';
+import TextInput from '../../text-input';
+import Textarea from '../../textarea';
+import DateInput from '../../date-input';
+import TimeInput from '../../time-input';
+import Select from '../../select';
+import AlignedForm from '../../aligned-form';
+import AlignedLabel from '../../aligned-form/label';
+import AddressField from '../../address-field';
+import AvailabilityIndicator from '../../availability-indicator';
 import chooseFiles from 'choose-files';
-import AttachmentGrid from '../attachment-grid';
-import CalendarAddEventToolbar from './calendar-add-event-toolbar';
+import AttachmentGrid from '../../attachment-grid';
+import AppointmentEditToolbar from './appointment-edit-toolbar';
 import wire from 'wiretie';
 
 import s from './style.less';
-import { ATTENDEE_ROLE } from '../../constants/calendars';
-import withMediaQuery from '../../enhancers/with-media-query';
-import { minWidth, screenMd } from '../../constants/breakpoints';
+import { ATTENDEE_ROLE } from '../../../constants/calendars';
+import withMediaQuery from '../../../enhancers/with-media-query';
+import { minWidth, screenMd } from '../../../constants/breakpoints';
 
 const REMIND_OPTIONS = [
 	'never',
@@ -93,7 +93,7 @@ const MobileHeading = ( { title } ) => (<div class={s.simpleHeader}>
 @withText({
 	errorMsg: 'calendar.editModal.FILE_SIZE_EXCEEDED'
 })
-export default class CalendarAddEvent extends Component {
+export default class AppointmentEditEvent extends Component {
 	static defaultProps = {
 		title: 'calendar.editModal.title'
 	};
@@ -536,7 +536,7 @@ export default class CalendarAddEvent extends Component {
 						</Select>
 					</FormGroup>
 				</AlignedForm>
-				<CalendarAddEventToolbar isMobileActive={!matchesScreenMd} onSave={this.handleSubmit} onCancel={this.onClose} />
+				<AppointmentEditToolbar isMobileActive={!matchesScreenMd} onSave={this.handleSubmit} onCancel={this.onClose} />
 			</div>
 		);
 	}

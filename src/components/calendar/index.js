@@ -44,7 +44,7 @@ import ExportCalendarModal from './export-calendar-modal';
 import { CalendarEvent, CalendarEventWrapper, getEventProps } from './event';
 import YearView from './year-view';
 import QuickAddEventPopover from './quick-add-event-popover';
-import CalendarAddEvent from '../calendar-add-event';
+import AppointmentEditEvent from './appointment-edit';
 import SkeletonWithSidebar from '../skeletons/with-sidebar';
 
 import CalendarsAndAppointmentsQuery from '../../graphql/queries/calendar/calendars-and-appointments.graphql';
@@ -365,9 +365,8 @@ export default class Calendar extends Component {
 	state = {
 		newEvent: null,
 		quickAddBounds: null,
-		showEditModal: false,
 		activeModal: '',
-		showAddEventView: false
+		showEditView: false
 	};
 
 	getSlotProps = time => {
@@ -419,11 +418,11 @@ export default class Calendar extends Component {
 			start: start.toDate(),
 			end: start.add(30, 'minutes').toDate()
 		});
-		this.setState( { showAddEventView: true } );
+		this.setState( { showEditView: true } );
 	};
 
 	handleCloseAddEvent = () => {
-		this.setState( { showAddEventView: false } );
+		this.setState( { showEditView: false } );
 		this.clearNewEvent();
 	};
 
@@ -449,13 +448,20 @@ export default class Calendar extends Component {
 	};
 
 	selectEvent = event => {
-		// eslint-disable-next-line no-console
-		console.log('selected event', event);
-
 		const { matchesScreenMd } = this.props;
 		if (!matchesScreenMd) {
-			this.openModal('eventDetails', { event });
+			this.openModal('eventDetails', {
+				event,
+				onEdit: this.editEvent
+			});
 		}
+	};
+
+	editEvent = event => {
+		this.setState({
+			showEditView: true,
+			newEvent: event
+		});
 	};
 
 	handleQuickAddRender = ({ bounds }) => {
@@ -469,8 +475,12 @@ export default class Calendar extends Component {
 		});
 	};
 
-	handleCreateAppointment = appointment => {
+	handleEditAppointment = appointment => {
+		this.props.modifyAppointment(appointment);
+		this.handleCloseAddEvent();
+	};
 
+	handleCreateAppointment = appointment => {
 		this.props.createAppointment({
 			name: '(No title)',
 			...appointment
@@ -507,9 +517,9 @@ export default class Calendar extends Component {
 
 	handleQuickAddMoreDetails = event => {
 		this.setState({
-			newEvent: event
+			newEvent: event,
+			showEditView: true
 		});
-		this.setState( { showAddEventView: true } );
 	};
 
 	handleBeginSelectEvent = () => {
@@ -530,7 +540,8 @@ export default class Calendar extends Component {
 			dateHeader: CalendarDateHeader,
 			eventWrapper: CalendarEventWrapper,
 			event: withProps({
-				view: props.view
+				view: props.view,
+				onEdit: this.editEvent
 			})(CalendarEvent)
 		};
 		this.MODALS = {
@@ -583,7 +594,7 @@ export default class Calendar extends Component {
 
 	render(
 		{ view, date, calendarsData, pending, matchesScreenMd },
-		{ newEvent, quickAddBounds, activeModal, activeModalProps, showAddEventView }
+		{ newEvent, quickAddBounds, activeModal, activeModalProps, showEditView }
 	) {
 		if (!view) {
 			return null;
@@ -657,8 +668,8 @@ export default class Calendar extends Component {
 					openModal={this.openModal}
 					matchesScreenMd={matchesScreenMd}
 				/>
-				{ showAddEventView ? (
-					<CalendarAddEvent
+				{ showEditView ? (
+					<AppointmentEditEvent
 						className={style.calendarInner}
 						event={newEvent}
 						onAction={this.handleCreateAppointment}
@@ -691,6 +702,7 @@ export default class Calendar extends Component {
 						onView={this.handleSetView}
 						onSelectSlot={this.selectSlot}
 						onSelectEvent={this.selectEvent}
+						onDoubleClickEvent={this.editEvent}
 					/>
 					<CalendarRightbar class={style.rightbar} />
 					<CalendarSectionToolbar
@@ -701,7 +713,7 @@ export default class Calendar extends Component {
 				</div>)
 				}
 
-				{newEvent && quickAddBounds && !showAddEventView && (
+				{newEvent && quickAddBounds && !showEditView && (
 					<QuickAddEventPopover
 						event={newEvent}
 						onSubmit={this.handleCreateAppointment}
