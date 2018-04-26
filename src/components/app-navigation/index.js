@@ -59,32 +59,27 @@ export default class AppNavigation extends Component {
 		}];
 	}
 
-	render({ slugs, desktopView, renderBefore, renderAfter, url }) {
+	getMatchedItemIndex( list ) {
+		return list.findIndex( ( item ) => (item.name === this.props.url.view));
+	}
+
+	getPreItems ( list ) {
+		return list.slice( 0, this.getMatchedItemIndex( list ) + 1 );
+	}
+
+	getPostItems( list ) {
+		return list.slice( this.getMatchedItemIndex( list ) + 1, list.lenght );
+	}
+
+	render({ slugs, desktopView, renderBefore, renderAfter }) {
 
 		const navList = this.getNavList();
-		let matchedRoute, listView = [];
-
-		for ( let listItem of navList ) {
-			if ( renderBefore || renderAfter ) {
-
-				if ( renderBefore && !matchedRoute ) {
-					listView.push( <MenuItemView desktopView={desktopView} slugs={slugs} {...listItem} /> );
-				}
-				else if ( renderAfter && matchedRoute ) {
-					listView.push( <MenuItemView desktopView={desktopView} slugs={slugs} {...listItem} /> );
-				}
-
-				matchedRoute = listItem.name === url.view || matchedRoute;
-			}
-			else {
-				listView.push( <MenuItemView desktopView={desktopView} slugs={slugs} {...listItem} /> );
-			}
-		}
+		const listItems = renderBefore ? this.getPreItems( navList ) : ( renderAfter ? this.getPostItems( navList ) : navList );
 
 		return (
 			<div class={style.appMenu}>
 				<div class={cx( !( renderBefore || renderAfter ) && style.hideSmDown, style.nav, !desktopView && style.sidebarNavWrapper)}>
-					{ listView }
+					{ listItems.map( ( listItem ) => (<MenuItemView desktopView={desktopView} slugs={slugs} {...listItem} />) ) }
 					{ !renderBefore && <ZimletSlot props class={style.slot} name="menu" /> }
 					{ desktopView && <AppNavigationTabs /> }
 				</div>
