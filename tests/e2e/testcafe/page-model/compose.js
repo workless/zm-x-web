@@ -151,17 +151,18 @@ class Compose {
 
 	//select toolbar popmenu
 	async selectComposeToolbarPopmenu(toolbarTitle, popmenuSelectStr) {
-        let elementTag = '';
         await t.click(compose.toolbarButtonsSelector(toolbarTitle));
         await t.wait(1000);
         switch (toolbarTitle) {
-        	case 'Font':
-        		elementTag = 'a';
-        		break;
-        	default:
-        		elementTag = 'li';
+        	case 'Link':
+        		await t.click(Selector('#select_6-ul').find('li').withText(popmenuSelectStr));
+				break;
+			case 'Attachments':
+				await t.click(Selector('#select_2-ul').find('li').withText(popmenuSelectStr));
+				break;
+			default:
+				await t.click(elements.blocksPopover.find('a').withText(popmenuSelectStr));
 		}
-		await t.click(elements.blocksPopover.find('a').withText(popmenuSelectStr));
 	}
 		
 	//select text color or highlight color

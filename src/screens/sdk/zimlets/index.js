@@ -4,69 +4,66 @@ import TextInput from '../../../components/text-input';
 import ZimletLoader from '../../../components/zimlet-loader';
 import { Button } from '@zimbra/blocks';
 import zimletLocalStorage from '../../../utils/zimlet-storage';
+import { callWith } from '../../../lib/util';
 import style from './style';
 
 
 export default class ZimletsSdk extends Component {
 
-	state = {
-		url: 'https://localhost:8081/index.js',
-		zimlets: this.persistedZimlets ? { ...this.persistedZimlets } : {}
+	handleLoadZimlets = ({ running: runningZimlets, errors }) => {
+		this.setState({ runningZimlets, errors });
 	}
 
-	handleLoadZimlets = (zimlets) => {
-		this.setState({
-			zimlets: {
-				...this.state.zimlets,
-				...zimlets
-			}
-		});
-	}
-
-	persistedZimlets = zimletLocalStorage.get();
-
-	handlePersistZimlet = (name) => (e) => {
-		let zimlets = zimletLocalStorage.get();
-
-		if (e.target.checked) {
-			zimlets[name] = { url: this.state.zimlets[name].url };
-
-			this.persistedZimlets = zimlets;
-			zimletLocalStorage.set(zimlets);
+	togglePersist = ({ name, persist }) => {
+		let { persistedZimlets, zimlets, errors={} } = this.state;
+		if (persist) {
+			persistedZimlets[name] = zimlets[name];
 		}
-		else if (zimlets) {
+		else {
+			delete persistedZimlets[name];
+		}
+		//remove errored zimlets from the list of zimlets if they choose not to persist
+		if (errors[name] && !persist) {
 			delete zimlets[name];
-			this.persistedZimlets = zimlets;
-			zimletLocalStorage.set(zimlets);
 		}
+		this.setState({ persistedZimlets: { ...persistedZimlets }, zimlets: { ...zimlets } });
+		zimletLocalStorage.set(persistedZimlets);
 	}
 
 	addZimlet = () => {
-		const { zimlets, name, url } = this.state;
+		let { zimlets, persistedZimlets, name, url } = this.state;
+
 		console.log(`Adding Zimlet ${name}: ${url}`); // eslint-disable-line no-console
+
+		if (zimlets[name]) {
+			return this.setState({ error: 'Zimlet with that name is already loaded' });
+		}
+
+		persistedZimlets = { ...persistedZimlets, [name]: { url } };
+		zimlets = { ...zimlets, [name]: { url } };
 
 		this.setState({
 			name: '',
 			url: '',
-			latest: name,
-			zimlets: {
-				...zimlets,
-				[name]: { url }
-			}
+			zimlets,
+			persistedZimlets
 		});
+
+		zimletLocalStorage.set(persistedZimlets);
 	}
 
-	loadRemoteZimlet = () => {
-		let { zimlets } = this.props;
-		let { url, name } = this.state;
-		zimlets.loadZimletByUrl(url, { name, compat: false })
-			.then( result =>
-				Promise.resolve().then(result.init).then( () => result )
-			)
-			.catch( error => this.setState({ error }));
-	};
+	constructor(props, context) {
+		super(props, context);
+		let persistedZimlets = zimletLocalStorage.get() || {};
+		this.state = {
+			url: 'https://localhost:8081/index.js',
+			persistedZimlets,
+			runningZimlets: {},
+			zimlets: persistedZimlets
+		};
+	}
 
-	render({ }, { url, name, latest, zimlets, error }) {
+	render(props, { url, name, zimlets, persistedZimlets, runningZimlets, errors={} }) {
 		return (
 			<div class={style.root}>
 				<ZimletLoader zimlets={zimlets} onLoadZimlets={this.handleLoadZimlets} />
@@ -83,38 +80,24 @@ export default class ZimletsSdk extends Component {
 						<Button type="submit">Load Zimlet</Button>
 					</form>
 
-					{ zimlets && !!Object.keys(zimlets).length && ([
-						latest && (
-							<div class={style.running}>
-								Successfully started <b>{latest}</b> zimlet. The zimlet will remain loaded and running until this browser tab is closed or reloaded.
-							</div>
-						),
-						<table>
-							<caption>Running Zimlets</caption>
+					<table>
+						<caption>Zimlets Loaded By SDK</caption>
+						<thead>
 							<tr>
-								<th>Persisted</th>
-								<th>Zimlet Name</th>
-								<th>Zimlet URL</th>
+								<th>Name</th>
+								<th>URL</th>
+								<th>Status</th>
+								<th>Persist on Reload</th>
 							</tr>
-							{Object.keys(zimlets) && Object.keys(zimlets).map((zimletName) => (
-								<tr>
-									<td>
-										<span>
-											<input checked={zimletName in this.persistedZimlets} type="checkbox" onClick={this.handlePersistZimlet(zimletName)} />
-											<label>Persist</label>
-										</span>
-									</td>
-									<td>{zimletName}</td>
-									<td>{zimlets[zimletName].url}</td>
-								</tr>
-							))}
-						</table>
-					])}
-					{error &&
-						<div class={style.error}>
-							Error loading/starting {latest} zimlet: {error.message}
-						</div>
-					}
+						</thead>
+
+						<tbody>
+							{Object.keys(zimlets).map((zimletName) =>
+								<ZimletRow name={zimletName} url={zimlets[zimletName].url} error={errors[zimletName]} running={runningZimlets[zimletName]} onChangePersist={this.togglePersist} persisted={!!persistedZimlets[zimletName]} />
+							)}
+						</tbody>
+					</table>
+
 					<div class={style.showZimlets}>
 						<a href="?zimletSlots=show">Click here</a> to show available zimlet slots
 					</div>
@@ -123,4 +106,20 @@ export default class ZimletsSdk extends Component {
 			</div>
 		);
 	}
+}
+
+/**
+ * A single row in the table of zimlets loaded by the SDK
+ */
+function ZimletRow({ name, url, error, running, persisted, onChangePersist }) {
+	return (
+		<tr>
+			<td class={style.name}>{name}</td>
+			<td><a href={url} target="_blank">{url}</a></td>
+			<td class={error ? style.statusError : running ? style.statusRunning : style.statusLoading}>
+				{error ? `Error: ${error}` : running ? 'Running' : 'Loading' }
+			</td>
+			<td class={style.persist}><input type="checkbox" onChange={callWith(onChangePersist, { name, persist: !persisted })} checked={persisted} /></td>
+		</tr>
+	);
 }
