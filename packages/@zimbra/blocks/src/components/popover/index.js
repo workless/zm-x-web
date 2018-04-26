@@ -96,13 +96,16 @@ export default class Popover extends Component {
 		}
 	}
 
+	// Rather than support 4 props for classes, just use one classes object:
+	getClasses = () => {
+		let { popoverClass, toggleClass, titleClass, containerClass, classes } = this.props;
+		return { popoverClass, toggleClass, titleClass, containerClass, ...classes };
+	}
+
 	/**
 	 * set our own ref for the button/target, and tell react-popper about it as well by calling its callback function
 	 */
-	chainReferences = (refFn, c) => {
-		this.buttonRef = c;
-		refFn(c);
-	}
+	chainReferences = (refFn, c) => refFn(this.buttonRef = c);
 
 	componentWillReceiveProps({ active }) {
 		typeof active === 'boolean' && this.props.active !== active && this.setState({ active }, this.focusAfterToggle);
@@ -110,7 +113,9 @@ export default class Popover extends Component {
 
 	renderReference = ({ ref }) => {
 		let handler = this.props.useMouseDownEvents ? { onMouseDown: this.togglePopover } : { onClick: this.togglePopover };
-		let { classes, disabled, icon, iconPosition, target, text, tooltip, hoverDuration } = this.props;
+		let { disabled, icon, iconPosition, target, text, tooltip, hoverDuration } = this.props;
+		let classes = this.getClasses();
+
 		return (
 			<div
 				ref={callWith(this.chainReferences, ref, true)}
@@ -132,31 +137,6 @@ export default class Popover extends Component {
 			</div>
 		);
 	}
-
-	// Pass the scheduleUpdate function that the Popper component gives to its first child if it is a function, to each
-	// child, so any given child can kick tell popper to reposition itself
-	renderPopper =  ({ ref, style, placement, scheduleUpdate, arrowProps }) => {
-		let { arrow, children, classes, hoverDuration, onDropdownClick } = this.props;
-
-		return (
-			<div arrow={!!arrow} ref={ref} style={style} data-placement={placement} class={cx(s.popper, classes.popoverClass)}
-				onMouseEnter={hoverDuration && this.handleMouseEnterChild} onMouseLeave={hoverDuration && this.handleMouseLeaveChild}
-			>
-				{children && children.length &&
-					<div onClick={onDropdownClick}>
-						{children.map(c => c ? cloneElement(c, { scheduleUpdate }) : c)}
-					</div>
-				}
-				{ arrow &&
-					 <div {...arrowProps} class={s.borderArrow} />
-				}
-				{ arrow &&
-					<div {...arrowProps} class={s.arrow} />
-				}
-			</div>
-		);
-	}
-
 
 	render({
 		placement,
@@ -187,6 +167,8 @@ export default class Popover extends Component {
 		delete props.onToggle;
 		delete props.active;
 
+		classes = this.getClasses();
+
 		if (typeof icon==='string') {
 			icon = <Icon name={icon} />;
 		}
@@ -200,22 +182,88 @@ export default class Popover extends Component {
 						{this.renderReference}
 					</Reference>
 					{active &&
-							<Portal into="body">
-								<ClickOutsideDetector onClickOutside={this.closePopover}>
-									<Popper arrow={arrow} placement={`${placement}${anchor ? `-${anchor}` : ''}`}
-										modifiers={{
-											preventOverflow: {
-												boundariesElement
-											}
-										}}
-									>
-										{this.renderPopper}
-									</Popper>
-								</ClickOutsideDetector>
-							</Portal>
+							<ActivePopper arrow={arrow}
+								classes={classes}
+								onDropdownClick={onDropdownClick}
+								onMouseEnter={hoverDuration && this.handleMouseEnterChild}
+								onMouseLeave={hoverDuration && this.handleMouseLeaveChild}
+								onClickOutside={this.closePopover}
+								placement={placement} anchor={anchor}
+								boundariesElement={boundariesElement}
+							>
+								{children}
+							</ActivePopper>
 					}
 				</div>
 			</Manager>
+		);
+	}
+}
+
+class ActivePopper extends Component {
+
+	// Pass the scheduleUpdate function that the Popper component gives to its first child if it is a function, to each
+	// child, so any given child can kick tell popper to reposition itself
+	renderPopper =  ({ ref, style, placement, scheduleUpdate, arrowProps }) => {
+		let { arrow, children, classes, onDropdownClick, onMouseEnter, onMouseLeave } = this.props;
+
+		let newArrowProps, borderArrowProps;
+
+		if (arrow) {
+			//To avoid "snapping" as the popover is repositioned after the css classes are applied, apply margins in
+			//inline styles for popover and arrow
+			let inversePlacement = placement === 'left' ? 'right' : placement === 'right' ? 'left' : placement === 'top' ? 'bottom' : 'top';
+			style = { ...style, [`margin-${inversePlacement}`]: '13px' };
+
+			let arrowMargins = placement === 'left' || placement === 'right' ? ['6.5px 0', '6px 0']  : ['0 6.5px', '0 6px'];
+
+			newArrowProps = {
+				...arrowProps,
+				style: { ...(arrowProps.style),  margin: arrowMargins[0] }
+			};
+			borderArrowProps = {
+				...arrowProps,
+				style: { ...(arrowProps.style),  margin: arrowMargins[1] }
+			 };
+
+		}
+
+
+		return (
+			<div arrow={!!arrow} ref={ref} style={style} data-placement={placement} class={cx(s.popper, classes.popoverClass)}
+				onMouseEnter={onMouseEnter}
+				onMouseLeave={onMouseLeave}
+			>
+				{children && children.length &&
+					<div onClick={onDropdownClick}>
+						{children.map(c => c ? cloneElement(c, { scheduleUpdate }) : c)}
+					</div>
+				}
+				{ arrow &&
+					 <div {...borderArrowProps} class={s.borderArrow} />
+				}
+				{ arrow &&
+					<div {...newArrowProps} class={s.arrow} />
+				}
+			</div>
+		);
+	}
+
+	render({ arrow, placement, anchor, boundariesElement, onClickOutside }) {
+		return (
+			<Portal into="body">
+				<ClickOutsideDetector onClickOutside={onClickOutside}>
+					<Popper arrow={arrow} placement={`${placement}${anchor ? `-${anchor}` : ''}`}
+						modifiers={{
+							preventOverflow: {
+								boundariesElement
+							}
+						}}
+					>
+						{this.renderPopper}
+					</Popper>
+				</ClickOutsideDetector>
+			</Portal>
 		);
 	}
 }

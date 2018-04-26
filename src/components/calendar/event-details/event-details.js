@@ -1,5 +1,5 @@
 import { h, Component } from 'preact';
-import { Icon, Spinner, Button } from '@zimbra/blocks';
+import { Icon, Spinner /*, Button */ } from '@zimbra/blocks';
 import { Text } from 'preact-i18n';
 import format from 'date-fns/format';
 import get from 'lodash/get';
@@ -17,7 +17,7 @@ import MessageQuery from '../../../graphql/queries/message.graphql';
 export default class CalendarEventDetails extends Component {
 
 	componentWillReceiveProps({ appointmentData }) {
-		//If we are in a pop-over, tell the popover to reposition properly after we render our new appointment data
+		//If we are in a pop-over, tell the popover to reposition properly after we render our final appointment data
 		if (this.props.scheduleUpdate && appointmentData.loading !== this.props.appointmentData.loading) {
 			this.setState({}, this.props.scheduleUpdate);
 		}
@@ -93,7 +93,9 @@ export default class CalendarEventDetails extends Component {
 					</p>
 				)}
 
-				<div style={'display: none' /* Buttons are unimplemented */}>
+				{/*
+				 Buttons are unimplemented
+				<div >
 					<Button onClick={onEdit}>
 						<Text id="buttons.edit" />
 					</Button>
@@ -103,7 +105,7 @@ export default class CalendarEventDetails extends Component {
 					<Button onClick={onDelete}>
 						<Text id="buttons.delete" />
 					</Button>
-				</div>
+				</div> */}
 			</div>
 		);
 	}
