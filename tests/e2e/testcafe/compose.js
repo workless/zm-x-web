@@ -484,7 +484,7 @@ test('L1 | Compose: Data visibility (view, addresses, subject) | C581633 | Compo
 	await t
 		.expect(elements.addressFieldSuggestions.nth(0).exists).notOk({ timeout: 20000 });
 	await t.click(compose.buttonAddressFieldTokenLabel(selectLabelText));
-	console.log(await elements.contactHoverCardDetails.innerText);
+	//console.log(await elements.contactHoverCardDetails.innerText);
 	await t.expect(await elements.contactHoverCardDetails.innerText).contains(labelText, 'verify tooltip content. ', { timeout: 3000 });
 })
 	.before( async t => {
