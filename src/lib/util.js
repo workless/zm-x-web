@@ -74,14 +74,14 @@ export function getEmailDomain(address) {
  * @example isAddressTrusted("joe@bar.com", ["foo.bar.com"]) === false //no match
  */
 export function isAddressTrusted(emailAddress, trustedList) {
-	//TODO match email address
 	trustedList = array(trustedList);
 	if (!(emailAddress && trustedList.length)) return false;
 	emailAddress = emailAddress.toLowerCase();
 	let domain = getEmailDomain(emailAddress);
-	return trustedList
-		.map(d => d.toLowerCase())
-		.some(d => d === emailAddress || d === domain || domain.endsWith(`.${d}`));
+	return trustedList.some(t => {
+		t = t.toLowerCase();
+		return t === emailAddress || t === domain || domain.indexOf(`.${t}`) === (domain.length - t.length -1);
+	});
 }
 
 export function serializeAddress(address, name) {
