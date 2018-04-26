@@ -89,9 +89,21 @@ class SavedCalendarEvent extends Component {
 
 	handleClickClose = () => this.setState({ active: false });
 
-	render({ view, title, event }, { active }) {
+	render({ view, title, event, matchesScreenMd }, { active }) {
 		const start = event.date;
-		return (
+		const body = (
+			<div class={style.eventInner} >
+				{view === VIEW_MONTH && !event.allDay && (
+					<time title={start}>
+						{format(start, 'h:mm A').replace(':00', '')}
+					</time>
+				)}
+				{title}
+			</div>
+		);
+
+		//Add clickable/hoverable popover for event details if not in a mobile viewport size
+		return !matchesScreenMd ? body : (
 			<Popover active={active}
 				onToggle={this.handleToggle}
 				arrow
@@ -103,17 +115,7 @@ class SavedCalendarEvent extends Component {
 				placement="top"
 				anchor="center"
 				hoverDuration={SHOW_EVENT_DETAILS_AFTER_HOVER_DELAY}
-				target={<div
-					class={style.eventInner}
-				        >
-					{view === VIEW_MONTH && !event.allDay && (
-						<time title={start}>
-							{format(start, 'h:mm A').replace(':00', '')}
-						</time>
-					)}
-					{title}
-				</div>
-				}
+				target={body}
 			>
 				<CloseButton class={style.close} onClick={this.handleClickClose} />
 				<CalendarEventDetails event={event} />
