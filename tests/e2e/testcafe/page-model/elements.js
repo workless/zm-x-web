@@ -83,6 +83,7 @@ class Elements {
     // Dialog Elements
     blocksDialogOverlaySelector = Selector('.blocks_dialog_overlay');
     dialogSelector = Selector(clientName + '_modal-dialog_dialog');
+    calendarAddEventFooterSelector = Selector(clientName + '_calendar-add-event_footer');
     calendarModalDialogButtonSelector = Selector(clientName + '_modal-dialog_footer');
 
     // Compose - Rich Text Area Elements
