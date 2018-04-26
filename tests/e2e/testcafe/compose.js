@@ -117,6 +117,7 @@ test('L2 | Compose, Send: No Message Body (basic) | C581670', async t => {
 	await compose.sendEmail();
 	await t.wait(1000);
 	await sidebar.clickSidebarContent('Inbox');
+	await t.eval(() => location.reload(true));
 	await t.expect(elements.mailListItemUnread.exists).ok({ timeout: 15000 });
 	await compose.openMessageWithSubject(emailSubject);
 	await t.expect(elements.inboxReadPane().exists).ok({ timeout: 10000 });
@@ -164,7 +165,7 @@ test('L1 | Compose, Send: To, CC, BCC (basic) | C581667 | Bug:PREAPPS-357 | ##TO
 		.expect(elements.addressListAddressType.withText('Cc').parent('div').find('span').withText('ui testing').exists).ok();
 });
 
-test('L1 | Reply to Message Containing Inline Attachments | C881169', async t => {
+test('L1 | Reply to Message Containing Inline Attachments | C881169 | Issue: not stable because Send button does not always display', async t => {
 	let emailBodyText = 'reply email';
 	let replyEmailSubject = 'Re: Inline attachement';
 	await compose.openNewMessage();
@@ -470,7 +471,7 @@ test('L1 | Compose: No Data, Exit (X) | C581628', async t => {
 	await t.expect(elements.composerBody.exists).notOk({ timeout: 5000 });
 });
 
-test('L1 | Compose: Data visibility (view, addresses, subject) | C581633 | Compose: Test address field suggestions ', async t => {
+test('L1 | Compose: Data visibility (view, addresses, subject) | C581633 | Compose: Test address field suggestions', async t => {
 	let labelText = 'ui.testing';
 	let selectLabelText = 'test user';
 	await t
@@ -483,7 +484,8 @@ test('L1 | Compose: Data visibility (view, addresses, subject) | C581633 | Compo
 	await t
 		.expect(elements.addressFieldSuggestions.nth(0).exists).notOk({ timeout: 20000 });
 	await t.click(compose.buttonAddressFieldTokenLabel(selectLabelText));
-	await t.expect(await elements.blocksTooltip.innerText).contains(labelText, 'verify tooltip content. ', { timeout: 3000 });
+	console.log(await elements.contactHoverCardDetails.innerText);
+	await t.expect(await elements.contactHoverCardDetails.innerText).contains(labelText, 'verify tooltip content. ', { timeout: 3000 });
 })
 	.before( async t => {
 		t.ctx.user = await soap.createAccount(t.fixtureCtx.adminAuthToken);
@@ -511,7 +513,7 @@ test('L2 | Compose, Autocompleter, CC - Match on Email Address, select | C581673
 	await t
 		.expect(elements.addressFieldSuggestions.nth(0).exists).notOk({ timeout: 20000 });
 	await t.click(compose.buttonAddressFieldTokenLabel(selectLabelText));
-	await t.expect(await elements.blocksTooltip.innerText).contains(labelText, 'verify tooltip content. ', { timeout: 3000 });
+	await t.expect(await elements.contactHoverCardDetails.innerText).contains(labelText, 'verify tooltip content. ', { timeout: 3000 });
 })
 	.before( async t => {
 		t.ctx.user = await soap.createAccount(t.fixtureCtx.adminAuthToken);
@@ -539,7 +541,7 @@ test('L2 | Compose, Autocompleter, BCC - Match on Email Address, select | C58167
 	await t
 		.expect(elements.addressFieldSuggestions.nth(0).exists).notOk({ timeout: 20000 });
 	await t.click(compose.buttonAddressFieldTokenLabel(selectLabelText));
-	await t.expect(await elements.blocksTooltip.innerText).contains(labelText, 'verify tooltip content. ', { timeout: 3000 });
+	await t.expect(await elements.contactHoverCardDetails.innerText).contains(labelText, 'verify tooltip content. ', { timeout: 3000 });
 })
 	.before( async t => {
 		t.ctx.user = await soap.createAccount(t.fixtureCtx.adminAuthToken);
@@ -754,7 +756,7 @@ fixture `Compose: Attachement upload Files`
 		await soap.deleteAccount(t.ctx.user.id, t.fixtureCtx.adminAuthToken);
 	});
 
-	test('L2 | Compose, Send: File Attachment, No Message Body | C581643 | ##TODO: C548614 L1: Add Attachments ', async t => {
+	test('L2 | Compose, Send: File Attachment, No Message Body | C581643 | ##TODO: C548614 L1: Add Attachments', async t => {
 		let emailSubject = '[No subject]';
 		let emailTo = t.ctx.user.email;
 		const filePath = path.join(__dirname, './data/files/JPEG_Image.jpg');

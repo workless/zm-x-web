@@ -714,7 +714,6 @@ test.skip('L1 | Automatically save draft for reply message | C730223 | PREAPPS-5
 	await compose.clickReplyButton();
 	await compose.enterBodyText(emailBodyText);
 	await t.wait(3000);
-	await t.debug();
 	await sidebar.clickSidebarContent('Drafts');
 	await compose.openMessageWithSubject("ABC");
 	await mail.openCondensedMessage(0);
