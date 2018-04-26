@@ -365,7 +365,7 @@ test('L1 | Verify the filter with respect to custom folder | C830220', async t =
 	await settings.enterEditFilterText('Filter Name', filterName);
 	await settings.selectFilterSelectByLabel('Then move the messages to this folder', ruleFolder);
 	await settings.enterEditFilterText('From', t.ctx.user2.email);
-	await settings.clickModalDialogFooterButton('Save');
+	await settings.filters.clickFilterPanelButton('Save');
 	await t
 		.expect(elements.settingsFiltersListEntrySelector.exists).ok({ timeout: 5000 })
 		.expect(await elements.settingsSubsectionBodySelector.innerText).contains(filterName)
@@ -558,7 +558,7 @@ test.skip('L2 | Font > Alignment | C826709 | PREAPPS-250', async t => {
 	await t.expect(await elements.richtextareaTextContentSelector.find('div').getStyleProperty('text-align')).eql('right');
 });
 
-test('L1 | Verify the insert link with respect to the cursor position | C871114 | (Bug:PREAPPS-274)', async t => {
+test.skip('L1 | Verify the insert link with respect to the cursor position | C871114 | (Bug:PREAPPS-274)', async t => {
 	let emailBodyText = 'test';
 	let linkUrl = 'http://www.google.ca';
 	await t.wait(500);
@@ -643,7 +643,7 @@ fixture `Mail: Forward functions single user`
 		await soap.deleteAccount(t.ctx.user.id, t.fixtureCtx.adminAuthToken);
 	});
 
-test('L1 | Forward email Add Attachments | C906307 | PREAPPS-565', async t => {
+test.skip('L1 | Forward email Add Attachments | C906307 | PREAPPS-565', async t => {
 	const filePath = path.join(__dirname, './data/files/JPEG_Image.jpg');
 	let emailBodyText = 'forward email';
 	let fwdEmailSubject = 'Fwd: empty';
@@ -714,7 +714,6 @@ test.skip('L1 | Automatically save draft for reply message | C730223 | PREAPPS-5
 	await compose.clickReplyButton();
 	await compose.enterBodyText(emailBodyText);
 	await t.wait(3000);
-	await t.debug();
 	await sidebar.clickSidebarContent('Drafts');
 	await compose.openMessageWithSubject("ABC");
 	await mail.openCondensedMessage(0);

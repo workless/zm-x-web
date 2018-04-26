@@ -131,7 +131,7 @@ class Elements {
     searchField = Selector('input[placeholder="Search photos"]');
     buttonListAddressFieldTokenLabel = Selector(clientName + '_address-field_tokenLabel');
     addressFieldSuggestions = Selector(clientName + '_contact-suggestion_suggestion');
-    blocksTooltip = Selector('.blocks_tooltip').withAttribute('role', 'tooltip'); // Refactor
+    contactHoverCardDetails = Selector(clientName + '_contact-hover-card_details');//Selector('.blocks_tooltip').withAttribute('role', 'tooltip'); // Refactor
     composerSubject = Selector(clientName + '_composer_subject');
     dragZoneFileAttachementSelector = Selector(clientName + '_centered_outer');
     dialogSelector = Selector('div').withAttribute('role', 'dialog'); // Refactor
