@@ -83,6 +83,7 @@ class Elements {
     // Dialog Elements
     blocksDialogOverlaySelector = Selector('.blocks_dialog_overlay');
     dialogSelector = Selector(clientName + '_modal-dialog_dialog');
+    calendarAddEventFooterSelector = Selector(clientName + '_calendar-add-event_footer');
     calendarModalDialogButtonSelector = Selector(clientName + '_modal-dialog_footer');
 
     // Compose - Rich Text Area Elements
@@ -131,7 +132,7 @@ class Elements {
     searchField = Selector('input[placeholder="Search photos"]');
     buttonListAddressFieldTokenLabel = Selector(clientName + '_address-field_tokenLabel');
     addressFieldSuggestions = Selector(clientName + '_contact-suggestion_suggestion');
-    blocksTooltip = Selector('.blocks_tooltip').withAttribute('role', 'tooltip'); // Refactor
+    contactHoverCardDetails = Selector(clientName + '_contact-hover-card_details');//Selector('.blocks_tooltip').withAttribute('role', 'tooltip'); // Refactor
     composerSubject = Selector(clientName + '_composer_subject');
     dragZoneFileAttachementSelector = Selector(clientName + '_centered_outer');
     dialogSelector = Selector('div').withAttribute('role', 'dialog'); // Refactor
@@ -212,7 +213,7 @@ class Elements {
     settingsFilterSubsectionTitleSelector = Selector(clientName + '_settings_filters-settings_filter-modal_subsectionTitle');
     settingsFiltersList  = Selector(clientName + '_settings_filtersList');
     blocksButtonSelector = Selector('.blocks_button_regular');
-    settingsModalDialogFooterButtonSelector = Selector(clientName + '_inline-modal-dialog_footer');
+    settingsModalDialogFooterButtonSelector = Selector(clientName + '_settings-modal_footer');
     checkBoxSelector = Selector('input[type=checkbox]');
     labelSelector = Selector('label');
     settingsSendMeCopyButtonSelector = Selector('#settings.vacationResponse.sendMeCopy');
