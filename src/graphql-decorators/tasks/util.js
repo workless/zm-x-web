@@ -25,6 +25,7 @@ export function createTaskMutationVariables({
 
 	dueDate = dueDate || get(instances, '[0].dueDate');
 	const end = !dueDate ? {} : {
+		allDay: true, // Tasks should always be all day
 		end: {
 			date: format(dueDate, 'YYYYMMDD')
 		}
