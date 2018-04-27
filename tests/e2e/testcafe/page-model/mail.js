@@ -1,9 +1,13 @@
 /*eslint new-cap: ["error", { "capIsNew": false }]*/
 /*eslint no-mixed-spaces-and-tabs: "off"*/
-import { t } from 'testcafe';
+import { t, Selector } from 'testcafe';
 import { elements } from './elements';
+import { settings } from './settings';
+import { stat } from 'fs';
 
 class Mail {
+	mailContentSelector = Selector(elements.clientName + '_viewer_desktop-viewer_viewerContent');
+	notificationSelector = Selector(elements.clientName + '_notifications');
 	
 	// Get converstaion section count
 	async getConverstationSectionCount() {
@@ -74,6 +78,69 @@ class Mail {
 	//select all the mails from mail list toolbar
 	async selectAllMail() {
 		await t.click(elements.mailListHeader.find('input').withAttribute('type', 'checkbox'));
+	}
+	
+	async verifyMessageSnippets(messageSubject, expected){
+		let selector = elements.mailListPaneSelector.find(elements.mailSubject).withText(messageSubject).parent().nextSibling().find('div.zimbra-client_mail-list-item_excerpt');
+
+		if (await selector.exists) {
+			if (String(await selector.innerText).includes(expected)) return true;
+			return false;
+		}
+		else {
+			return false;
+		}
+	}
+
+	async clickonMessage(subject) {
+    	await t
+    		.click(elements.mailListPaneSelector.find(elements.mailSubject).withText(subject));
+	}
+
+	async getViewMailPanel(){
+		await t.wait(4000);
+		let isNoneView = !await elements.mailPanelSelector.find('div.zimbra-client_mail-pane_readPane').exists;
+		let isRightView = await elements.mailPanelSelector.find('div.zimbra-client_mail-pane_narrow').exists;
+		let isBottomView = await elements.mailPanelSelector.find('div.zimbra-client_mail-pane_withBottomPreview').exists;
+
+		if (isNoneView) return 'None';
+		if (isRightView) return 'Preview pane on the right';
+		if (isBottomView) return 'Preview pane on the bottom';
+	}
+
+	async getMailBodyContent(viewType) {
+		if (viewType === 'None') {
+			let bodyContentSelector = await mail.mailContentSelector.find(`div[class$='desktop-viewer_body']`).innerText;
+			return bodyContentSelector;
+		}
+	}
+
+	async clickMessageNavigator(button) {
+		if (button === 'UpArrow') {
+			await t.click(elements.inboxReadPane.find('span.zimbra-icon-arrow-up'));
+		}
+		
+		else if (button === 'DownArrow') {
+			await t.click(elements.inboxReadPane.find('span.zimbra-icon-arrow-down'));
+		}
+		
+		else if (button === 'Close') {
+			await t.click(elements.inboxReadPane.find('span.zimbra-icon-close'));
+		}
+	}
+	
+	async getToastMessage(){
+		return await mail.notificationSelector.innerText;
+	}
+
+	async IsMessageRead(subject) {
+		let status = await elements.mailListPaneSelector.find(elements.mailSubject)
+					.withText(subject).parent().parent().prevSibling()
+					.find(`div[aria-label='Unread']`)
+					.getAttribute('aria-checked');
+		
+		if (String(status).toUpperCase() == 'TRUE') return false;
+		return true;
 	}
 	
 	selectMail = (index) => elements.mailListItemMessageSelector.nth(index);

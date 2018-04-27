@@ -1,12 +1,12 @@
 /*eslint new-cap: ["error", { "capIsNew": false }]*/
-import { profile } from './profile/profile';
-import { actions } from './page-model/common';
-import { settings } from './page-model/settings';
-import { elements } from './page-model/elements';
+import { profile } from '../profile/profile';
+import { actions } from '../page-model/common';
+import { settings } from '../page-model/settings';
+import { elements } from '../page-model/elements';
 import { Selector } from 'testcafe';
-import { sidebar } from './page-model/sidebar';
-import { soap } from './utils/soap-client';
-import { mail } from './page-model/mail';
+import { sidebar } from '../page-model/sidebar';
+import { soap } from '../utils/soap-client';
+import { mail } from '../page-model/mail';
 
 
 fixture `Settings fixture`
@@ -42,6 +42,29 @@ test.skip('Enable and disable vacation response', async t => {
 	await settings.clickDialogButton('Save'); // Disable vacation response
 });
 
+test('L2 | Settings should have vacation response | C725276', async t => {
+	await settings.clickSettings();
+	await t.expect(settings.IsSidebarItemDisplay('Vacation Response')).ok('Verify the vacation response tab should be present in sidebar', { timeout: 5000 });
+});
+
+test('L2 | Settings should have vacation response | C725277', async t => {
+	await settings.clickSettings();
+	await settings.clickSettingSidebarItem('Vacation Response');
+	await t.expect(await settings.vacationResponse.IsAllOptionDisplayOnVacationRepose()).ok('Verify the vacation response view panel');
+});
+
+test('L1 | Enable automatic response and save | C725278', async t => {
+	await settings.clickSettings();
+	await settings.clickSettingSidebarItem('Vacation Response');
+	let vacationData = Object.create(settings.vactionResponseData);
+	vacationData.Enable = true;
+
+	await settings.vacationResponse.setVactionResponseData(vacationData);
+	await settings.clickModalDialogFooterButton('Save');
+	await settings.clickSettings();
+	await settings.clickSettingSidebarItem('Vacation Response');
+	await t.expect(await settings.vacationResponse.isVactionResponseEnable()).ok('Verify the Vacation Response enable');
+});
 
 /********************************/
 /*** Settings > Filter fixture ***/

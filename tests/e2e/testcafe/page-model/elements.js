@@ -70,6 +70,7 @@ class Elements {
     actionMenuDropDown = Selector(clientName + '_action-menu_dropdown');
     // Mail Elements
     mailListItemMessageSelector = Selector(this.messageItem);
+    mailPanelSelector = Selector(clientName + '_mail-pane_mailPane');
     mailListItemUnread = Selector(clientName + '_mail-list-item_unread');
     inboxReadPane = Selector(clientName + '_mail-pane_readPane');
     mailListPaneSelector = Selector(clientName + '_mail-pane_mailListPane');

@@ -2,6 +2,7 @@
 import { t, Selector } from 'testcafe';
 import { elements } from './elements';
 import { utilFunc } from './common';
+import { sidebar } from './sidebar';
 
 class Settings {
 
@@ -13,6 +14,8 @@ class Settings {
 	filterLabelSelector = this.editFilterDialogSelector.find(`div[class$='filter-modal_subsectionTitle']`);
 	filterErrorSelector = this.editFilterDialogSelector.find(`div[class$='filter-modal_error']`);
 	deleteFilterDialogSelector = Selector(elements.clientName + '_inline-modal-dialog_inner');
+	settingdialogSelector = Selector(elements.clientName + '_settings');
+    activePanelLabelSelector = (labelName) => settings.settingdialogSelector.find(`div.zimbra-client_settings_subsectionTitle`).withText(labelName);
 
 	filter = {
 		FilterName: null,
@@ -30,6 +33,13 @@ class Settings {
 		Body_Matchcase: false,
 		Move_To_Folder: null
 	}
+	
+	vactionResponseData = {
+		Enable: null,
+		FromDate: null,
+		UntilDate: null,
+		Message: null
+	}
 
 
 	selectFilterSelectByLabelSelector = (label) => elements.settingsFilterSubsectionTitleSelector.withText(label).sibling().find('select');
@@ -38,6 +48,10 @@ class Settings {
 
 	async clickSettings() {
 	    await t.click(elements.iconCogSelector);
+	}
+	
+	async IsSidebarItemDisplay(sideBarText) {
+		await elements.settingsSidebarItemSelector.withText(sideBarText).exists;
 	}
 
 	// Click on settings sideBar content element
@@ -67,17 +81,6 @@ class Settings {
 	    await t.click(elements.settingsModalDialogFooterButtonSelector.find('button').withText(text));
 	}
 	
-
-	// Click enter vacation response text
-	async clickEnterVacationResponse(text) {
-	    await t.click(elements.settingsVacationResponseTextAreaSelector);
-	    await t.typeText(elements.settingsVacationResponseTextAreaSelector, text);
-	}
-
-	async clickClearVacationResponse() {
-	    await t.click(elements.settingsVacationResponseTextAreaSelector).pressKey('ctrl+a delete');
-	}
-
 	async selectFilterSelectByLabel(selectLabel, selectValue) {
 		await t
 			.click(this.selectFilterSelectByLabelSelector(selectLabel))
@@ -275,6 +278,142 @@ class Settings {
 				return await settings.filterErrorSelector.innerText;
 			}
 			return 'No error';
+		}
+	};
+	
+	vacationResponse = {
+		 
+		// Click enter vacation response text
+		async clickEnterVacationResponse(text) {
+			await t.click(elements.settingsVacationResponseTextAreaSelector);
+			await t.typeText(elements.settingsVacationResponseTextAreaSelector, text);
+		},
+
+		async clickClearVacationResponse() {
+			await t.click(elements.settingsVacationResponseTextAreaSelector).pressKey('ctrl+a delete');
+		},
+
+		async IsAllOptionDisplayOnVacationRepose(){
+			let EnableCheckboxSelector = await settings.settingsActivePanelSelector
+				.find('label')
+				.withText('Enable automatic response during these dates (inclusive)')
+				.find('input').exists;
+			
+			let FromInputSelector = await settings.settingsActivePanelSelector
+				.find('label')
+				.withText('From')
+				.nextSibling()
+				.find('input').exists;
+
+			let UntilInputSelector = await settings.settingsActivePanelSelector
+				.find('label')
+				.withText('Until')
+				.nextSibling()
+				.find('input').exists;
+			
+			let textAreaSelector = await settings.settingsActivePanelSelector
+				.find(`textarea[rows='5']`).exists;
+			
+			let sampleCopyInputSelector = await settings.settingsActivePanelSelector
+				.find('button')
+				.withText('Send sample copy to me').exists;
+
+			return EnableCheckboxSelector && FromInputSelector && UntilInputSelector && textAreaSelector && sampleCopyInputSelector;
+
+		},
+
+		async setVactionResponseData(vactionResponseData) {
+			if (vactionResponseData.Enable) await this.enableVactionResponse(vactionResponseData.Enable);
+			if (vactionResponseData.FromDate) await this.setFromDate(String(vactionResponseData.FromDate));
+			if (vactionResponseData.UntilDate) await this.setUntilDate(String(vactionResponseData.UntilDate));
+			if (vactionResponseData.Message) await this.addVacationMessage(vactionResponseData.Message);
+			
+		},
+
+		async enableVactionResponse(flag) {
+			let enableSelector =  settings.settingsActivePanelSelector
+				.find('label')
+				.withText('Enable automatic response during these dates (inclusive)')
+				.find('input');
+			let current =  enableSelector.checked;
+		
+			if (flag !== current) {
+				await t.hover(enableSelector).click(enableSelector);
+			}
+		},
+
+		async setFromDate(dateValue) {
+		
+			let FromInputSelector = await settings.settingsActivePanelSelector
+				.find('label')
+				.withText('From')
+				.nextSibling()
+				.find('input');
+			await t.click(FromInputSelector).pressKey('ctrl+a delete').typeText(FromInputSelector,dateValue);
+		},
+
+		async setUntilDate(dateValue) {
+			let UntilInputSelector = await settings.settingsActivePanelSelector
+				.find('label')
+				.withText('Until')
+				.nextSibling()
+				.find('input');
+			await t.click(UntilInputSelector).pressKey('ctrl+a delete').typeText(UntilInputSelector,dateValue);
+		},
+
+		async addVacationMessage(message) {
+			let textAreaSelector = await settings.settingsActivePanelSelector
+				.find(`textarea[rows='5']`);
+			await t.typeText(textAreaSelector, message);
+		},
+
+		async clickSendSampleButton(){
+			let sampleCopyInputSelector = await settings.settingsActivePanelSelector
+				.find('button')
+				.withText('Send sample copy to me');
+			await t.click(sampleCopyInputSelector);
+		},
+
+		async isVactionResponseEnable(){
+			let enableSelector =  settings.settingsActivePanelSelector
+				.find('label')
+				.withText('Enable automatic response during these dates (inclusive)')
+				.find('input');
+			return await enableSelector.checked;
+		}
+
+	};
+
+	viewingEmail = {
+
+		async selectPreviewPaneOption(option) {
+			let previewPaneDropdownSelector = settings.activePanelLabelSelector('Preview Pane').nextSibling().find('select');
+			await utilFunc.selectOption.with({ dependencies: { selectEl: previewPaneDropdownSelector } })(option);
+		},
+
+		async enableShowSnippets(flag) {
+			let snowSnippetSelector = settings.settingdialogSelector.find('label').withText('Show snippets').find('input');
+			let current =  await snowSnippetSelector.checked;
+			
+		
+			if (flag !== current) {
+				await t.hover(snowSnippetSelector).click(snowSnippetSelector);
+			}
+		},
+
+		async enableDesktopNotificaiton(flag){
+			let notificationSelector = settings.activePanelLabelSelector('Desktop notifications').nextSibling().find('input');
+			let current =  await notificationSelector.checked;
+			
+		
+			if (flag !== current) {
+				await t.hover(notificationSelector).click(notificationSelector);
+			}
+		},
+
+		async selectMarkasReadOption(option) {
+			let markasreadSelector = settings.activePanelLabelSelector('Mark as read').nextSibling().find('select');
+		await utilFunc.selectOption.with({ dependencies: { selectEl: markasreadSelector } })(option);
 		}
 	};
 }
