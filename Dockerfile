@@ -11,11 +11,11 @@ RUN mkdir -p /app
 WORKDIR /app
 
 # Install app dependencies
-COPY package.json /app
-RUN npm install
-
-# Bundle app source
 COPY . /app
+RUN rm -r -f node_modules && \
+    rm -r -f $(find . -name "package-lock.json")
+RUN npm config set unsafe-perm true && \
+    npm install
 
 RUN chmod +x /app/init
 
