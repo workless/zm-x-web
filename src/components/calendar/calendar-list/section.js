@@ -26,16 +26,12 @@ export default class CalendarListSectionItem extends Component {
 		renderAction,
 		matchesScreenMd
 	}, { expanded }) {
-		let itemsList = items;
-
 		if (type === CALENDAR_TYPE.own) {
-			let defaultCalendarItems = [], otherCalendarItems = [];
-
-			items.forEach(item => {
-				(item.id === CALENDAR_IDS[CALENDAR_TYPE.own].DEFAULT) ? defaultCalendarItems.push(item) : otherCalendarItems.push(item);
-			});
-
-			itemsList = [ ...defaultCalendarItems, ...otherCalendarItems ];
+			// Bring Primary Calendar to the top of the list.
+			items = items.reduce((sortedItems, item) => {
+				(item.id === CALENDAR_IDS[CALENDAR_TYPE.own].DEFAULT) ? sortedItems.unshift(item) : sortedItems.push(item);
+				return sortedItems;
+			}, []);
 		}
 
 		return (
@@ -60,7 +56,7 @@ export default class CalendarListSectionItem extends Component {
 
 				{(!matchesScreenMd || expanded) && (
 					<ul class={style.list}>
-						{itemsList.map((item) => renderItem(item))}
+						{items.map((item) => renderItem(item))}
 					</ul>
 				)}
 			</li>
