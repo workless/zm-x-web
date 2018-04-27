@@ -40,15 +40,13 @@ export default class AppNavigation extends Component {
 			name: 'email',
 			href: '/',
 			match: `/${slugs.email}/`,
-			icon: 'envelope',
-			iconText: null
+			icon: 'envelope'
 		},
 		{
 			name: 'contacts',
 			href: `/${slugs.contacts}`,
 			match: `/${slugs.contacts}/`,
-			icon: 'address-book',
-			iconText: null
+			icon: 'address-book'
 		},
 		{
 			name: 'calendar',
@@ -68,7 +66,7 @@ export default class AppNavigation extends Component {
 	}
 
 	getPostItems( list ) {
-		return list.slice( this.getMatchedItemIndex( list ) + 1, list.lenght );
+		return list.slice( this.getMatchedItemIndex( list ) + 1 );
 	}
 
 	render({ slugs, desktopView, renderBefore, renderAfter }) {
