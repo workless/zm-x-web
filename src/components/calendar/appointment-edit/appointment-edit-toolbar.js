@@ -6,8 +6,8 @@ import { Button } from '@zimbra/blocks';
 import s from './style.less';
 
 export default function AppointmentEditToolbar({ isMobileActive, ...props }) {
-	const c = <AppointmentEditToolbarItems class={isMobileActive ? s.toolbarAction : s.footer}  {...props} />;
-	return isMobileActive ? <Toolbar>{c}</Toolbar> : c;
+	const items = <AppointmentEditToolbarItems class={isMobileActive ? s.toolbarAction : s.footer}  {...props} />;
+	return isMobileActive ? <Toolbar>{items}</Toolbar> : items;
 }
 
 function AppointmentEditToolbarItems({ onSave, onCancel, ...props }) {

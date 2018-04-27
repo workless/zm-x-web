@@ -50,15 +50,12 @@ import SkeletonWithSidebar from '../skeletons/with-sidebar';
 import CalendarsAndAppointmentsQuery from '../../graphql/queries/calendar/calendars-and-appointments.graphql';
 import PreferencesQuery from '../../graphql/queries/preferences/preferences.graphql';
 import PrefCalendarInitialViewMutation from '../../graphql/queries/preferences/calendar/initial-view-mutation.graphql';
-import AppointmentDeleteMutation from '../../graphql/queries/calendar/appointment-delete.graphql';
-import AppointmentCreateMutation from '../../graphql/queries/calendar/appointment-create.graphql';
 import AccountInfoQuery from '../../graphql/queries/preferences/account-info.graphql';
+import { withCreateAppointment, withModifyAppointment, withDeleteAppointment } from '../../graphql-decorators/calendar';
 
 import colorForCalendar from '../../utils/color-for-calendar';
 import { hasFlag } from '../../utils/folders';
 import { newAlarm } from '../../utils/event';
-import htmlInviteEmail from './emails/html-invite-email';
-import plainTextInviteEmail from './emails/plain-text-invite-email';
 import { soapTimeToJson } from '../../utils/prefs';
 import withMediaQuery from '../../enhancers/with-media-query';
 import { minWidth, screenMd } from '../../constants/breakpoints';
@@ -119,9 +116,6 @@ function isParticipatingInEvent({ participationStatus }) {
 		DECLINED
 	].indexOf(participationStatus);
 }
-function zimbraFormat(date, allDay) {
-	return moment.utc(date).format(allDay ? 'YYYYMMDD' : 'YYYYMMDD[T]HHmmss[Z]');
-}
 
 function getView({ preferences }) {
 	return (
@@ -134,19 +128,6 @@ function getWorkingHours({ preferences }) {
 	return (
 		preferences && soapTimeToJson(preferences.zimbraPrefCalendarWorkingHours)
 	);
-}
-
-function inviteEmailMailParts(options) {
-	return [
-		{
-			contentType: 'text/plain',
-			content: plainTextInviteEmail(options)
-		},
-		{
-			contentType: 'text/html',
-			content: htmlInviteEmail(options)
-		}
-	];
 }
 
 /**
@@ -261,101 +242,9 @@ function getDOW({ preferences }) {
 			})
 	})
 })
-@graphql(AppointmentDeleteMutation, {
-	props: ({ ownProps: { calendarsData }, mutate }) => ({
-		deleteAppointment: inviteId =>
-			mutate({
-				variables: { inviteId }
-			}).then(() => {
-				calendarsData.refetch();
-			})
-	})
-})
-@graphql(AppointmentCreateMutation, {
-	props: ({ ownProps: { calendarsData, accountInfoData }, mutate }) => ({
-		createAppointment: ({
-			name,
-			location,
-			start,
-			end,
-			alarms,
-			recurrence,
-			freeBusy,
-			allDay,
-			isPrivate,
-			notes,
-			attachments,
-			attendees = []
-		}) => {
-			const account = accountInfoData.accountInfo.identities.identity[0]._attrs;
-			const organizer = {
-				address: account.zimbraPrefFromAddress,
-				name: account.zimbraPrefFromDisplay
-			};
-			const startVal = { date: zimbraFormat(start, allDay) };
-			const endVal = allDay ? null : { date: zimbraFormat(end, allDay) };
-			const classType = isPrivate ? 'PRI' : 'PUB';
-			const attendeesVal = attendees.map(e => ({
-				role: e.role,
-				participationStatus: 'NE',
-				rsvp: true,
-				address: e.address,
-				name: e.name
-			}));
-
-			return mutate({
-				variables: {
-					appointment: {
-						message: {
-							folderId: '10',
-							subject: name,
-							invitations: {
-								components: [
-									{
-										name,
-										location,
-										alarms,
-										recurrence,
-										freeBusy,
-										allDay,
-										class: classType,
-										organizer,
-										start: startVal,
-										end: endVal,
-										attendees: attendeesVal
-									}
-								]
-							},
-							emailAddresses: attendees.map(e => ({
-								address: e.address,
-								name: e.name,
-								type: 't'
-							})),
-							mimeParts: {
-								contentType: 'multipart/alternative',
-								mimeParts: inviteEmailMailParts({
-									organizer,
-									start,
-									end,
-									attendees: attendeesVal,
-									subject: name,
-									body: notes
-								})
-							},
-							...(attachments && attachments.length ? {
-								attach: {
-									aid: attachments.join(',')
-								}
-							} : {})
-						}
-					}
-				}
-			}).then(() => {
-				calendarsData.refetch();
-			});
-		}
-	})
-})
+@withCreateAppointment()
+@withModifyAppointment()
+@withDeleteAppointment()
 export default class Calendar extends Component {
 	static defaultProps = {
 		businessHoursStart: 8,
@@ -475,9 +364,15 @@ export default class Calendar extends Component {
 		});
 	};
 
+	handleAppointmentSave = appointment => {
+		appointment.new ? this.handleCreateAppointment(appointment) : this.handleEditAppointment(appointment);
+
+		this.handleCloseAddEvent();
+	};
+
 	handleEditAppointment = appointment => {
 		this.props.modifyAppointment(appointment);
-		this.handleCloseAddEvent();
+		// @TODO show errors
 	};
 
 	handleCreateAppointment = appointment => {
@@ -495,7 +390,6 @@ export default class Calendar extends Component {
 				}
 			});
 		} );
-		this.handleCloseAddEvent();
 	};
 
 	handleCancelAdd = () => {
@@ -672,7 +566,7 @@ export default class Calendar extends Component {
 					<AppointmentEditEvent
 						className={style.calendarInner}
 						event={newEvent}
-						onAction={this.handleCreateAppointment}
+						onAction={this.handleAppointmentSave}
 						onClose={this.handleCloseAddEvent}
 						preferencesData={this.props.preferencesData}
 						accountInfoData={this.props.accountInfoData}

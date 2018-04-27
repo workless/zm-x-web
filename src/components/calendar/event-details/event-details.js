@@ -7,14 +7,10 @@ import get from 'lodash/get';
 import isSameDay from 'date-fns/is_same_day';
 import style from './style';
 import cx from 'classnames';
-import { graphql } from 'react-apollo';
 import Recurrence from '../../recurrence';
-import MessageQuery from '../../../graphql/queries/message.graphql';
+import { withAppointmentData } from '../../../graphql-decorators/calendar';
 
-@graphql(MessageQuery, {
-	name: 'appointmentData',
-	options: ({ event: { inviteId } }) => ({ variables: { id: inviteId } })
-})
+@withAppointmentData()
 export default class CalendarEventDetails extends Component {
 	render({ event, appointmentData, onPrint, onDelete, onEdit, ...props }) {
 		const inviteComponent = get(appointmentData, 'message.invitations.0.components.0');

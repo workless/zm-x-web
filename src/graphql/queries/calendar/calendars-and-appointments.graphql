@@ -18,6 +18,9 @@ fragment calendarWithAppointmentFields on Folder {
 	appointments(start: $start, end: $end) {
 		appointments {
 			inviteId
+			folderId
+			modifiedSequence
+			revision
 			participationStatus
 			date
 			name

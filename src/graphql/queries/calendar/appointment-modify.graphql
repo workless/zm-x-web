@@ -1,0 +1,3 @@
+mutation modifyAppointment($appointment: CalendarItemInput!) {
+	modifyAppointment(appointment: $appointment)
+}

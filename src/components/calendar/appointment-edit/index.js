@@ -9,6 +9,7 @@ import cx from 'classnames';
 
 import { newAlarm, hasEmailAlarm, hasDisplayAlarm } from '../../../utils/event';
 import { getPrimaryAccountAddress } from '../../../utils/account';
+import { withAppointmentData } from '../../../graphql-decorators/calendar';
 
 import FormGroup from '../../form-group';
 import TextInput from '../../text-input';
@@ -93,6 +94,7 @@ const MobileHeading = ( { title } ) => (<div class={s.simpleHeader}>
 @withText({
 	errorMsg: 'calendar.editModal.FILE_SIZE_EXCEEDED'
 })
+@withAppointmentData()
 export default class AppointmentEditEvent extends Component {
 	static defaultProps = {
 		title: 'calendar.editModal.title'
@@ -115,15 +117,18 @@ export default class AppointmentEditEvent extends Component {
 		isErrored: false
 	};
 
-	setEvent = props => {
-		const alarms = props.event.alarms;
+	setEvent = ({ appointmentData, event }) => {
+		let data = appointmentData.message || event;
+		const inviteComponent = get(data, 'invitations.0.components.0');
+
+		const alarms = event.alarms;
 		const alarm = alarms ? alarms[0] : null;
 		this.setState({
-			event: props.event,
+			event,
 			remindValue: alarm && remindValueFor(alarm.trigger.relative),
 			remindDesktop: hasDisplayAlarm(alarms),
 			remindEmail: hasEmailAlarm(alarms),
-			allDay: props.event.allDay,
+			allDay: event.allDay,
 			isPrivate: this.state.isPrivate
 		});
 	};
@@ -201,10 +206,12 @@ export default class AppointmentEditEvent extends Component {
 					recurrence: this.recurrenceFromState(),
 					freeBusy: showAsValue
 				});
-			})
-			.catch(() => {
-				this.setState({ isErrored: true });
 			});
+
+			/*.catch(() => {
+				// @TODO Show error somewhere
+				this.setState({ isErrored: true });
+			});*/
 	};
 
 	handleAttendeesChange = e => {

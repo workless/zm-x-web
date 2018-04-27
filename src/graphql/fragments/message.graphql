@@ -87,6 +87,19 @@ fragment messageFields on MessageInfo {
 				name
 				url
 			}
+			alarm {
+				trigger {
+					relative {
+						weeks
+						days
+						hours
+						minutes
+						seconds
+						relatedTo
+						negative
+					}
+				}
+			}
 			percentComplete
 			priority
 			utcRecurrenceId

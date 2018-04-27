@@ -7,6 +7,7 @@ export const USER_FOLDER_IDS = {
 	SENT: 5,
 	DRAFTS: 6,
 	CONTACTS: 7,
+	CALENDAR: 10,
 	TASKS: 15
 };
 export const DEFAULT_MAILBOX_METADATA_SECTION = 'zwc:implicit';
