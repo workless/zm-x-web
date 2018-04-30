@@ -1,7 +1,7 @@
 {
     "clientName": ".zimbra-client",
     "notepadName": ".zimlets-notepad",
-    "serverName": "ec2-13-58-225-137.us-east-2.compute.amazonaws.com",
+    "serverName": "ec2-13-127-151-6.ap-south-1.compute.amazonaws.com",
     "hostURL": "https://localhost:8080/",
     "pageElements": {
         "id": {
