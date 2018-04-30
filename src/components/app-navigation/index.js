@@ -32,7 +32,7 @@ const MenuItemView = ( { desktopView, slugs, onSelect, ...listItem } ) => (
 @configure('routes.slugs')
 @connect( state => ({
 	url: state.url
-}), null )
+}))
 export default class AppNavigation extends Component {
 
 	getNavList = () => {
