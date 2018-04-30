@@ -293,19 +293,19 @@ class Settings {
 			await t.click(elements.settingsVacationResponseTextAreaSelector).pressKey('ctrl+a delete');
 		},
 
-		async IsAllOptionDisplayOnVacationRepose(){
-			let EnableCheckboxSelector = await settings.settingsActivePanelSelector
+		async isAllOptionDisplayedOnVacationResponse(){
+			let enableCheckboxSelector = await settings.settingsActivePanelSelector
 				.find('label')
 				.withText('Enable automatic response during these dates (inclusive)')
 				.find('input').exists;
 			
-			let FromInputSelector = await settings.settingsActivePanelSelector
+			let fromInputSelector = await settings.settingsActivePanelSelector
 				.find('label')
 				.withText('From')
 				.nextSibling()
 				.find('input').exists;
 
-			let UntilInputSelector = await settings.settingsActivePanelSelector
+			let untilInputSelector = await settings.settingsActivePanelSelector
 				.find('label')
 				.withText('Until')
 				.nextSibling()
@@ -318,7 +318,7 @@ class Settings {
 				.find('button')
 				.withText('Send sample copy to me').exists;
 
-			return EnableCheckboxSelector && FromInputSelector && UntilInputSelector && textAreaSelector && sampleCopyInputSelector;
+			return enableCheckboxSelector && fromInputSelector && untilInputSelector && textAreaSelector && sampleCopyInputSelector;
 
 		},
 
@@ -344,21 +344,21 @@ class Settings {
 
 		async setFromDate(dateValue) {
 		
-			let FromInputSelector = await settings.settingsActivePanelSelector
+			let fromInputSelector = await settings.settingsActivePanelSelector
 				.find('label')
 				.withText('From')
 				.nextSibling()
 				.find('input');
-			await t.click(FromInputSelector).pressKey('ctrl+a delete').typeText(FromInputSelector,dateValue);
+			await t.click(fromInputSelector).pressKey('ctrl+a delete').typeText(fromInputSelector,dateValue);
 		},
 
 		async setUntilDate(dateValue) {
-			let UntilInputSelector = await settings.settingsActivePanelSelector
+			let untilInputSelector = await settings.settingsActivePanelSelector
 				.find('label')
 				.withText('Until')
 				.nextSibling()
 				.find('input');
-			await t.click(UntilInputSelector).pressKey('ctrl+a delete').typeText(UntilInputSelector,dateValue);
+			await t.click(untilInputSelector).pressKey('ctrl+a delete').typeText(untilInputSelector,dateValue);
 		},
 
 		async addVacationMessage(message) {

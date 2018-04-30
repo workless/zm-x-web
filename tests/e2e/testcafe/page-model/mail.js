@@ -133,7 +133,7 @@ class Mail {
 		return await mail.notificationSelector.innerText;
 	}
 
-	async IsMessageRead(subject) {
+	async isMessageRead(subject) {
 		let status = await elements.mailListPaneSelector.find(elements.mailSubject)
 					.withText(subject).parent().parent().prevSibling()
 					.find(`div[aria-label='Unread']`)

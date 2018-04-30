@@ -50,7 +50,7 @@ test('L2 | Settings should have vacation response | C725276', async t => {
 test('L2 | Settings should have vacation response | C725277', async t => {
 	await settings.clickSettings();
 	await settings.clickSettingSidebarItem('Vacation Response');
-	await t.expect(await settings.vacationResponse.IsAllOptionDisplayOnVacationRepose()).ok('Verify the vacation response view panel');
+	await t.expect(await settings.vacationResponse.isAllOptionDisplayedOnVacationResponse()).ok('Verify the vacation response view panel');
 });
 
 test('L1 | Enable automatic response and save | C725278', async t => {

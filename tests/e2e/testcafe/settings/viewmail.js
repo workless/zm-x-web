@@ -145,7 +145,7 @@ test('L1 | Mark as read set to immediately | C714457', async t=> {
 	await sidebar.clickSidebarContent('Inbox');
 	await mail.clickonMessage('Subject1');
 	await t.wait(1000);
-	await t.expect(await mail.IsMessageRead('Subject1')).ok('Verify that message has been read');
+	await t.expect(await mail.isMessageRead('Subject1')).ok('Verify that message has been read');
 });
 
 
@@ -159,7 +159,7 @@ test('L2 | Mark as read set to 2 secs | C714458', async t=> {
 	await sidebar.clickSidebarContent('Inbox');
 	await mail.clickonMessage('Subject1');
 	await t.wait(3000);
-	await t.expect(await mail.IsMessageRead('Subject1')).ok('Verify that message has been read');
+	await t.expect(await mail.isMessageRead('Subject1')).ok('Verify that message has been read');
 });
 
 test('L2 | Mark as read set to 5 secs | C714459', async t=> {
@@ -172,7 +172,7 @@ test('L2 | Mark as read set to 5 secs | C714459', async t=> {
 	await sidebar.clickSidebarContent('Inbox');
 	await mail.clickonMessage('Subject1');
 	await t.wait(6000);
-	await t.expect(await mail.IsMessageRead('Subject1')).ok('Verify that message has been read');
+	await t.expect(await mail.isMessageRead('Subject1')).ok('Verify that message has been read');
 });
 
 test('L2 | Mark as read set to Never | C714460', async t=> {
@@ -185,5 +185,5 @@ test('L2 | Mark as read set to Never | C714460', async t=> {
 	await sidebar.clickSidebarContent('Inbox');
 	await mail.clickonMessage('Subject1');
 	await t.wait(10000);
-	await t.expect(await mail.IsMessageRead('Subject1')).notOk('Verify that message has been read');
+	await t.expect(await mail.isMessageRead('Subject1')).notOk('Verify that message has been read');
 });
