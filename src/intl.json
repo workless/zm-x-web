@@ -14,7 +14,6 @@
 		"edit": "Edit",
 		"done": "Done",
 		"download": "Download",
-		"edit": "Edit",
 		"export": "Export Now",
 		"forward": "Forward",
 		"fullScreen": "Full Screen",
@@ -364,6 +363,12 @@
 				"COLOR_LABEL": "Color",
 				"INPUT_PLACEHOLDER": "New Calendar",
 				"ERROR_DUPLICATE_CALENDAR": "A calendar with this name already exists."
+			},
+			"recurrence_edit": {
+				"title": "Edit Recurring Event",
+				"label": "You're editing a recurring event. Apply chnages to:",
+				"event_only": "This Event Only",
+				"all_events": "All Events"
 			},
 			"share": {
 				"title": "Share Calendar: {{name}}",

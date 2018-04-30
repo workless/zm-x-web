@@ -85,12 +85,12 @@ export default class CalendarEventDetails extends Component {
 				<Button onClick={callWith(onEdit, event)}>
 					<Text id="buttons.edit" />
 				</Button>
-				<Button onClick={callWith(onPrint, event)}>
+				{/*<Button onClick={callWith(onPrint, event)}>
 					<Text id="buttons.print" />
 				</Button>
 				<Button onClick={callWith(onDelete, event)}>
 					<Text id="buttons.delete" />
-				</Button>
+				</Button>*/}
 			</div>
 		);
 	}

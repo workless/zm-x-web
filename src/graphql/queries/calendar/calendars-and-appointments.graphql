@@ -29,6 +29,23 @@ fragment calendarWithAppointmentFields on Folder {
 			date
 			duration
 			alarm
+			alarmData {
+				alarms {
+					action
+					trigger {
+						relative {
+							negative
+							relatedTo
+							weeks
+							days
+							hours
+							minutes
+							seconds
+						}
+					}
+				}
+				nextAlarm
+			}
 			allDay
 			class
 			isRecurring

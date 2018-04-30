@@ -9,7 +9,6 @@ import cx from 'classnames';
 
 import { newAlarm, hasEmailAlarm, hasDisplayAlarm } from '../../../utils/event';
 import { getPrimaryAccountAddress } from '../../../utils/account';
-import { withAppointmentData } from '../../../graphql-decorators/calendar';
 
 import FormGroup from '../../form-group';
 import TextInput from '../../text-input';
@@ -64,13 +63,16 @@ const INTERVAL_SHORTHAND_MAP = {
 const SHOW_AS_OPTIONS = ['F', 'T', 'B', 'O'];
 const REPEAT_OPTIONS = ['NONE', 'DAI', 'WEE', 'MON', 'YEA'];
 
-function remindValueFor(relativeTrigger) {
+function remindValueFor(alarmData) {
+	let relativeTrigger = get(alarmData, '0.alarms.0.trigger.0.relative.0');
+
 	return (
-		(relativeTrigger.weeks && `${relativeTrigger.weeks}w`) ||
+		relativeTrigger &&
+		((relativeTrigger.weeks && `${relativeTrigger.weeks}w`) ||
 		(relativeTrigger.days && `${relativeTrigger.days}d`) ||
 		(relativeTrigger.hours && `${relativeTrigger.hours}h`) ||
 		(typeof relativeTrigger.minutes === 'number' &&
-			`${relativeTrigger.minutes}m`)
+			`${relativeTrigger.minutes}m`))
 	);
 }
 
@@ -94,7 +96,6 @@ const MobileHeading = ( { title } ) => (<div class={s.simpleHeader}>
 @withText({
 	errorMsg: 'calendar.editModal.FILE_SIZE_EXCEEDED'
 })
-@withAppointmentData()
 export default class AppointmentEditEvent extends Component {
 	static defaultProps = {
 		title: 'calendar.editModal.title'
@@ -117,17 +118,14 @@ export default class AppointmentEditEvent extends Component {
 		isErrored: false
 	};
 
-	setEvent = ({ appointmentData, event }) => {
-		let data = appointmentData.message || event;
-		const inviteComponent = get(data, 'invitations.0.components.0');
+	setEvent = ({ event }) => {
+		const { alarm, alarmData } = event;
 
-		const alarms = event.alarms;
-		const alarm = alarms ? alarms[0] : null;
 		this.setState({
 			event,
-			remindValue: alarm && remindValueFor(alarm.trigger.relative),
-			remindDesktop: hasDisplayAlarm(alarms),
-			remindEmail: hasEmailAlarm(alarms),
+			remindValue: alarm && remindValueFor(alarmData),
+			remindDesktop: alarm && hasDisplayAlarm(alarmData),
+			remindEmail: alarm && hasEmailAlarm(alarmData),
 			allDay: event.allDay,
 			isPrivate: this.state.isPrivate
 		});
