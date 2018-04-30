@@ -1,5 +1,6 @@
 import moment from 'moment-timezone';
-import findIndex from 'lodash-es/findIndex';
+import findIndex from 'lodash/findIndex';
+import find from 'lodash/find';
 import isNil from 'lodash-es/isNil';
 import array from '@zimbra/util/src/array';
 import { calendarDateFormat } from '../utils/calendar';
@@ -8,9 +9,18 @@ import CALENDAR_FORMATS from '../constants/calendar-formats';
 
 const HOP = Object.prototype.hasOwnProperty;
 
+/**
+ * Find and return the element in `arr` that has a key with name `key` whose value is equal to `value` if `value`
+ * is not a regex, or passes the regex test if `value` is a regex
+ * @param {Array} arr
+ * @param {String} key
+ * @param {*} value A value to == match against (no type equality), or a regex to test
+ * @return {*} The element in `arr` that has the key matching `value`, or undefined if not found
+ */
 export function pluck(arr, key, value) {
-	// eslint-disable-next-line
-	for (let i = arr.length; i--; ) if (arr[i][key] == value) return arr[i];
+	//eslint-disable-next-line eqeqeq
+	const predicate = value && value.test ? (item) => value.test(item[key]) : (item) => item[key] == value;
+	return find(arr, predicate);
 }
 
 export function getId(obj) {
@@ -82,14 +92,14 @@ export function getEmailDomain(address) {
  * @example isAddressTrusted("joe@bar.com", ["foo.bar.com"]) === false //no match
  */
 export function isAddressTrusted(emailAddress, trustedList) {
-	//TODO match email address
 	trustedList = array(trustedList);
 	if (!(emailAddress && trustedList.length)) return false;
 	emailAddress = emailAddress.toLowerCase();
 	let domain = getEmailDomain(emailAddress);
-	return trustedList
-		.map(d => d.toLowerCase())
-		.some(d => d === emailAddress || d === domain || domain.endsWith(`.${d}`));
+	return trustedList.some(t => {
+		t = t.toLowerCase();
+		return t === emailAddress || t === domain || domain.indexOf(`.${t}`) === (domain.length - t.length -1);
+	});
 }
 
 export function serializeAddress(address, name) {

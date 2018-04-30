@@ -1,9 +1,5 @@
 import * as taskUtils from 'src/utils/tasks';
-import get from 'lodash-es/get';
 import addDays from 'date-fns/add_days';
-import format from 'date-fns/format';
-import isTomorrow from 'date-fns/is_tomorrow';
-import { COMPLETE_STATUS, NEED_STATUS } from 'src/constants/tasks';
 
 describe('Task Utilities', () => {
 	const initialTask = {
@@ -23,14 +19,14 @@ describe('Task Utilities', () => {
 	describe('setDueDate', () => {
 		const { setDueDate } = taskUtils;
 		it('should set a timestamp as `instances[0].dueDate`', () => {
-			const expectedDate = new Date('2200-12-25T03:14:00');
+			const expectedDate = new Date('2200-12-25T12:00:00');
 			const nextTask = setDueDate(initialTask, expectedDate);
 
 			expect(nextTask.instances[0].dueDate).to.equal(expectedDate.getTime());
 		});
 
 		it('should set a formatted date string (YYYY-MM-DD) as `dueDate`', () => {
-			const expectedDate = new Date('2200-12-25T03:14:00');
+			const expectedDate = new Date('2200-12-25T12:00:00');
 			const nextTask = setDueDate(initialTask, expectedDate);
 
 			expect(nextTask.dueDate).to.equal('2200-12-25');
@@ -67,7 +63,7 @@ describe('Task Utilities', () => {
 
 
 		it('should accept a fromTime value to begin postponement from', () => {
-			const initialDueDate = getDueDate(initialTask)
+			const initialDueDate = getDueDate(initialTask);
 
 			// Starting from five days, add one to get six days.
 			const fromTime = addDays(initialDueDate, 5);

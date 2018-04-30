@@ -10,6 +10,12 @@ export const CALENDAR_LIST_ORDER = {
 	[CALENDAR_TYPE.other]: 2
 };
 
+export const CALENDAR_IDS = {
+	[CALENDAR_TYPE.own]: {
+		DEFAULT: '10'
+	}
+};
+
 // Zimbra FolderActionRequest op='!grant' requires a `zid`
 // however, `pub` and `all` require fake `zid`s.
 // https://files.zimbra.com/docs/soap_api/8.7.11/api-reference/zimbraMail/FolderAction.html

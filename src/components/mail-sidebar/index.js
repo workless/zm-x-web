@@ -36,6 +36,8 @@ import s from './style.less';
 
 const { ActionType } = apiClientTypes;
 
+const INBOX_REGEX = /^inbox$/i;
+
 @withMediaQuery(minWidth(screenMd))
 @configure({ urlSlug: 'routes.slugs.email' })
 @accountInfo()
@@ -78,9 +80,9 @@ export default class MailSidebar extends Component {
 			...dataSources.imap
 				.filter(i => i.l !== get(this.props, 'inboxFolder.id'))
 				.map(i => {
-					const sourceFolders = get(findFolder(folders, i.l), 'folder') || [];
+					const sourceFolders = get(findFolder(folders, i.l), 'folders') || [];
 					const primaryFolder =
-						find(sourceFolders, f => /Inbox/i.test(f.name)) || sourceFolders[0];
+						find(sourceFolders, f => INBOX_REGEX.test(f.name)) || sourceFolders[0];
 
 					return {
 						id: i.id,
@@ -118,7 +120,7 @@ export default class MailSidebar extends Component {
 			? folders.filter(
 				f => !includes(excludedDataSourceFolderIds, f.id.toString())
 			)
-			: get(findFolder(folders, activeAccount.folderId), 'folder') || [];
+			: get(findFolder(folders, activeAccount.folderId), 'folders') || [];
 	};
 
 	// Multi-account support is enabled when the user has a primary account and
@@ -225,7 +227,7 @@ export default class MailSidebar extends Component {
 						enableAccountSelector ? this.foldersForAccount(accounts) : folders
 					}
 					refetchFolders={refetchFolders}
-					indexFolderName="Inbox"
+					indexFolderName={INBOX_REGEX}
 					urlSlug={urlSlug}
 					refresh={refresh}
 					defaultContextMenu={DefaultFolderContextMenu}

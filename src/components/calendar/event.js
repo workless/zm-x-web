@@ -1,10 +1,12 @@
 import { h, Component } from 'preact';
 import format from 'date-fns/format';
 import { STATUS_BUSY, STATUS_FREE, VIEW_MONTH } from './constants';
-import { CalendarEventDetailsTooltip } from './event-details';
+import CloseButton from '../close-button';
+import { CalendarEventDetails } from './event-details';
 import cx from 'classnames';
 import withMediaQuery from '../../enhancers/with-media-query';
 import { minWidth, screenMd } from '../../constants/breakpoints';
+import { Popover } from '@zimbra/blocks';
 import { hexToRgb } from '../../lib/util';
 
 import style from './style';
@@ -80,59 +82,44 @@ export function CalendarEventWrapper(props) {
 @withMediaQuery(minWidth(screenMd), 'matchesScreenMd')
 class SavedCalendarEvent extends Component {
 	state = {
-		hoverOrigin: false
+		active: false
 	}
 
-	handleMouseEnter = (e) => {
-		if (!this.state.hoverOrigin || !this.timer) {
-			this.timer = setTimeout(() => {
-				this.showEventDetails(e);
-			}, SHOW_EVENT_DETAILS_AFTER_HOVER_DELAY);
-		}
-	}
+	handleToggle = (active) => this.setState({ active });
 
-	handleMouseLeave = () => {
-		if (this.timer) {
-			clearTimeout(this.timer);
-			this.timer = undefined;
-		}
+	handleClickClose = () => this.setState({ active: false });
 
-		this.hideHoverTooltip();
-	}
-
-	showEventDetails = ({ clientX, clientY }) => {
-		this.setState({
-			hoverOrigin: {
-				x: clientX,
-				y: clientY
-			}
-		});
-	}
-
-	hideHoverTooltip = () => {
-		this.setState({ hoverOrigin: false });
-	}
-
-	render({ view, title, event, matchesScreenMd }, { hoverOrigin }) {
+	render({ view, title, event, matchesScreenMd }, { active }) {
 		const start = event.date;
-		return (
-			<div
-				class={style.eventInner}
-				onMouseEnter={matchesScreenMd && this.handleMouseEnter}
-				onMouseLeave={matchesScreenMd && this.handleMouseLeave}
-				onClick={matchesScreenMd && this.showEventDetails}
-			>
+		const body = (
+			<div class={style.eventInner} >
 				{view === VIEW_MONTH && !event.allDay && (
 					<time title={start}>
 						{format(start, 'h:mm A').replace(':00', '')}
 					</time>
 				)}
 				{title}
-
-				{hoverOrigin && (
-					<CalendarEventDetailsTooltip origin={hoverOrigin} event={event} onClose={this.hideHoverTooltip} />
-				)}
 			</div>
+		);
+
+		//Add clickable/hoverable popover for event details if not in a mobile viewport size
+		return !matchesScreenMd ? body : (
+			<Popover active={active}
+				onToggle={this.handleToggle}
+				arrow
+				classes={{
+					containerClass: style.eventTooltipTarget,
+					toggleClass: style.eventTooltipTarget,
+					popoverClass: style.eventTooltip
+				}}
+				placement="top"
+				anchor="center"
+				hoverDuration={SHOW_EVENT_DETAILS_AFTER_HOVER_DELAY}
+				target={body}
+			>
+				<CloseButton class={style.close} onClick={this.handleClickClose} />
+				<CalendarEventDetails event={event} />
+			</Popover>
 		);
 	}
 }
