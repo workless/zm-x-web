@@ -30,10 +30,6 @@ export default class Notifications extends Component {
 		this.props.notification.action.fn();
 	}
 
-	dismissDialog = () => {
-		this.props.clear();
-	}
-
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.notification && nextProps.notification !== this.props.notification) {
 			clearTimeout(this.timeout);
@@ -49,9 +45,9 @@ export default class Notifications extends Component {
 		clearTimeout(this.timeout);
 	}
 
-	render({ notification }) {
+	render({ notification, clear }) {
 		return notification && (
-			<FixedDialog class={cx(s.notifications, notification.failure ? s.failure : s.success)} onClick={this.dismissDialog}>
+			<FixedDialog class={cx(s.notifications, notification.failure ? s.failure : s.success)} onClick={clear}>
 				<div className={s.label}>{notification.message}</div>
 				{notification.action &&
 					<button className={s.undoButton} onClick={this.handleActionClick}>
