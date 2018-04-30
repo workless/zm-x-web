@@ -249,16 +249,10 @@ export default class Contacts extends Component {
 		return (
 			<div class={cx(style.contacts, pending && style.loading)}>
 				<Sidebar header={!matchesScreenMd} inlineClass={style.sidebar}>
-					{matchesScreenMd
-						? (
+					{matchesScreenMd &&
+						(
 							<div class={style.sidebarHeader}>
 								<a class={style.createNew} href={`/${urlSlug}/${folder ? (folder+'/') : ''}new`}>New Contact</a>
-							</div>
-						)
-						: (
-							<div class={style.sidebarSectionHeader}>
-								<span class={style.sidebarSectionHeaderIcon} />
-								Contacts
 							</div>
 						)
 					}

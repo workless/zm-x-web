@@ -32,6 +32,18 @@ function addressFromContact(contact) {
 }
 
 function createAddress(address) {
+	if (typeof address === 'string' && address) {
+
+		/**
+		 * If email address is typed by hand/copy pasted instead of selecting from address list,
+		 * then all we receive as address argument's value is email string.
+		 * In order to process further, we need to tweak it.
+		 */
+		address = {
+			email: address
+		};
+	}
+
 	if (typeof address === 'object' && address.email) {
 		return addressFromContact(address);
 	}
