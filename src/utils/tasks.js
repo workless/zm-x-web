@@ -56,7 +56,7 @@ export function setDueDate(task, dueDate) {
 			{ ...task.instances[0], dueDate: dueDate.getTime() },
 			...task.instances.slice(1)
 		],
-		dueDate: format(new Date(dueDate), 'YYYY-MM-DD')
+		dueDate: format(dueDate, 'YYYY-MM-DD')
 	};
 }
 
