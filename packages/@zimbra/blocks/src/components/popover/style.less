@@ -43,6 +43,7 @@
 }
 
 .popper {
+	//Note: Do any margins of the popper and arrows as inline styles to avoid "snapping" of popper into place after initial calculations
 	background: @popover-background;
 	border: 1px solid @border-color-primary;
 	border-radius: 4px;
@@ -71,7 +72,6 @@
 	}
 
 	&[data-placement^="top"][arrow] {
-		margin-bottom: @arrow-border-size;
 
 		.arrow {
 			border-bottom-width: 0;
@@ -89,56 +89,47 @@
 	}
 
 	&[data-placement^="bottom"][arrow] {
-		margin-top: @arrow-border-size;
 
 		.arrow {
 			border-top-width: 0;
 			border-bottom-color: @popover-background;
 			top: -@arrow-size;
-			margin: 0 calc(@arrow-border-size/2);
 		}
 
 		.borderArrow {
 			border-top-width: 0;
 			border-bottom-color: @gray-lighter;
 			top: -@arrow-border-size;
-			margin: 0 calc(@arrow-size/2);
 		}
 	}
 
 	&[data-placement^="right"][arrow] {
-		margin-left: @arrow-size;
 
 		.arrow {
 			border-left-width: 0;
 			border-right-color: @popover-background;
 			left: -@arrow-size;
-			margin: calc(@arrow-border-size/2) 0;
 		}
 
 		.borderArrow {
 			border-left-width: 0;
 			border-right-color: @gray-lighter;
 			left: -@arrow-border-size;
-			margin: calc(@arrow-size/2) 0;
 		}
 	}
 
 	&[data-placement^="left"][arrow] {
-		margin-right: @arrow-size;
 
 		.arrow {
 			border-right-width: 0;
 			border-left-color: @popover-background;
 			right: -@arrow-size;
-			margin: calc(@arrow-border-size/2) 0;
 		}
 
 		.borderArrow {
 			border-right-width: 0;
 			border-left-color: @gray-lighter;
 			right: -@arrow-border-size;
-			margin: calc(@arrow-size/2) 0;
 		}
 	}
 }
