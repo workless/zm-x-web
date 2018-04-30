@@ -35,11 +35,29 @@ export function getEmail(address) {
 
 export function parseAddress(str) {
 	str = str.trim();
-	let parts = str.match(/\s*(['"]?)(.*?)\1\s*<(.+)>/);
-	if (parts) {
-		return { address: parts[3], name: parts[2] };
+
+	/**
+	 * There are two types of email address (str) we receive here.
+	 * 1) Composite Address with pattern: "Name <Email Address>" (When email address is selected from list)
+	 * 2) Simple Address with pattern: "Email Address" (When email address is either typed by hand/copy pasted or not available in the list)
+	 * So, in both cases, we need to parse email address such that we have values for address and name.
+	 * In exceptional cases, we will just return address as it is.
+	 */
+	const simpleAddrMatchRegExp = /(.+)@(.+)/, compositeAddrMatchRegExp = /\s*(['"]?)(.*?)\1\s*<(.+)>/;
+
+	let parts = str.match(compositeAddrMatchRegExp);
+
+	if (!parts) {
+		parts = str.match(simpleAddrMatchRegExp);
+
+		if (parts) {
+			return { address: parts[0], name: parts[1] };
+		}
+
+		return { address: str };
 	}
-	return { address: str };
+
+	return { address: parts[3], name: parts[2] };
 }
 
 /** Get the domain portion of an email address
