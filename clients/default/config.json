@@ -2,7 +2,7 @@
 	"title": "Zimbra",
 	"clientName": "Zimbra",
 	"zimbraOrigin": "/@zimbra",
-	"zimbraProxyURL": "https://zimbra-api-proxy-aws.herokuapp.com",
+	"zimbraProxyURL": "https://zimbra-api-proxy-aws-test-cafe.herokuapp.com",
 	"routes": {
 		"slugs": {
 			"email": "email",
