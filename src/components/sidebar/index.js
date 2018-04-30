@@ -36,11 +36,15 @@ export default class Sidebar extends PureComponent {
 		this.setState({ width });
 	};
 
+	closeSidebar = () => {
+		this.props.hide();
+	}
+
 	// @TODO sidebar would be better triggered via a querystring param
 	// for mobile back button support
 	componentWillReceiveProps({ url, sidebar }) {
 		if (url !== this.props.url && this.props.sidebar && sidebar) {
-			this.props.hide();
+			this.closeSidebar();
 		}
 	}
 
@@ -90,9 +94,9 @@ export default class Sidebar extends PureComponent {
 					)}
 
 					{!empty(footer) ? footer : null}
-					{modal && <AppNavigation renderBefore />}
+					{modal && <AppNavigation renderBefore onRouteSelect={this.closeSidebar} />}
 					<div class={style.content}>{children}</div>
-					{modal && <AppNavigation renderAfter />}
+					{modal && <AppNavigation renderAfter onRouteSelect={this.closeSidebar} />}
 				</div>
 			</div>
 		);

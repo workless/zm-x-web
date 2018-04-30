@@ -36,6 +36,7 @@ export default function MenuItem({
 					(matches || match && match.test(url)) && cx(style.active, activeClass),
 					sidebarEnable && style.sidebarEnable
 				)}
+				onClick={this.props.onSelect}
 			>
 				{ icon && (
 					<span class={iconClass || style.icon}>

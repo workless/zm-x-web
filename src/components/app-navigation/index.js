@@ -12,7 +12,7 @@ import withMediaQuery from '../../enhancers/with-media-query';
 import { minWidth, screenMd } from '../../constants/breakpoints';
 import { connect } from 'preact-redux';
 
-const MenuItemView = ( { desktopView, slugs, ...listItem } ) => (
+const MenuItemView = ( { desktopView, slugs, onSelect, ...listItem } ) => (
 	<MenuItem
 		key={listItem.name}
 		sidebarEnable={!desktopView}
@@ -23,6 +23,7 @@ const MenuItemView = ( { desktopView, slugs, ...listItem } ) => (
 		class={cx(style.navMenuItem, !desktopView && style.sidebarNav )}
 		href={listItem.href}
 		match={`/${slugs[listItem.name]}/`}
+		onSelect={onSelect}
 	>
 		<Text id={`appNavigation.${listItem.name}`} />
 	</MenuItem> );
@@ -77,7 +78,14 @@ export default class AppNavigation extends Component {
 		return (
 			<div class={style.appMenu}>
 				<div class={cx( !( renderBefore || renderAfter ) && style.hideSmDown, style.nav, !desktopView && style.sidebarNavWrapper)}>
-					{ listItems.map( ( listItem ) => (<MenuItemView desktopView={desktopView} slugs={slugs} {...listItem} />) ) }
+					{ listItems.map( ( listItem ) => (
+						<MenuItemView
+							desktopView={desktopView}
+							slugs={slugs}
+							onSelect={this.props.onRouteSelect}
+							{...listItem}
+						/>)
+					) }
 					{ !renderBefore && <ZimletSlot props class={style.slot} name="menu" /> }
 					{ desktopView && <AppNavigationTabs /> }
 				</div>
