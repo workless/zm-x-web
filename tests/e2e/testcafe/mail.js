@@ -734,3 +734,24 @@ test('L1 | Delete draft confirmation message | C730226', async t => {
 	await t.maximizeWindow();
 	await actions.loginEmailPage(t.ctx.user.email, t.ctx.user.password);
 });
+
+test('L1 | Save draft and send | C730228', async t => {
+	let emailTo = t.ctx.user.email;
+	let emailContent = 'save draft';
+	await compose.clickCompose();
+	await compose.enterTextToFieldElement(emailTo, compose.addressFieldTextField('To'));
+	await compose.enterTextToFieldElement(emailContent, elements.composerSubject);
+	await compose.enterBodyText(emailContent);
+	await t.wait(3000);
+	await compose.closeCompose();
+	await sidebar.clickSidebarContent('Drafts');
+	await t.eval(() => location.reload(true));
+	await compose.openMessageWithSubject(emailContent);
+	await compose.enterBodyText(emailContent);
+	await compose.sendEmail();
+	await sidebar.clickSidebarContent('Sent');
+	await t.eval(() => location.reload(true));
+	await compose.openNewMessage();
+	await t.expect(elements.inboxReadPane().exists).ok({ timeout: 10000 });
+	await t.expect(await elements.conversationSectionSelector.innerText).contains(emailContent);
+});
