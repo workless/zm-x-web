@@ -17,19 +17,13 @@ export default function CalendarSidebar({
 }) {
 	return (
 		<Sidebar header={!matchesScreenMd}>
-			{matchesScreenMd
-				? (
+			{matchesScreenMd &&
+				(
 					<div class={style.sidebarHeader}>
 						<SidebarPrimaryButton
 							text="New Event"
 							onClick={onCreateNew}
 						/>
-					</div>
-				)
-				: (
-					<div class={style.sidebarSectionHeader}>
-						<span class={style.sidebarSectionHeaderIcon} />
-						Calendar
 					</div>
 				)
 			}

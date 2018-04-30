@@ -16,16 +16,17 @@ export default function MenuItem({
 	iconText,
 	responsive,
 	children,
+	sidebarEnable,
 	...props
 }) {
 	if (match && typeof match === 'string') {
 		match = new RegExp('^' + escapeStringRegexp(match));
 	}
 
-	return (
-		<Match path={props.href}>
-			{ ({ matches, url }) => (
-				<a {...props} class={cx(
+	return ( <Match path={props.href}>
+		{ ({ matches, url }) => (
+			<a {...props}
+				class={cx(
 					!customClass && style.navItem,
 					icon && (iconPosition==='right' ? style.iconRight : style.iconLeft),
 					customClass!==true && customClass,
@@ -33,19 +34,19 @@ export default function MenuItem({
 					responsive && style.responsive,
 					props.disabled && style.disabled,
 					(matches || match && match.test(url)) && cx(style.active, activeClass),
+					sidebarEnable && style.sidebarEnable
 				)}
-				>
-					{ icon && (
-						<span class={iconClass || style.icon}>
-							{typeof icon === 'string' ? <Icon name={icon} /> : icon}
-							{ iconText && (
-								<span class={style.iconText}>{iconText}</span>
-							) }
-						</span>
-					)}
-					<span class={cx(style.inner, innerClass)}>{children}</span>
-				</a>
-			)}
-		</Match>
-	);
+			>
+				{ icon && (
+					<span class={iconClass || style.icon}>
+						{typeof icon === 'string' ? <Icon name={icon} /> : icon}
+						{ iconText && (
+							<span class={style.iconText}>{iconText}</span>
+						) }
+					</span>
+				)}
+				<span class={cx(style.inner, innerClass)}>{children}</span>
+			</a>
+		)}
+	</Match> );
 }
