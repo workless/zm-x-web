@@ -279,13 +279,13 @@ test('L1 | Verify the Week, Month, Year and List view using button | C972897', a
 
 test('L1 | Create new calendar event - Empty title | C972902', async t => {
 	await calendar.clickSidebarPrimaryButton(/New Event/i);
-	await calendar.dialog.clickModalDialogFooterButton('OK');
+	await calendar.dialog.clickAddEventFooterButton(/Save/i);
 });
 
 test('L1 | Create new calendar event - With title | C972901', async t => {
 	await calendar.clickSidebarPrimaryButton(/New Event/i);
 	await calendar.enterNewEventText('My New Calendar Event');
-	await calendar.dialog.clickModalDialogFooterButton('OK');
+	await calendar.dialog.clickAddEventFooterButton(/Save/i);
 });
 
 test('L1 | Click Add Calendar and cancel dialog | C972900', async t => {
