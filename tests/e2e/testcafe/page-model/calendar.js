@@ -63,6 +63,11 @@ class Calendar {
 		async clickModalDialogFooterButton(text) {
 			await t.click(elements.calendarModalDialogButtonSelector.find('*').withText(text));
 		},
+
+		async clickAddEventFooterButton(text) {
+			await t.click(elements.calendarAddEventFooterSelector.find('*').withText(text));
+		},
+
 		async enterStartDate(date) { // Test:: done working
 			const dateInputSelector = elements.labelSelector.withText('Start').sibling().find('input[type=text]');
 			await utilFunc.setDatePicker.with({ dependencies: { selectEl: dateInputSelector } })(date);
@@ -74,12 +79,12 @@ class Calendar {
 		},
 
 		async enterStartTime(time) {
-			const timeSelector = elements.labelSelector.withText('Start').sibling('input[type=time]');
+			const timeSelector = elements.labelSelector.withText('Start').sibling().find('input[type=time]');
 			await utilFunc.setTime.with({ dependencies: { selectEl: timeSelector } })(time);
 		},
 		
 		async enterEndTime(time) {
-			const timeSelector = elements.labelSelector.withText('End').sibling('input[type=time]');
+			const timeSelector = elements.labelSelector.withText('End').sibling().find('input[type=time]');
 			await utilFunc.setTime.with({ dependencies: { selectEl: timeSelector } })(time);
 		},
 		
@@ -407,7 +412,7 @@ class Calendar {
 		if (aptObj.isMobileDesktop !==null) await calendar.dialog.setMobileDesktopReminder(aptObj.isMobileDesktop);
 		if (aptObj.isEmailNotify !==null) await calendar.dialog.setEmailReminder(aptObj.isEmailNotify);
 		if (aptObj.showAs !==null) await calendar.dialog.selectShowAs(aptObj.showAs);
-		await calendar.dialog.clickModalDialogFooterButton('OK');
+		await calendar.dialog.clickAddEventFooterButton(/Save/i);
 	}
 
 	async clickToolBarTopButton(text) {

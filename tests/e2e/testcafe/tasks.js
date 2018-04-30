@@ -153,7 +153,7 @@ test('L2 | Add duplicate task in the same tasklist | C871013', async t => {
 	const taskListName = t.ctx.user.email;
 	const taskName = 'Sample Task';
 	await t.expect(await tasks.tasksHeaderSelector.innerText).contains('Tasks - List');
-	await t.expect(tasks.panel.checkTaskListExists(taskListName)).ok();
+	await t.expect(tasks.panel.checkTaskListExists(taskListName)).ok({ allowUnawaitedPromise: true });
 	await tasks.header.clickTasksSettingsIcon();
 	await tasks.header.selectMenuItem('New Task');
 	await tasks.dialog.enterNewTaskText(taskName);
@@ -510,6 +510,7 @@ test('L3 | View task details for task without notes | C876498', async t => {
 	await tasks.panel.rightClickonTaskListAndSelectOption(taskListName,'New Task');
 	await tasks.dialog.enterNewTaskText(taskName);
 	await tasks.dialog.clickModalDialogFooterButton('Save');
+	await t.wait(1000);
 	await tasks.panel.singleClickonTask(taskListName,taskName);
 	await t.expect(await tasks.popup.isTaskPresentInPopup(taskName)).ok('Verification of Task Name');
 	await t.expect(await tasks.popup.isHorizontalDividerInPopup()).notOk('Verification of Horizontal divider');

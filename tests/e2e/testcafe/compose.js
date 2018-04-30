@@ -117,6 +117,7 @@ test('L2 | Compose, Send: No Message Body (basic) | C581670', async t => {
 	await compose.sendEmail();
 	await t.wait(1000);
 	await sidebar.clickSidebarContent('Inbox');
+	await t.eval(() => location.reload(true));
 	await t.expect(elements.mailListItemUnread.exists).ok({ timeout: 15000 });
 	await compose.openMessageWithSubject(emailSubject);
 	await t.expect(elements.inboxReadPane().exists).ok({ timeout: 10000 });
@@ -164,7 +165,7 @@ test('L1 | Compose, Send: To, CC, BCC (basic) | C581667 | Bug:PREAPPS-357 | ##TO
 		.expect(elements.addressListAddressType.withText('Cc').parent('div').find('span').withText('ui testing').exists).ok();
 });
 
-test('L1 | Reply to Message Containing Inline Attachments | C881169', async t => {
+test('L1 | Reply to Message Containing Inline Attachments | C881169 | Issue: not stable because Send button does not always display', async t => {
 	let emailBodyText = 'reply email';
 	let replyEmailSubject = 'Re: Inline attachement';
 	await compose.openNewMessage();
@@ -470,7 +471,7 @@ test('L1 | Compose: No Data, Exit (X) | C581628', async t => {
 	await t.expect(elements.composerBody.exists).notOk({ timeout: 5000 });
 });
 
-test('L1 | Compose: Data visibility (view, addresses, subject) | C581633 | Compose: Test address field suggestions ', async t => {
+test('L1 | Compose: Data visibility (view, addresses, subject) | C581633 | Compose: Test address field suggestions', async t => {
 	let labelText = 'ui.testing';
 	let selectLabelText = 'test user';
 	await t
@@ -483,7 +484,8 @@ test('L1 | Compose: Data visibility (view, addresses, subject) | C581633 | Compo
 	await t
 		.expect(elements.addressFieldSuggestions.nth(0).exists).notOk({ timeout: 20000 });
 	await t.click(compose.buttonAddressFieldTokenLabel(selectLabelText));
-	await t.expect(await elements.blocksTooltip.innerText).contains(labelText, 'verify tooltip content. ', { timeout: 3000 });
+	//console.log(await elements.contactHoverCardDetails.innerText);
+	await t.expect(await elements.contactHoverCardDetails.innerText).contains(labelText, 'verify tooltip content. ', { timeout: 3000 });
 })
 	.before( async t => {
 		t.ctx.user = await soap.createAccount(t.fixtureCtx.adminAuthToken);
@@ -511,7 +513,7 @@ test('L2 | Compose, Autocompleter, CC - Match on Email Address, select | C581673
 	await t
 		.expect(elements.addressFieldSuggestions.nth(0).exists).notOk({ timeout: 20000 });
 	await t.click(compose.buttonAddressFieldTokenLabel(selectLabelText));
-	await t.expect(await elements.blocksTooltip.innerText).contains(labelText, 'verify tooltip content. ', { timeout: 3000 });
+	await t.expect(await elements.contactHoverCardDetails.innerText).contains(labelText, 'verify tooltip content. ', { timeout: 3000 });
 })
 	.before( async t => {
 		t.ctx.user = await soap.createAccount(t.fixtureCtx.adminAuthToken);
@@ -539,7 +541,7 @@ test('L2 | Compose, Autocompleter, BCC - Match on Email Address, select | C58167
 	await t
 		.expect(elements.addressFieldSuggestions.nth(0).exists).notOk({ timeout: 20000 });
 	await t.click(compose.buttonAddressFieldTokenLabel(selectLabelText));
-	await t.expect(await elements.blocksTooltip.innerText).contains(labelText, 'verify tooltip content. ', { timeout: 3000 });
+	await t.expect(await elements.contactHoverCardDetails.innerText).contains(labelText, 'verify tooltip content. ', { timeout: 3000 });
 })
 	.before( async t => {
 		t.ctx.user = await soap.createAccount(t.fixtureCtx.adminAuthToken);
@@ -604,17 +606,18 @@ test('L1 | Responsive Composer Toolbar | C610130 | Fixed:PREAPPS-206', async t =
 		.expect(await elements.componentsToolbarMiddleSelector.child().count).eql(toolbarItemCount);
 });
 
-test.skip('L2 | Font > Type | C665561 | Bug:PREAPPS-250', async t => {
+test('L2 | Font > Type | C665561 | Fixed:PREAPPS-250', async t => {
 	let emailBodyText = 'Font';
-	//await t.selectText(elements.richtextareaTextContentSelector, 0, emailBodyText.length);
-	await t.click(elements.richtextareaTextContentSelector);
+	await compose.enterBodyText(emailBodyText);
+	await t.wait(500);
+	await t.selectText(elements.richtextareaTextContentSelector, 0, emailBodyText.length);
 	await t.expect(elements.componentsToolbarMiddleSelector.exists).ok({ timeout: 10000 });
 	await compose.selectComposeToolbarPopmenu('Font', 'Classic');
-	await compose.enterBodyText(emailBodyText);
+	await t.wait(500);
 	await t.expect(await elements.richtextareaTextContentSelector.find('font').getAttribute('face')).contains('TimesNewRoman');
 });
 
-test.skip('L2 | Font > Size | C665562 | Bug:PREAPPS-250', async t => {
+test('L2 | Font > Size | C665562 | Fixed:PREAPPS-250', async t => {
 	let emailBodyText = 'Size';
 	await compose.enterBodyText(emailBodyText);
 	await t.wait(500);
@@ -625,7 +628,7 @@ test.skip('L2 | Font > Size | C665562 | Bug:PREAPPS-250', async t => {
 	await t.expect(await elements.richtextareaTextContentSelector.find('font').getAttribute('size')).eql('5');
 });
 
-test.skip('L2 | Font > Bold | C665611', async t => {
+test('L2 | Font > Bold | C665611', async t => {
 	let emailBodyText = 'Bold';
 	await compose.enterBodyText(emailBodyText);
 	await t.wait(500);
@@ -636,7 +639,7 @@ test.skip('L2 | Font > Bold | C665611', async t => {
 	await t.expect(await elements.richtextareaTextContentSelector.find('b').exists).ok();
 });
 
-test.skip('L2 | Font > Italics | C665612', async t => {
+test('L2 | Font > Italics | C665612', async t => {
 	let emailBodyText = 'Test';
 	await compose.enterBodyText(emailBodyText);
 	await t.wait(500);
@@ -647,7 +650,7 @@ test.skip('L2 | Font > Italics | C665612', async t => {
 	await t.expect(await elements.richtextareaTextContentSelector.find('i').exists).ok();
 });
 
-test.skip('L2 | Font > Underline | C665613', async t => {
+test('L2 | Font > Underline | C665613', async t => {
 	let emailBodyText = 'Test';
 	await compose.enterBodyText(emailBodyText);
 	await t.wait(500);
@@ -658,7 +661,7 @@ test.skip('L2 | Font > Underline | C665613', async t => {
 	await t.expect(await elements.richtextareaTextContentSelector.find('u').exists).ok();
 });
 
-test.skip('L2 | Font > Text, Background Color | C665614', async t => {
+test('L2 | Font > Text, Background Color | C665614', async t => {
 	let expectedFontColor = '#888888';
 	let expectedFontBackgroundColor = 'rgb(136, 136, 136)';
 	let emailBodyText = 'Test';
@@ -727,7 +730,7 @@ test('L2 | Hyperlink > Insert Link | C668234 | Fixed:PREAPPS-274', async t => {
 		.expect((await elements.richtextareaTextContentSelector.innerText).split(emailBodyText).length - 1).eql(1);
 });
 
-test.skip('L1 | Emoticon button | C668238 | Bug:PREAPPS-383', async t => {
+test('L1 | Emoticon button | C668238 | Fixed:PREAPPS-383', async t => {
 	const expectedEmojiData = await compose.insertEmoji(0);
 	const actualEmojiData = await elements.richtextareaTextContentSelector.find('img').getAttribute('src');
 	await t.expect(expectedEmojiData).eql(actualEmojiData);
@@ -753,7 +756,7 @@ fixture `Compose: Attachement upload Files`
 		await soap.deleteAccount(t.ctx.user.id, t.fixtureCtx.adminAuthToken);
 	});
 
-	test('L2 | Compose, Send: File Attachment, No Message Body | C581643 | ##TODO: C548614 L1: Add Attachments ', async t => {
+	test('L2 | Compose, Send: File Attachment, No Message Body | C581643 | ##TODO: C548614 L1: Add Attachments', async t => {
 		let emailSubject = '[No subject]';
 		let emailTo = t.ctx.user.email;
 		const filePath = path.join(__dirname, './data/files/JPEG_Image.jpg');

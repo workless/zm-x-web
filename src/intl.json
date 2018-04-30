@@ -258,55 +258,66 @@
 			"FILE_SIZE_EXCEEDED":
 				"Unable to upload your attachment. Please try again. Note: the maximum attachment size is 10MB.",
 			"fields": {
-				"remind": {
-					"label": "Remind",
-					"options": {
-						"never": "Never",
-						"0m": "At time of event",
-						"1m": "1 minute before",
-						"5m": "5 minutes before",
-						"10m": "10 minutes before",
-						"15m": "15 minutes before",
-						"30m": "30 minutes before",
-						"45m": "45 minutes before",
-						"60m": "60 minutes before",
-						"2h": "2 hours before",
-						"3h": "3 hours before",
-						"4h": "4 hours before",
-						"5h": "5 hours before",
-						"18h": "18 hours before",
-						"1d": "1 day before",
-						"2d": "2 days before",
-						"3d": "3 days before",
-						"4d": "4 days before",
-						"1w": "1 week before",
-						"2w": "2 weeks before"
-					}
+				"start" : "Start",
+				"allDay" :  "All Day",
+				"end" : "End",
+				"repeat": "Repeat",
+				"repeatOptions": {
+					"NONE": "None",
+					"DAI": "Every day",
+					"WEE": "Every week",
+					"MON": "Every month",
+					"YEA": "Every year"
 				},
-				"showAs": {
-					"label": "Show as",
-					"options": {
-						"F": "Free",
-						"T": "Tentative",
-						"B": "Busy",
-						"O": "Out of Office"
-					}
+				"private": "Private",
+				"location": "Location",
+				"invitees": "Invitees",
+				"notes": "Notes",
+				"remind": "Remind",
+				"remindOptions": {
+					"never": "Never",
+					"0m": "At time of event",
+					"1m": "1 minute before",
+					"5m": "5 minutes before",
+					"10m": "10 minutes before",
+					"15m": "15 minutes before",
+					"30m": "30 minutes before",
+					"45m": "45 minutes before",
+					"60m": "60 minutes before",
+					"2h": "2 hours before",
+					"3h": "3 hours before",
+					"4h": "4 hours before",
+					"5h": "5 hours before",
+					"18h": "18 hours before",
+					"1d": "1 day before",
+					"2d": "2 days before",
+					"3d": "3 days before",
+					"4d": "4 days before",
+					"1w": "1 week before",
+					"2w": "2 weeks before"
 				},
-				"repeat": {
-					"label": "Repeat",
-					"options": {
-						"NONE": "None",
-						"DAI": "Every day",
-						"WEE": "Every week",
-						"MON": "Every month",
-						"YEA": "Every year"
-					}
+				"mobileDesktop": "Mobile/Desktop",
+				"email": "Email",
+				"showAs": "Show as",
+				"showAsOptions": {
+					"F": "Free",
+					"T": "Tentative",
+					"B": "Busy",
+					"O": "Out of Office"
 				}
+			},
+			"buttons": {
+				"showAvailability": "Show Availability",
+				"addAttachment": "Add Attachment"
 			},
 			"availability": {
 				"title": "Availability for {{date}}",
 				"subtitle":
 					"Only calendars that are shared with you or that are public will be visible."
+			},
+			"notifications" : {
+				"problemInCreating" : "There was a problem creating the event.",
+				"tryAgain" : "Try again"
 			}
 		},
 		"sidebar": {

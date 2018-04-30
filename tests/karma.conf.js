@@ -34,7 +34,7 @@ module.exports = function(config) {
 				}
 			]
 		},
-		browsers: ['jsdom'],
+		browsers: ['PhantomJS'],
 
 		junitReporter: {
 			outputDir: __dirname+'/../test-reports/unit',

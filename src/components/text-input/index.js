@@ -21,7 +21,7 @@ export default class TextInput extends Component {
 				<input
 					type="text"
 					{...rest}
-					placeholder={placeholderId ? <Text id={placeholderId} /> : placeholderId}
+					placeholder={placeholderId ? <Text id={placeholderId} /> : placeholder}
 					class={cx(s.input, wide && s.wide, invalid && s.invalid, rest.class)}
 					ref={this.registerRef}
 				/>

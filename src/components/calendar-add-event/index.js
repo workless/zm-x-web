@@ -5,11 +5,11 @@ import moment from 'moment';
 import get from 'lodash/get';
 import isString from 'lodash/isString';
 import { Button, Icon } from '@zimbra/blocks';
+import cx from 'classnames';
 
 import { newAlarm, hasEmailAlarm, hasDisplayAlarm } from '../../utils/event';
 import { getPrimaryAccountAddress } from '../../utils/account';
 
-import ModalDialog from '../modal-dialog';
 import FormGroup from '../form-group';
 import TextInput from '../text-input';
 import Textarea from '../textarea';
@@ -22,10 +22,13 @@ import AddressField from '../address-field';
 import AvailabilityIndicator from '../availability-indicator';
 import chooseFiles from 'choose-files';
 import AttachmentGrid from '../attachment-grid';
+import CalendarAddEventToolbar from './calendar-add-event-toolbar';
 import wire from 'wiretie';
 
 import s from './style.less';
 import { ATTENDEE_ROLE } from '../../constants/calendars';
+import withMediaQuery from '../../enhancers/with-media-query';
+import { minWidth, screenMd } from '../../constants/breakpoints';
 
 const REMIND_OPTIONS = [
 	'never',
@@ -69,13 +72,28 @@ function remindValueFor(relativeTrigger) {
 			`${relativeTrigger.minutes}m`)
 	);
 }
+
+const DesktopHeading = ( { title, onClose } ) => (<div class={s.header}>
+	<h2><Text id={title} /></h2>
+	<Button
+		styleType="floating"
+		class={s.actionButton}
+		onClick={onClose}
+	/>
+</div> );
+
+const MobileHeading = ( { title } ) => (<div class={s.simpleHeader}>
+	<h2><Text id={title} /></h2>
+</div>);
+
+@withMediaQuery(minWidth(screenMd), 'matchesScreenMd')
 @wire('zimbra', {}, zimbra => ({
 	attach: zimbra.appointments.attach
 }))
 @withText({
 	errorMsg: 'calendar.editModal.FILE_SIZE_EXCEEDED'
 })
-export default class EditEventModal extends Component {
+export default class CalendarAddEvent extends Component {
 	static defaultProps = {
 		title: 'calendar.editModal.title'
 	};
@@ -289,7 +307,7 @@ export default class EditEventModal extends Component {
 	}
 
 	render(
-		{ title, errorMsg },
+		{ title, inline, class: cls, matchesScreenMd },
 		{
 			allDay,
 			isPrivate,
@@ -302,9 +320,7 @@ export default class EditEventModal extends Component {
 			repeatValue,
 			showAsValue,
 			availabilityVisible,
-			attachments,
-			attachPending,
-			isErrored
+			attachments
 		}
 	) {
 		const start = moment(event.start);
@@ -312,23 +328,24 @@ export default class EditEventModal extends Component {
 		const invalidDateRange = !allDay && start.diff(event.end) > 0;
 		const showAvailabilityButtonVisible =
 			!availabilityVisible && attendees.some(a => !isString(a));
-		const error = isErrored ? errorMsg : '';
+
+		let desktopHeading, mobileHeading;
+		if ( matchesScreenMd ){
+			// desktop view
+			desktopHeading = ( <DesktopHeading title={title} onClose={this.onClose} /> );
+		}
+		else {
+			mobileHeading = ( <MobileHeading title={title} /> );
+		}
+
 		return (
-			<ModalDialog
-				class={s.dialog}
-				contentClass={s.dialogContent}
-				title={title}
-				actionLabel="buttons.ok"
-				onAction={this.handleSubmit}
-				onClose={this.onClose}
-				disablePrimary={invalidDateRange || attachPending}
-				error={error}
-				disableOutsideClick
-			>
-				<AlignedForm>
+			<div className={cx(cls, s.wrapper, inline && s.inlineWrapper)}>
+				{ desktopHeading }
+				<AlignedForm class={s.formWrapper}>
+					{ mobileHeading }
 					<FormGroup>
 						<TextInput
-							placeholder="New Event"
+							placeholderId={title}
 							value={event.name}
 							onInput={linkstate(this, 'event.name')}
 							wide
@@ -336,71 +353,75 @@ export default class EditEventModal extends Component {
 						/>
 					</FormGroup>
 					<FormGroup>
-						<AlignedLabel>Start</AlignedLabel>
-						<DateInput
-							class={s.inlineField}
-							dateValue={event.start}
-							onDateChange={this.handleStartChange}
-						/>
-						<TimeInput
-							class={s.inlineField}
-							dateValue={
-								allDay ? moment(event.start).startOf('day') : event.start
-							}
-							onDateChange={this.handleStartChange}
-							disabled={allDay}
-						/>
-						<label>
-							<input
-								type="checkbox"
-								checked={allDay}
-								onChange={linkstate(this, 'allDay')}
+						<AlignedLabel class={s.alignedLabel} align="left"><Text id="calendar.editModal.fields.start" /></AlignedLabel>
+						<div class={s.datepickerWrapper}>
+							<DateInput
+								class={s.dateSelector}
+								dateValue={event.start}
+								onDateChange={this.handleStartChange}
 							/>
-							All Day
-						</label>
+							<TimeInput
+								class={s.timeSelector}
+								dateValue={
+									allDay ? moment(event.start).startOf('day') : event.start
+								}
+								onDateChange={this.handleStartChange}
+								disabled={allDay}
+							/>
+							<label class={s.allDay}>
+								<input
+									type="checkbox"
+									checked={allDay}
+									onChange={linkstate(this, 'allDay')}
+								/>
+								<Text id="calendar.editModal.fields.allDay" />
+							</label>
+						</div>
 					</FormGroup>
 					<FormGroup>
-						<AlignedLabel>End</AlignedLabel>
-						<DateInput
-							class={s.inlineField}
-							dateValue={endDate}
-							onDateChange={linkstate(this, 'event.end')}
-							disabled={allDay}
-							invalid={invalidDateRange}
-						/>
-						<TimeInput
-							class={s.inlineField}
-							dateValue={endDate}
-							onDateChange={this.handleEndChange}
-							disabled={allDay}
-							invalid={invalidDateRange}
-						/>
+						<AlignedLabel class={s.alignedLabel} align="left"><Text id="calendar.editModal.fields.end" /></AlignedLabel>
+						<div class={s.datepickerWrapper}>
+							<DateInput
+								class={s.dateSelector}
+								dateValue={endDate}
+								onDateChange={linkstate(this, 'event.end')}
+								disabled={allDay}
+								invalid={invalidDateRange}
+							/>
+							<TimeInput
+								class={s.timeSelector}
+								dateValue={endDate}
+								onDateChange={this.handleEndChange}
+								disabled={allDay}
+								invalid={invalidDateRange}
+							/>
+						</div>
 					</FormGroup>
 					<FormGroup>
-						<AlignedLabel>Repeat</AlignedLabel>
+						<AlignedLabel class={s.alignedLabel} align="left"><Text id="calendar.editModal.fields.repeat" /></AlignedLabel>
 						<Select
 							value={repeatValue}
 							onChange={linkstate(this, 'repeatValue')}
 						>
 							{REPEAT_OPTIONS.map(k => (
 								<option value={k} key={k}>
-									<Text id={`calendar.editModal.fields.repeat.options.${k}`} />
+									<Text id={`calendar.editModal.fields.repeatOptions.${k}`} />
 								</option>
 							))}
 						</Select>
-						<AlignedLabel>
+						<AlignedLabel class={s.privateWrapper} align="left">
 							<label>
 								<input
 									type="checkbox"
 									checked={isPrivate}
 									onChange={linkstate(this, 'isPrivate')}
 								/>
-								Private
+								<Text id="calendar.editModal.fields.private" />
 							</label>
 						</AlignedLabel>
 					</FormGroup>
 					<FormGroup>
-						<AlignedLabel>Location</AlignedLabel>
+						<AlignedLabel class={s.alignedLabel} align="left"><Text id="calendar.editModal.fields.location" /></AlignedLabel>
 						<TextInput
 							value={event.location}
 							onInput={linkstate(this, 'event.location')}
@@ -408,7 +429,7 @@ export default class EditEventModal extends Component {
 						/>
 					</FormGroup>
 					<FormGroup class={s.inviteesGroup}>
-						<AlignedLabel>Invitees</AlignedLabel>
+						<AlignedLabel class={s.alignedLabel} align="left"><Text id="calendar.editModal.fields.invitees" /></AlignedLabel>
 						<AddressField
 							class={s.addressField}
 							value={attendees}
@@ -417,7 +438,7 @@ export default class EditEventModal extends Component {
 						/>
 					</FormGroup>
 					<FormGroup
-						class={availabilityVisible && s.availabilityIndicatorGroup}
+						class={(availabilityVisible || showAvailabilityButtonVisible) && s.availabilityIndicatorGroup}
 					>
 						{availabilityVisible ? (
 							<AvailabilityIndicator
@@ -430,16 +451,16 @@ export default class EditEventModal extends Component {
 						) : (
 							showAvailabilityButtonVisible && (
 								<Button
-									class={s.fieldOffset}
+									class={cx(s.fieldOffset, s.availabilityButton)}
 									onClick={this.handleToggleAvailabilty}
 								>
-									Show Availability
+									<Text id="calendar.editModal.buttons.showAvailability" />
 								</Button>
 							)
 						)}
 					</FormGroup>
 					<FormGroup>
-						<AlignedLabel>Notes</AlignedLabel>
+						<AlignedLabel class={s.alignedLabel} align="left"><Text id="calendar.editModal.fields.notes" /></AlignedLabel>
 						<div class={s.notesContainer}>
 							<Textarea
 								class={s.textArea}
@@ -461,7 +482,7 @@ export default class EditEventModal extends Component {
 								))}
 						</div>
 						<Button
-							title="Add Attachment"
+							title={<Text id="calendar.editModal.buttons.addAttachment" />}
 							class={s.attachmentButton}
 							onClick={this.chooseAttachments}
 						>
@@ -469,14 +490,14 @@ export default class EditEventModal extends Component {
 						</Button>
 					</FormGroup>
 					<FormGroup compact>
-						<AlignedLabel>Remind</AlignedLabel>
+						<AlignedLabel class={s.alignedLabel} align="left"><Text id="calendar.editModal.fields.remind" /></AlignedLabel>
 						<Select
 							value={remindValue}
 							onChange={linkstate(this, 'remindValue')}
 						>
 							{REMIND_OPTIONS.map(k => (
 								<option value={k} key={k}>
-									<Text id={`calendar.editModal.fields.remind.options.${k}`} />
+									<Text id={`calendar.editModal.fields.remindOptions.${k}`} />
 								</option>
 							))}
 						</Select>
@@ -489,7 +510,7 @@ export default class EditEventModal extends Component {
 									onChange={linkstate(this, 'remindDesktop')}
 									checked={remindDesktop}
 								/>
-								Mobile/Desktop
+								<Text id="calendar.editModal.fields.mobileDesktop" />
 							</label>
 							<label class={s.subOption}>
 								<input
@@ -497,25 +518,26 @@ export default class EditEventModal extends Component {
 									onChange={linkstate(this, 'remindEmail')}
 									checked={remindEmail}
 								/>
-								Email
+								<Text id="calendar.editModal.fields.email" />
 							</label>
 						</FormGroup>
 					)}
 					<FormGroup>
-						<AlignedLabel>Show as</AlignedLabel>
+						<AlignedLabel class={s.alignedLabel} align="left"><Text id="calendar.editModal.fields.showAs" /></AlignedLabel>
 						<Select
 							value={showAsValue}
 							onChange={linkstate(this, 'showAsValue')}
 						>
 							{SHOW_AS_OPTIONS.map(k => (
 								<option value={k} key={k}>
-									<Text id={`calendar.editModal.fields.showAs.options.${k}`} />
+									<Text id={`calendar.editModal.fields.showAsOptions.${k}`} />
 								</option>
 							))}
 						</Select>
 					</FormGroup>
 				</AlignedForm>
-			</ModalDialog>
+				<CalendarAddEventToolbar isMobileActive={!matchesScreenMd} onSave={this.handleSubmit} onCancel={this.onClose} />
+			</div>
 		);
 	}
 }
