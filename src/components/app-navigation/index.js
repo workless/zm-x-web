@@ -12,7 +12,7 @@ import withMediaQuery from '../../enhancers/with-media-query';
 import { minWidth, screenMd } from '../../constants/breakpoints';
 import { connect } from 'preact-redux';
 
-const MenuItemView = ( { desktopView, slugs, onSelect, ...listItem } ) => (
+const MenuItemView = ( { desktopView, slugs, onClick, ...listItem } ) => (
 	<MenuItem
 		key={listItem.name}
 		sidebarEnable={!desktopView}
@@ -23,7 +23,7 @@ const MenuItemView = ( { desktopView, slugs, onSelect, ...listItem } ) => (
 		class={cx(style.navMenuItem, !desktopView && style.sidebarNav )}
 		href={listItem.href}
 		match={`/${slugs[listItem.name]}/`}
-		onSelect={onSelect}
+		onClick={onClick}
 	>
 		<Text id={`appNavigation.${listItem.name}`} />
 	</MenuItem> );
@@ -36,7 +36,7 @@ const MenuItemView = ( { desktopView, slugs, onSelect, ...listItem } ) => (
 export default class AppNavigation extends Component {
 
 	getNavList = () => {
-		const slugs = this.props.slugs;
+		const { slugs } = this.props;
 		return [{
 			name: 'email',
 			href: '/',
@@ -70,7 +70,7 @@ export default class AppNavigation extends Component {
 		return list.slice( this.getMatchedItemIndex( list ) + 1 );
 	}
 
-	render({ slugs, desktopView, renderBefore, renderAfter }) {
+	render({ slugs, desktopView, renderBefore, renderAfter, onRouteSelect }) {
 
 		const navList = this.getNavList();
 		const listItems = renderBefore ? this.getPreItems( navList ) : ( renderAfter ? this.getPostItems( navList ) : navList );
@@ -82,7 +82,7 @@ export default class AppNavigation extends Component {
 						<MenuItemView
 							desktopView={desktopView}
 							slugs={slugs}
-							onSelect={this.props.onRouteSelect}
+							onClick={onRouteSelect}
 							{...listItem}
 						/>)
 					) }
