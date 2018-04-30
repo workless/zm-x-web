@@ -52,7 +52,8 @@ export default class Notifications extends Component {
 	render({ notification }) {
 		return notification && (
 			<FixedDialog class={cx(s.notifications, notification.failure ? s.failure : s.success)} onClick={this.dismissDialog}>
-				{notification.message} {notification.action &&
+				<div className={s.label}>{notification.message}</div> 
+				{notification.action &&
 					<button className={s.undoButton} onClick={this.handleActionClick}>
 						{notification.action.label}
 					</button>

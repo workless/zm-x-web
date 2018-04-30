@@ -7,13 +7,13 @@
 	transform: translateX(-50%);
 	background-color: @gray-darkest;
 	color: white;
-	padding: @spacing-md @spacing-lg;
 	box-shadow: 0 2px 2px rgba(0,0,0,.24);
 	text-align: left;
 	border-radius: 2px;
 	min-width: 320px;
 	display: flex;
 	justify-content: space-between;
+	border-left: solid 4px transparent;
 
 	&.success {
 		border-color: @toast-success-color;
@@ -24,13 +24,16 @@
 	}
 }
 
+.label {
+	padding: @spacing-md @spacing-lg;
+}
 
 .undoButton {
 	color: #f8e71c;
 	background-color: transparent;
 	border: none;
 	margin-left: 48px;
-	padding: 0;
+	padding: @spacing-md @spacing-lg;
 	text-decoration: none;
 	text-transform: uppercase;
 	&:hover, &:focus {
