@@ -1,6 +1,6 @@
 @import '~@zimbra/x-ui/helpers.less';
 
-.navItem, a.navItem {
+.navItem {
 	font-family: @branding-font-family-regular;
 	display: flex;
 	align-items: center;
@@ -65,17 +65,18 @@
 		width: 100%;
 	}
 
-	&.sidebarEnable{
+	&.sidebarEnable {
 		border-left: 4px solid transparent;
 		border-bottom: 1px solid @border-color-primary;
-	}
-	&.sidebarEnable&:hover, &.sidebarEnable&:focus, &.sidebarEnable&.active {
-		text-decoration: none;
-		border-left-color: @brand-primary;
-		border-bottom-color: @border-color-primary;
-	}
-	&.sidebarEnable&.active {
-		border-bottom-color: transparent;
+
+		&:hover, &:focus, &.active {
+			text-decoration: none;
+			border-left-color: @brand-primary;
+		}
+
+		&.active {
+			border-bottom-color: transparent;
+		}
 	}
 
 	&:hover, &:focus, &.active {
