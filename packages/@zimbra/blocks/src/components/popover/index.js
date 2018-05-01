@@ -116,6 +116,10 @@ export default class Popover extends Component {
 		let { disabled, icon, iconPosition, target, text, tooltip, hoverDuration } = this.props;
 		let classes = this.getClasses();
 
+		if (typeof icon==='string') {
+			icon = <Icon name={icon} />;
+		}
+
 		return (
 			<div
 				ref={callWith(this.chainReferences, ref, true)}
@@ -168,10 +172,6 @@ export default class Popover extends Component {
 		delete props.active;
 
 		classes = this.getClasses();
-
-		if (typeof icon==='string') {
-			icon = <Icon name={icon} />;
-		}
 
 		if (anchor === 'center') anchor=false;
 
