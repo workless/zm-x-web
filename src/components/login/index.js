@@ -116,7 +116,7 @@ export default class Login extends Component {
 		newAccount.append('userName', userName);
 		newAccount.append('recoveryEmail', recoveryEmail);
 
-		return fetch('https://bc.lonni.me:8081/register', {
+		return fetch('https://bc.lonni.me/__account/register', {
 			method: 'POST',
 			redirect: 'follow',
 			body: newAccount
